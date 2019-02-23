@@ -1,4 +1,4 @@
-package com.example.libo.myapplication;
+package com.example.project;
 
 import org.junit.Test;
 

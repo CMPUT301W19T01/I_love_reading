@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">project</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="comment">comment</string>
+    <string name="bookname">BookName</string>
+    <string name="watchlist">Watch List</string>
+    <string name="description">Description</string>
+    <string name="borrow">Borrow</string>
+    <string name="action_settings">Settings</string>
 </resources>
