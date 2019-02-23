@@ -14,6 +14,10 @@ public class BasicActivity extends AppCompatActivity {
 
     private OwnFragment ownFragment;
     private ProfileFragment profileFragment;
+    private BorrowFragment borrowFragment;
+    private AllFragment allFragment;
+    private RequestFragment requestFragment;
+
 
     private Fragment[] fragments;
     private int lastFragment;
@@ -38,23 +42,22 @@ public class BasicActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.navigation_borrow:
-                    /*
                     if (lastFragment != 2){
                         switchFragment(borrowFragment, fragments[lastFragment]);
                         lastFragment = 2;
                     }
-                    */
                     return true;
                 case R.id.navigation_all:
-                    /*
-                    if (lastFragment != 2){
-                        switchFragment(borrowFragment, fragments[lastFragment]);
-                        lastFragment = 2;
+                    if (lastFragment != 3){
+                        switchFragment(allFragment, fragments[lastFragment]);
+                        lastFragment = 3;
                     }
-                    */
                     return true;
                 case R.id.navigation_request:
-
+                    if (lastFragment != 4){
+                        switchFragment(requestFragment, fragments[lastFragment]);
+                        lastFragment = 4;
+                    }
                     return true;
             }
             return false;
@@ -79,7 +82,11 @@ public class BasicActivity extends AppCompatActivity {
 
         ownFragment = new OwnFragment();
         profileFragment = new ProfileFragment();
-        fragments = new Fragment[]{profileFragment, ownFragment};
+        borrowFragment = new BorrowFragment();
+        allFragment = new AllFragment();
+        requestFragment = new RequestFragment();
+
+        fragments = new Fragment[]{profileFragment, ownFragment, borrowFragment, allFragment, requestFragment};
         lastFragment = 0;
 
         getSupportFragmentManager().beginTransaction().replace(R.id.basic_layout, profileFragment).show(profileFragment).commit();
