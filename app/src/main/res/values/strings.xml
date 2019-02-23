@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">I Love Reading</string>
+    <string name="title_activity_basic">Profile</string>
+    <string name="title_profile">PROFILE</string>
+    <string name="title_own">OWN</string>
+    <string name="title_borrow">BORROW</string>
+    <string name="title_all">ALL</string>
+    <string name="title_request">REQUEST</string>
 </resources>
