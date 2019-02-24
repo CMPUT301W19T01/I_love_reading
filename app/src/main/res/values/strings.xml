@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">I love Reading login</string>
+    <string name="signUp">Don\'t have account? Sign Up</string>
+    <string name="username"> Username</string>
+    <string name="password"> Password</string>
+    <string name="Email"> Email</string>
+    <string name="Cancel"> Cancel</string>
+    <string name="login"> Log In</string>
+    <string name="app_logo">log of app</string>
+    <string name="SignupButton">Sign up</string>
 </resources>
