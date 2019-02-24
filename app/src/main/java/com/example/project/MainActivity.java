@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("AuthorName", test.getAuthorName());
                 ItemView.putExtra("ID", test.getID());
                 ItemView.putExtra("status", test.getStatus());
+                ItemView.putExtra("edit",false);
+                ItemView.putExtra("description", test.getAuthorName()); //should be get description here
                 startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
             }
         });
@@ -72,3 +74,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+
