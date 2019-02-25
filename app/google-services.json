@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "659709826179",
+    "firebase_url": "https://ilovereading-55841.firebaseio.com",
+    "project_id": "ilovereading-55841",
+    "storage_bucket": "ilovereading-55841.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659709826179:android:93f9aed4812dd109",
+        "android_client_info": {
+          "package_name": "com.example.libo.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659709826179-69p982h5v0vli0ca3ih1ghk3lbcsh9av.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.libo.myapplication",
+            "certificate_hash": "4f2d902c6a2e6a11f7d7a9fcdcf136fd29ba3f5c"
+          }
+        },
+        {
+          "client_id": "659709826179-999v33e276vvlnqgl4issbcgrkjclflb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAryBkrBPgy02SB4acE7ULzMznwASoDRhs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659709826179-999v33e276vvlnqgl4issbcgrkjclflb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
