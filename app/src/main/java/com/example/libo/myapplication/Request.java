@@ -1,10 +1,17 @@
 package com.example.libo.myapplication;
 
 public class Request {
-
     private String sender;
     private String receiver;
     private String senderEmail;
+
+    public Request(String sender, String receiver, String senderEmail) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.senderEmail = senderEmail;
+    }
+
+
 
     public String getSender() {
         return sender;

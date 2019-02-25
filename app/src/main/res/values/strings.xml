@@ -6,4 +6,12 @@
     <string name="title_borrow">BORROW</string>
     <string name="title_all">ALL</string>
     <string name="title_request">REQUEST</string>
+    <string name="signUp">Don\'t have account? Sign Up</string>
+    <string name="username"> Username</string>
+    <string name="password"> Password</string>
+    <string name="Email"> Email</string>
+    <string name="Cancel"> Cancel</string>
+    <string name="login"> Log In</string>
+    <string name="app_logo">log of app</string>
+    <string name="SignupButton">Sign up</string>
 </resources>
