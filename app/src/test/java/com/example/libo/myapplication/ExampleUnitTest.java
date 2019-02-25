@@ -32,6 +32,14 @@ public class ExampleUnitTest {
         assertEquals("Phoebe",username);
         assertEquals("123456",password);
     }
+    @Test
+    public void book_correct(){
+        Book test = new Book("Harry potter", "I don't know", "IDDDDD", false,"No description");
+        assertEquals("Harry potter", test.getBookName());
+        assertEquals("I don't know", test.getAuthorName());
+        assertEquals("IDDDDD", test.getID());
+        assertEquals(false, test.getStatus());
+    }
 
 
 
