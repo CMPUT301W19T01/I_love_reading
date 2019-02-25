@@ -1,4 +1,4 @@
-package com.example.libo.myapplication;
+package com.example.libo.myapplication.Model;
 
 public class Users {
 

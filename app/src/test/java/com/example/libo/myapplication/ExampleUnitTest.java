@@ -1,5 +1,8 @@
 package com.example.libo.myapplication;
 
+import com.example.libo.myapplication.Model.Request;
+import com.example.libo.myapplication.Model.Users;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

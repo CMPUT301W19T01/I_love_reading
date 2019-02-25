@@ -1,4 +1,4 @@
-package com.example.libo.myapplication;
+package com.example.libo.myapplication.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,16 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class ProfileFragment extends Fragment {
-    private Button button;
+import com.example.libo.myapplication.R;
+
+public class RequestFragment extends Fragment {
+
     private TextView userNameTextView;
+    private ListView requestList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.profile_page,container,false);
+        View view=inflater.inflate(R.layout.request_page,container,false);
         return view;
     }
 

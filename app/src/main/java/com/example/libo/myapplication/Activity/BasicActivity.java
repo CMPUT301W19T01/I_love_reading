@@ -1,4 +1,4 @@
-package com.example.libo.myapplication;
+package com.example.libo.myapplication.Activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.TextView;
+
+import com.example.libo.myapplication.Fragment.AllFragment;
+import com.example.libo.myapplication.Fragment.BorrowFragment;
+import com.example.libo.myapplication.Fragment.OwnFragment;
+import com.example.libo.myapplication.Fragment.ProfileFragment;
+import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Fragment.RequestFragment;
 
 public class BasicActivity extends AppCompatActivity {
 
