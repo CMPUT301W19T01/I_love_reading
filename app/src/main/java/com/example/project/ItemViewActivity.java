@@ -35,28 +35,10 @@ public class ItemViewActivity extends AppCompatActivity {
         String Description = result.getStringExtra("Description");
         Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
-        EditTextBookName.setText(BookName);
-        EditTextAuthorName.setText(AuthorName);
-        EditTextDescription.setText(Description);
 
 
-        if (Status){
-            BorrowButton.setText("Unavailable");
-            BorrowButton.setEnabled(false);
-        }
-
-        if (!Edit){
-            EditTextBookName.setEnabled(false);
-            EditTextAuthorName.setEnabled(false);
-            EditTextDescription.setEnabled(false);
-
-        }
-        else{
-            EditTextBookName.setText(BookName);
-            EditTextAuthorName.setText(AuthorName);
-            EditTextDescription.setText(AuthorName);
-
-        }
+        checkStatus(Status);
+        checkEdit(Edit, BookName, AuthorName, Description);
 
         BorrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +63,36 @@ public class ItemViewActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
+
+    public void checkStatus(Boolean Status){
+        // This function checks if the Book is available.
+        // If the Book is not available, it Borrow Button will show Unavailable
+        if (Status){
+            BorrowButton.setText("Unavailable");
+            BorrowButton.setEnabled(false);
+        }
+    }
+
+    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description){
+        // This function checks if the Book is editable
+        // If it's editable, text view will be able to edit
+        if (Edit){
+            EditTextBookName.setEnabled(true);
+            EditTextAuthorName.setEnabled(true);
+            EditTextDescription.setEnabled(true);
+        }
+        else{
+            EditTextBookName.setEnabled(false);
+            EditTextAuthorName.setEnabled(false);
+            EditTextDescription.setEnabled(false);
+            EditTextBookName.setText(BookName);
+            EditTextAuthorName.setText(AuthorName);
+            EditTextDescription.setText(Description);
+        }
+    }
+
+
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         // When the return button is pressed. Automatically transfer the required information back
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
