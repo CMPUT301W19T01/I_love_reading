@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-        progressBar.setVisibility(View.VISIBLE);
+        //progressBar.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 

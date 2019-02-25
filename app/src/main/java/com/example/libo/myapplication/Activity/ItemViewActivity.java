@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.libo.myapplication.R;
+
 public class ItemViewActivity extends AppCompatActivity {
 
     private EditText EditTextBookName;
