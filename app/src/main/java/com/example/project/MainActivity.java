@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        test = new Book("Harry potter", "I don't know", "IDDDDD", false,"No description");
         setContentView(R.layout.activity_main);
         start_button = (Button) findViewById(R.id.button_item_view);
         start_button.setOnClickListener(new View.OnClickListener() {
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("ID", test.getID());
                 ItemView.putExtra("status", test.getStatus());
                 ItemView.putExtra("edit",false);
-                ItemView.putExtra("description", test.getAuthorName()); //should be get description here
+                ItemView.putExtra("Description", test.getDescription());
                 startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
             }
         });
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
                          */
                     }
-                    else{
 
                         /* The Book is now added to watchlist, update your information
 
@@ -55,14 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                          */
-                    }
+
                 }
             }
         }
     }
-
-
-
 
 
     public void set_test(String BookName, String ID, String AuthorName, Boolean Status){

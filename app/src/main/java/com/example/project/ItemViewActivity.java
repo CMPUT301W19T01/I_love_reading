@@ -18,16 +18,18 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private Button BorrowButton;
     private Button WatchListButton;
+    private Intent temp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_view);
         final Intent result = getIntent();
+        temp = result;
+        setContentView(R.layout.activity_item_view);
         EditTextBookName = findViewById(R.id.EditTextBookName);
         EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
         BorrowButton = findViewById(R.id.ButtonRentBook);
-        BorrowButton = findViewById(R.id.ButtonWatchList);
+        WatchListButton = findViewById(R.id.ButtonWatchList);
         String BookName = result.getStringExtra("BookName");
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
@@ -35,7 +37,7 @@ public class ItemViewActivity extends AppCompatActivity {
         final Boolean Status = result.getBooleanExtra("status",false);
         EditTextBookName.setText(BookName);
         EditTextAuthorName.setText(AuthorName);
-        EditTextDescription.setText(AuthorName);
+        EditTextDescription.setText(Description);
 
 
         if (Status){
@@ -83,20 +85,26 @@ public class ItemViewActivity extends AppCompatActivity {
 
     }
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        // When the return button is pressed. Automatically transfer the required information back
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             // do something on back.
-            Intent resultIntent= new Intent();
-            resultIntent.putExtra("do","edit");
-            String BookName = EditTextBookName.getText().toString();
-            String AuthorName = EditTextAuthorName.getText().toString();
-            String Description = EditTextDescription.getText().toString();
+            Boolean Edit = temp.getBooleanExtra("edit",false);
+            if (Edit){
+                Intent resultIntent= new Intent();
+                resultIntent.putExtra("do","edit");
+                String BookName = EditTextBookName.getText().toString();
+                String AuthorName = EditTextAuthorName.getText().toString();
+                String Description = EditTextDescription.getText().toString();
 
-            resultIntent.putExtra("BookName",BookName);
-            resultIntent.putExtra("AuthorName", AuthorName);
-            resultIntent.putExtra("Description", Description);
-            setResult(Activity.RESULT_OK,resultIntent);
-            finish();
-
+                resultIntent.putExtra("BookName",BookName);
+                resultIntent.putExtra("AuthorName", AuthorName);
+                resultIntent.putExtra("Description", Description);
+                setResult(Activity.RESULT_OK,resultIntent);
+                finish();
+            }
+            else{
+                finish();
+            }
         }
 
         return super.onKeyDown(keyCode, event);
