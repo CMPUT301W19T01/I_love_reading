@@ -159,13 +159,13 @@ public class ItemViewActivity extends AppCompatActivity {
                                 finish();
                             }
                         });
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay",
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Stay",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         });
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Don't save",
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Don't save",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent resultIntent= new Intent();
