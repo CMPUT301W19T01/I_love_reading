@@ -10,14 +10,30 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     private Button start_button;
+    private Button view_Button;
     private Book test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        test = new Book("Harry potter", "I don't know", "IDDDDD", false,"No description");
+        test = new Book(" ", " ", " ", false," ");
         setContentView(R.layout.activity_main);
         start_button = (Button) findViewById(R.id.button_item_view);
+        view_Button = (Button) findViewById(R.id.button_view);
         start_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ItemView = new Intent(MainActivity.this, ItemViewActivity.class); // set the intent to start next activity
+                ItemView.putExtra("BookName", test.getBookName()); // Put the info of the book to next activity
+                ItemView.putExtra("AuthorName", test.getAuthorName());
+                ItemView.putExtra("ID", test.getID());
+                ItemView.putExtra("status", test.getStatus());
+                ItemView.putExtra("edit",true);
+                ItemView.putExtra("Description", test.getDescription());
+                startActivityForResult(ItemView, 1); // request code 0 means we are allowing the user to edit the book
+            }
+        });
+
+        view_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent ItemView = new Intent(MainActivity.this, ItemViewActivity.class); // set the intent to start next activity
@@ -27,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("status", test.getStatus());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", test.getDescription());
-                startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
+                startActivityForResult(ItemView, 1); // request code 0 means we are looking for if the user decide to borrow the book
             }
         });
 
@@ -44,21 +60,22 @@ public class MainActivity extends AppCompatActivity {
                         this.test.setStatus(true);
                         /* The book is now borrowed, update your information
 
-
-
                          */
                     }
-
-                        /* The Book is now added to watchlist, update your information
-
-
-
-
-                         */
-
+                        /* The Book is now added to watchlist, update your information        */
                 }
             }
-        }
+            case (1): {// we are looking for the new information that the user edited the book.
+                if (resultCode == Activity.RESULT_OK) {
+                    String order = data.getStringExtra("do");
+                    if (order == "edit") {
+                        test.setBookName(data.getStringExtra("BookName"));
+                        test.setAuthorName(data.getStringExtra("AuthorName"));
+                        test.setDescription(data.getStringExtra("Description"));
+                    }
+                }
+                }
+                }
     }
 
 

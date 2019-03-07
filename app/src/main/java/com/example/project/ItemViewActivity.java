@@ -1,24 +1,36 @@
 package com.example.project;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class ItemViewActivity extends AppCompatActivity {
 
     private EditText EditTextBookName;
     private EditText EditTextAuthorName;
     private EditText EditTextDescription;
-
+    private ImageView ImageViewBookCover;
     private Button BorrowButton;
     private Button WatchListButton;
     private Intent temp;
+
+    final int GET_FROM_GALLERY = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +40,7 @@ public class ItemViewActivity extends AppCompatActivity {
         EditTextBookName = findViewById(R.id.EditTextBookName);
         EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
+        ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
         BorrowButton = findViewById(R.id.ButtonRentBook);
         WatchListButton = findViewById(R.id.ButtonWatchList);
         String BookName = result.getStringExtra("BookName");
@@ -48,7 +61,7 @@ public class ItemViewActivity extends AppCompatActivity {
                     Intent resultIntent = new Intent();
                     resultIntent.putExtra("do","borrow");
                     setResult(Activity.RESULT_OK, resultIntent);
-                    finish();
+                    BorrowButton.setClickable(false);
                 }
             }
         });
@@ -60,10 +73,39 @@ public class ItemViewActivity extends AppCompatActivity {
                 Intent resultIntent= new Intent();
                 resultIntent.putExtra("do","watchlist");
                 setResult(Activity.RESULT_OK,resultIntent);
-                finish();
+                WatchListButton.setClickable(false);
             }
         });
+
+        ImageViewBookCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery_intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery_intent, GET_FROM_GALLERY);
+            }
+        });
+
     }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                ImageViewBookCover.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public void checkStatus(Boolean Status){
         // This function checks if the Book is available.
@@ -99,17 +141,41 @@ public class ItemViewActivity extends AppCompatActivity {
             // do something on back.
             Boolean Edit = temp.getBooleanExtra("edit",false);
             if (Edit){
-                Intent resultIntent= new Intent();
-                resultIntent.putExtra("do","edit");
-                String BookName = EditTextBookName.getText().toString();
-                String AuthorName = EditTextAuthorName.getText().toString();
-                String Description = EditTextDescription.getText().toString();
+                AlertDialog alertDialog = new AlertDialog.Builder(ItemViewActivity.this).create();
+                alertDialog.setTitle("Note: ");
+                alertDialog.setMessage("You are quitting the edit view, do you want to save?");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Save",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent resultIntent= new Intent();
+                                resultIntent.putExtra("do","edit");
+                                String BookName = EditTextBookName.getText().toString();
+                                String AuthorName = EditTextAuthorName.getText().toString();
+                                String Description = EditTextDescription.getText().toString();
+                                resultIntent.putExtra("BookName",BookName);
+                                resultIntent.putExtra("AuthorName", AuthorName);
+                                resultIntent.putExtra("Description", Description);
+                                setResult(Activity.RESULT_OK,resultIntent);
+                                finish();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Don't save",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent resultIntent= new Intent();
+                                resultIntent.putExtra("do","donotedit");
+                                finish();
+                            }
+                        });
 
-                resultIntent.putExtra("BookName",BookName);
-                resultIntent.putExtra("AuthorName", AuthorName);
-                resultIntent.putExtra("Description", Description);
-                setResult(Activity.RESULT_OK,resultIntent);
-                finish();
+                alertDialog.show();
+
             }
             else{
                 finish();
