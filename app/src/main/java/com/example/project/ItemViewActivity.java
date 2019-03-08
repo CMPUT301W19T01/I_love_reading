@@ -32,10 +32,10 @@ public class ItemViewActivity extends AppCompatActivity {
     private Button BorrowButton;
     private Button WatchListButton;
     private Intent temp;
-    private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"};
+    private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"}; // Possible selection in classification
     private boolean[] SelectedItemSet;
-    private ArrayList<Integer> myUserItems = new ArrayList<>();
-    private ArrayList<String> resultClassification= new ArrayList<>();
+    private ArrayList<Integer> myUserItems = new ArrayList<>(); //Selected items in terms of binary
+    private ArrayList<String> resultClassification= new ArrayList<>(); //Selected items in terms of String
     private Intent resultIntent = new Intent();
     final int GET_FROM_GALLERY = 2;
 
@@ -53,14 +53,14 @@ public class ItemViewActivity extends AppCompatActivity {
         ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
         BorrowButton = findViewById(R.id.ButtonRentBook);
         WatchListButton = findViewById(R.id.ButtonWatchList);
-        String BookName = result.getStringExtra("BookName");
+        String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
-        Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover");
+        Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
-        if (!Edit){
+        if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
             resultIntent.putExtra("watchlist", "false");
             checkStatus(Status); // check if the book can be borrowed
@@ -109,25 +109,19 @@ public class ItemViewActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                                 if (isChecked) {
-                                    myUserItems.add(which);
-                                }
+                                    myUserItems.add(which); }
                                 else {
-                                    myUserItems.remove((Integer.valueOf(which)));
-                                }
-                            }
-                        }
-                        );
+                                    myUserItems.remove((Integer.valueOf(which))); } }
+                        });
                 mBuilder.setCancelable(false);
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         ArrayList<String> item = new ArrayList<>();
                         for (int i = 0; i < myUserItems.size(); i++) {
-                            item.add(ItemSet[myUserItems.get(i)]);
-                        }
+                            item.add(ItemSet[myUserItems.get(i)]); }
                         resultClassification = item;
-                        TextViewClassification.setText(CombineStringList(item));
-                    }
+                        TextViewClassification.setText(CombineStringList(item)); }
                 });
 
                 mBuilder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
