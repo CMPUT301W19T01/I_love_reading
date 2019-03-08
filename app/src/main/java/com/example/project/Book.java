@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import org.w3c.dom.Comment;
@@ -15,7 +16,7 @@ public class Book {
     private ArrayList<String> Classification;
 
     private Float rating;
-    private Bundle BookCover;
+    private Bitmap BookCover;
 
     public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification){
         this.setBookName(BookName);
@@ -83,11 +84,11 @@ public class Book {
         this.rating = rating;
     }
 
-    public Bundle getBookCover() {
+    public Bitmap getBookCover() {
         return BookCover;
     }
 
-    public void setBookCover(Bundle bookCover) {
+    public void setBookCover(Bitmap bookCover) {
         BookCover = bookCover;
     }
 

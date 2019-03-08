@@ -2,6 +2,7 @@ package com.example.project;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("status", test.getStatus());
                 ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", test.getDescription());
+                ItemView.putExtra("BookCover", test.getBookCover());
                 ItemView.putExtra("ClassificationArray", test.getClassification());
                 startActivityForResult(ItemView, 1); // request code 0 means we are allowing the user to edit the book
             }
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("Description", test.getDescription());
                 ItemView.putExtra("ClassificationArray", test.getClassification());
                 ItemView.putExtra("BookCover", test.getBookCover());
+                ItemView.putExtra("Description", "dasdasdasdasd");
 
                 startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
             }
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         test.setAuthorName(data.getStringExtra("AuthorName"));
                         test.setDescription(data.getStringExtra("Description"));
                         test.setClassification(data.getStringArrayListExtra("ClassificationArray"));
-                        test.setBookCover(data.getBundleExtra("BookCover"));
+                        test.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         test.setAuthorName(order);
                     }
                 }

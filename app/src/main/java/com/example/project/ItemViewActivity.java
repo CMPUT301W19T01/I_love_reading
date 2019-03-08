@@ -57,11 +57,11 @@ public class ItemViewActivity extends AppCompatActivity {
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
-        Bundle BookCover = result.getBundleExtra("BookCover");
+        Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover");
         Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
         if (!Edit){
-            resultIntent.putExtra("borrow","true"); //default setting
+            resultIntent.putExtra("borrow","false"); //default setting
             resultIntent.putExtra("watchlist", "false");
             checkStatus(Status); // check if the book can be borrowed
         }
@@ -72,7 +72,6 @@ public class ItemViewActivity extends AppCompatActivity {
             // Onclick listener for borrow button
             public void onClick(View v) {
                 if (!Status){ //If available
-                    Intent resultIntent = new Intent();
                     resultIntent.putExtra("borrow","true");
                     BorrowButton.setClickable(false);
                     Toast.makeText(getBaseContext(), R.string.BorrowToast,
@@ -85,7 +84,6 @@ public class ItemViewActivity extends AppCompatActivity {
             // Onclick listener for Watchlist button
             @Override
             public void onClick(View v) {
-                Intent resultIntent= new Intent();
                 resultIntent.putExtra("watchlist","true");
                 WatchListButton.setClickable(false);
                 Toast.makeText(getBaseContext(), R.string.WatchListToast,
@@ -187,7 +185,7 @@ public class ItemViewActivity extends AppCompatActivity {
         }
     }
 
-    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Bundle BookCover){
+    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Bitmap BookCover){
         // This function checks if the Book is editable
         // If it's editable, text view will be able to edit
         if (Edit){
@@ -210,8 +208,7 @@ public class ItemViewActivity extends AppCompatActivity {
         EditTextDescription.setText(Description);
         TextViewClassification.setText(CombineStringList(ClassificationArray));
         if (BookCover != null){
-            Bitmap bmp = (Bitmap) BookCover.getParcelable("imagebitmap");
-            ImageViewBookCover.setImageBitmap(bmp);
+            ImageViewBookCover.setImageBitmap(BookCover);
         }
     }
 
@@ -231,9 +228,7 @@ public class ItemViewActivity extends AppCompatActivity {
                                 resultIntent.putExtra("do","edit");
                                 ImageViewBookCover.buildDrawingCache(); // send the image back
                                 Bitmap image= ImageViewBookCover.getDrawingCache();
-                                Bundle extras = new Bundle();
-                                extras.putParcelable("BookCover", image);
-                                resultIntent.putExtras(extras);
+                                resultIntent.putExtra("BookCover",image);
                                 String BookName = EditTextBookName.getText().toString();
                                 String AuthorName = EditTextAuthorName.getText().toString();
                                 String Description = EditTextDescription.getText().toString();
@@ -264,6 +259,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
             }
             else{
+                resultIntent.putExtra("do","test");
                 setResult(Activity.RESULT_OK,resultIntent);
                 finish();
             }
