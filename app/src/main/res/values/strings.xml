@@ -1,15 +1,20 @@
 <resources>
     <string name="app_name">project</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="comment">comment</string>
+    <string name="comment">Comment</string>
     <string name="bookname">BookName</string>
     <string name="watchlist">Watch List</string>
     <string name="description">Description</string>
     <string name="borrow">Borrow</string>
     <string name="action_settings">Settings</string>
-    <string name = "Name_Hint">Enter Your Book Name</string>
-    <string name = "Author_Hint">Enter Your Author Name</string>
-    <string name = "Description_Hint">Enter Your Description</string>
+    <string name = "Name_Hint">Enter Your Book Name </string>
+    <string name = "Author_Hint">Enter Your Author Name </string>
+    <string name = "Description_Hint">Enter Your Description </string>
+    <string name = "Classification_Hint">Select the class this book belongs to </string>
+    <string name = "Classification">Classification</string>
+    <string name = "BorrowToast">Borrow request has been sent</string>
+    <string name = "WatchListToast">The Book has been added to the WatchList</string>
+    <string name = "SelectionTile">"Select the possible classes"</string>
 
 
 </resources>

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button start_button;
@@ -15,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        test = new Book(" ", " ", " ", false," ");
+        ArrayList<String> Classification = new ArrayList<String>();
+        test = new Book("", "", "", false,"", Classification);
         setContentView(R.layout.activity_main);
         start_button = (Button) findViewById(R.id.button_item_view);
         view_Button = (Button) findViewById(R.id.button_view);
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("status", test.getStatus());
                 ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", test.getDescription());
+                ItemView.putExtra("ClassificationArray", test.getClassification());
                 startActivityForResult(ItemView, 1); // request code 0 means we are allowing the user to edit the book
             }
         });
@@ -43,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("status", test.getStatus());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", test.getDescription());
-                startActivityForResult(ItemView, 1); // request code 0 means we are looking for if the user decide to borrow the book
+                ItemView.putExtra("ClassificationArray", test.getClassification());
+                ItemView.putExtra("BookCover", test.getBookCover());
+
+                startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
             }
         });
 
@@ -56,22 +63,34 @@ public class MainActivity extends AppCompatActivity {
             case (0): { // In the case that we are looking for if the user is trying to borrow book
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
-                    if (data.getStringExtra("do").equals("borrow")) {
+                    if (data.getStringExtra("borrow").equals("true")) {
                         this.test.setStatus(true);
                         /* The book is now borrowed, update your information
 
+
+
                          */
                     }
-                        /* The Book is now added to watchlist, update your information        */
+                    if (data.getStringExtra("watchlist").equals("true")){
+
+                        /* The Book is now added to watchlist, update your information
+
+
+
+                        */
+                    }
                 }
             }
             case (1): {// we are looking for the new information that the user edited the book.
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
-                    if (order == "edit") {
+                    if (order.equals("edit")) {
                         test.setBookName(data.getStringExtra("BookName"));
                         test.setAuthorName(data.getStringExtra("AuthorName"));
                         test.setDescription(data.getStringExtra("Description"));
+                        test.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        test.setBookCover(data.getBundleExtra("BookCover"));
+                        test.setAuthorName(order);
                     }
                 }
                 }
