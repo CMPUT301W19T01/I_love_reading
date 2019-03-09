@@ -3,8 +3,6 @@ package com.example.project;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
-import org.w3c.dom.Comment;
-
 import java.util.ArrayList;
 
 public class Book {
@@ -14,6 +12,7 @@ public class Book {
     private Boolean status;
     private String Description;
     private ArrayList<String> Classification;
+    private ArrayList<Comment> Comments;
 
     private Float rating;
     private Bitmap BookCover;
@@ -25,6 +24,7 @@ public class Book {
         this.setAuthorName(AuthorName);
         this.setDescription(Description);
         this.setClassification(Classification);
+        this.Comments = new ArrayList<Comment>();
     }
 
     public String getDescription() {
@@ -75,7 +75,6 @@ public class Book {
         this.Classification = classification;
     }
 
-
     public Float getRating() {
         return rating;
     }
@@ -90,6 +89,18 @@ public class Book {
 
     public void setBookCover(Bitmap bookCover) {
         BookCover = bookCover;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return Comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        Comments = comments;
+    }
+
+    public void addComments(Comment newComment){
+        this.Comments.add(newComment);
     }
 
 }

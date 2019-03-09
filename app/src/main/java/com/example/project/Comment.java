@@ -1,23 +1,23 @@
 package com.example.project;
 
 public class Comment {
-    private Float rating;
+    private double rating;
     private String username;
     private String time;
     private String content;
 
-    public Comment(Float rating, String username, String time, String content){
+    public Comment(double rating, String username, String time, String content){
         this.rating = rating;
         this.username = username;
         this.time = time;
         this.content = content;
     }
 
-    public Float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(Float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

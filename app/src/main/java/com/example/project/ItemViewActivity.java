@@ -9,11 +9,14 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +35,12 @@ public class ItemViewActivity extends AppCompatActivity {
     private Button BorrowButton;
     private Button WatchListButton;
     private Intent temp;
+    private ListView ListViewComment;
     private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"}; // Possible selection in classification
     private boolean[] SelectedItemSet;
     private ArrayList<Integer> myUserItems = new ArrayList<>(); //Selected items in terms of binary
     private ArrayList<String> resultClassification= new ArrayList<>(); //Selected items in terms of String
+    private ArrayList<Comment> comments;
     private Intent resultIntent = new Intent();
     final int GET_FROM_GALLERY = 2;
 
@@ -53,11 +58,13 @@ public class ItemViewActivity extends AppCompatActivity {
         ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
         BorrowButton = findViewById(R.id.ButtonRentBook);
         WatchListButton = findViewById(R.id.ButtonWatchList);
+        ListViewComment = findViewById(R.id.ListViewComments);
         String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
+        comments = (ArrayList<Comment>) result.getSerializableExtra("CommentArray");
         Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
         if (!Edit){ // If we are viewing the info instead of borrowing
@@ -66,6 +73,9 @@ public class ItemViewActivity extends AppCompatActivity {
             checkStatus(Status); // check if the book can be borrowed
         }
         checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover);
+        CommentAdapter adapter = new CommentAdapter(this, comments);
+        ListViewComment.setAdapter(adapter);
+
 
         BorrowButton.setOnClickListener(new View.OnClickListener() {
             @Override

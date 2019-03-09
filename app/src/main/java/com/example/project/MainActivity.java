@@ -18,8 +18,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // Build a actual book
         ArrayList<String> Classification = new ArrayList<String>();
         test = new Book("", "", "", false,"", Classification);
+        Comment comment_1 = new Comment(5.0,"金刚芭比","2018/9/9", "I hate 301");
+        Comment comment_2 = new Comment(4.5,"金刚狼","2018/9/9", "I hate 301");
+        Comment comment_3 = new Comment(3.0,"虹口阿三","2018/9/9", "I hate 301？？？？？？？？？？？？？？？？？？？？");
+        Comment comment_4 = new Comment(2.5,"海南蹦迪王","2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+        test.addComments(comment_1);
+        test.addComments(comment_2);
+        test.addComments(comment_3);
+        test.addComments(comment_4);
+        //
+
         setContentView(R.layout.activity_main);
         start_button = (Button) findViewById(R.id.button_item_view);
         view_Button = (Button) findViewById(R.id.button_view);
@@ -35,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("Description", test.getDescription());
                 ItemView.putExtra("BookCover", test.getBookCover());
                 ItemView.putExtra("ClassificationArray", test.getClassification());
+                ItemView.putExtra("CommentArray",test.getComments());
                 startActivityForResult(ItemView, 1); // request code 0 means we are allowing the user to edit the book
             }
         });
@@ -51,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 ItemView.putExtra("Description", test.getDescription());
                 ItemView.putExtra("ClassificationArray", test.getClassification());
                 ItemView.putExtra("BookCover", test.getBookCover());
-                ItemView.putExtra("Description", "dasdasdasdasd");
+                ItemView.putExtra("CommentArray",test.getComments());
 
                 startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
             }
