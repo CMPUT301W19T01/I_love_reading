@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.libo.myapplication.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,6 +32,7 @@ public class ItemViewActivity extends AppCompatActivity {
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
         BorrowButton = findViewById(R.id.ButtonRentBook);
         WatchListButton = findViewById(R.id.ButtonWatchList);
+
         String BookName = result.getStringExtra("BookName");
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
