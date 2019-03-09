@@ -15,11 +15,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressBar progressBar;
     EditText editTextUsername,editTextPassword,editTextEmail;
+    DatabaseReference databaseUser;
     private FirebaseAuth mAuth;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +35,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
 
-
+        databaseUser = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
         findViewById(R.id.buttonCancel).setOnClickListener(this);
     }
+    private void AddUser(String email, String username){
+        String id = databaseUser.push().getKey();
+        User user = new User(email,username,id);
+        databaseUser.child(id).setValue(user);
+        Toast.makeText(this,"User add successful",Toast.LENGTH_LONG).show();
+    }
 
     private void RegisterUser(){
-        String username = editTextUsername.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
+        final String username = editTextUsername.getText().toString().trim();
+        final String password = editTextPassword.getText().toString().trim();
+        final String email = editTextEmail.getText().toString().trim();
 
         if (username.isEmpty()){
             editTextUsername.setError("Username is required");
@@ -64,6 +75,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    AddUser(email,username);
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(),"User Registered Successfull",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignUpActivity.this,Profile.class);
