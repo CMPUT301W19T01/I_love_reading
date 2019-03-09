@@ -1,6 +1,9 @@
 package com.example.project;
 
-public class Comment {
+
+import java.io.Serializable;
+
+public class Comment implements Serializable {
     private double rating;
     private String username;
     private String time;
