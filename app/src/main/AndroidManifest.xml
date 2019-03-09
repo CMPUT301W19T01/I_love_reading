@@ -21,7 +21,7 @@
             android:name=".Activity.BasicActivity"
             android:label="@string/title_activity_basic" />
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.ItemViewActivity"></activity>
+        <activity android:name=".Activity.ItemViewActivity" />
     </application>
 
 </manifest>

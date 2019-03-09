@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.example.libo.myapplication.Fragment.AllFragment;
 import com.example.libo.myapplication.Fragment.BorrowFragment;
@@ -15,6 +16,8 @@ import com.example.libo.myapplication.Fragment.OwnFragment;
 import com.example.libo.myapplication.Fragment.ProfileFragment;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Fragment.RequestFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 public class BasicActivity extends AppCompatActivity {
 
@@ -24,6 +27,7 @@ public class BasicActivity extends AppCompatActivity {
     private AllFragment allFragment;
     private RequestFragment requestFragment;
 
+    private FirebaseAuth auth;
 
     private Fragment[] fragments;
     private int lastFragment;
@@ -91,6 +95,7 @@ public class BasicActivity extends AppCompatActivity {
         borrowFragment = new BorrowFragment();
         allFragment = new AllFragment();
         requestFragment = new RequestFragment();
+
 
         fragments = new Fragment[]{profileFragment, ownFragment, borrowFragment, allFragment, requestFragment};
         lastFragment = 0;

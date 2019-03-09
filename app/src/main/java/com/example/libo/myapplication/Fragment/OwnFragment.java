@@ -20,7 +20,8 @@ import java.util.ArrayList;
 
 public class OwnFragment extends Fragment {
 
-
+    private static final String username = "username";
+    private static final String user_id = "userid";
     private TextView userNameTextView;
     ListView own_book_lv;
     ArrayAdapter<Book> adapter;

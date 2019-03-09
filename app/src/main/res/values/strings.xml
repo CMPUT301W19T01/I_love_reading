@@ -26,9 +26,10 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name = "Name_Hint">Enter Your Book Name</string>
+    <string name="Name_Hint">Enter Your Book Name</string>
 
-    <string name = "Author_Hint">Enter Your Author Name</string>
+    <string name="Author_Hint">Enter Your Author Name</string>
 
-    <string name = "Description_Hint">Enter Your Description</string>
+    <string name="Description_Hint">Enter Your Description</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
