@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "659709826179",
-    "firebase_url": "https://ilovereading-55841.firebaseio.com",
-    "project_id": "ilovereading-55841",
-    "storage_bucket": "ilovereading-55841.appspot.com"
+    "project_number": "608696867879",
+    "firebase_url": "https://cmput301-project.firebaseio.com",
+    "project_id": "cmput301-project",
+    "storage_bucket": "cmput301-project.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:659709826179:android:93f9aed4812dd109",
+        "mobilesdk_app_id": "1:608696867879:android:be6e1e6823825f47",
         "android_client_info": {
-          "package_name": "com.example.libo.myapplication"
+          "package_name": "com.example.libo.loginandsignup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "659709826179-69p982h5v0vli0ca3ih1ghk3lbcsh9av.apps.googleusercontent.com",
+          "client_id": "608696867879-avo49aurp3rai2jqkfmr2g1fd3ljkad2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.libo.myapplication",
-            "certificate_hash": "4f2d902c6a2e6a11f7d7a9fcdcf136fd29ba3f5c"
+            "package_name": "com.example.libo.loginandsignup",
+            "certificate_hash": "ad0d234038cb2aacd48f4482ef798277246d06cf"
           }
         },
         {
-          "client_id": "659709826179-999v33e276vvlnqgl4issbcgrkjclflb.apps.googleusercontent.com",
+          "client_id": "608696867879-blboue7fcpsskl4qtbtne8qi21puas60.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAryBkrBPgy02SB4acE7ULzMznwASoDRhs"
+          "current_key": "AIzaSyC0jYz63pl-5akcIuQ36hFUT2qhVGFA9x4"
         }
       ],
       "services": {
@@ -40,7 +40,51 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "659709826179-999v33e276vvlnqgl4issbcgrkjclflb.apps.googleusercontent.com",
+              "client_id": "608696867879-blboue7fcpsskl4qtbtne8qi21puas60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608696867879:android:93f9aed4812dd109",
+        "android_client_info": {
+          "package_name": "com.example.libo.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608696867879-6khovkfoqsl1vb9s8jri9uvp2am1ur3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.libo.myapplication",
+            "certificate_hash": "ad0d234038cb2aacd48f4482ef798277246d06cf"
+          }
+        },
+        {
+          "client_id": "608696867879-blboue7fcpsskl4qtbtne8qi21puas60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0jYz63pl-5akcIuQ36hFUT2qhVGFA9x4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608696867879-blboue7fcpsskl4qtbtne8qi21puas60.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
