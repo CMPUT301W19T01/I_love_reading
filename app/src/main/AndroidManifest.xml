@@ -17,17 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        <activity android:name=".Login" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".Profile"></activity>
-=======
         <activity
             android:name=".Activity.BasicActivity"
             android:label="@string/title_activity_basic" />
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.ItemViewActivity"></activity>
->>>>>>> 6309bfe233780aa32cb2e537165af3f564e3ca92
     </application>
 
 </manifest>

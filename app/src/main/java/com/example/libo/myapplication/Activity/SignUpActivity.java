@@ -24,11 +24,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     ProgressBar progressBar;
 
     EditText editTextUsername,editTextPassword,editTextEmail;
-<<<<<<< HEAD:app/src/main/java/com/example/libo/myapplication/SignUpActivity.java
     DatabaseReference databaseUser;
-=======
-
->>>>>>> 6309bfe233780aa32cb2e537165af3f564e3ca92:app/src/main/java/com/example/libo/myapplication/Activity/SignUpActivity.java
     private FirebaseAuth mAuth;
 
 
@@ -49,14 +45,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
 
-<<<<<<< HEAD:app/src/main/java/com/example/libo/myapplication/SignUpActivity.java
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
-=======
-
-
-
-
->>>>>>> 6309bfe233780aa32cb2e537165af3f564e3ca92:app/src/main/java/com/example/libo/myapplication/Activity/SignUpActivity.java
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
@@ -74,18 +63,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void RegisterUser(){
-<<<<<<< HEAD:app/src/main/java/com/example/libo/myapplication/SignUpActivity.java
         final String username = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
-=======
-
-        String username = editTextUsername.getText().toString().trim();
-
-        String password = editTextPassword.getText().toString().trim();
-
-        String email = editTextEmail.getText().toString().trim();
->>>>>>> 6309bfe233780aa32cb2e537165af3f564e3ca92:app/src/main/java/com/example/libo/myapplication/Activity/SignUpActivity.java
 
 
 
@@ -134,11 +114,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()){
-<<<<<<< HEAD:app/src/main/java/com/example/libo/myapplication/SignUpActivity.java
                     AddUser(email,username);
-=======
-
->>>>>>> 6309bfe233780aa32cb2e537165af3f564e3ca92:app/src/main/java/com/example/libo/myapplication/Activity/SignUpActivity.java
                     progressBar.setVisibility(View.GONE);
 
                     Toast.makeText(getApplicationContext(),"User Registered Successfull",Toast.LENGTH_SHORT).show();
