@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.libo.myapplication.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +23,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.libo.myapplication.Adapter.CommentAdapter;
+import com.example.libo.myapplication.Model.Comment;
+import com.example.libo.myapplication.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
