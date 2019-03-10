@@ -1,5 +1,7 @@
 package com.example.libo.myapplication.Model;
 
+import android.graphics.Bitmap;
+
 import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
@@ -10,13 +12,20 @@ public class Book {
     private String ID;
     private Boolean status;
     private String Description;
+    private ArrayList<String> Classification;
+    private ArrayList<Comment> Comments;
 
-    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description){
+    private Float rating;
+    private Bitmap BookCover;
+
+    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification){
         this.setBookName(BookName);
         this.setStatus(status);
         this.setID(ID);
         this.setAuthorName(AuthorName);
         this.setDescription(Description);
+        this.setClassification(Classification);
+        this.Comments = new ArrayList<Comment>();
     }
 
     public String getDescription() {
@@ -59,4 +68,40 @@ public class Book {
     public void setStatus(Boolean status) {
         this.status = status; // True means the item is borrowed, False means the item is still available
     }
+    public ArrayList<String> getClassification() {
+        return Classification;
+    }
+
+    public void setClassification(ArrayList<String> classification) {
+        this.Classification = classification;
+    }
+
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
+    }
+
+    public Bitmap getBookCover() {
+        return BookCover;
+    }
+
+    public void setBookCover(Bitmap bookCover) {
+        BookCover = bookCover;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return Comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        Comments = comments;
+    }
+
+    public void addComments(Comment newComment){
+        this.Comments.add(newComment);
+    }
+
 }
