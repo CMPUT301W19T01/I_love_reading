@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,7 @@ public class ItemViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Intent result = getIntent();
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
         setContentView(R.layout.activity_item_view);
@@ -202,8 +204,8 @@ public class ItemViewActivity extends AppCompatActivity {
             EditTextAuthorName.setEnabled(true);
             EditTextDescription.setEnabled(true);
             TextViewClassification.setClickable(true);
-            BorrowButton.setEnabled(false);
-            WatchListButton.setEnabled(false);
+            BorrowButton.setVisibility(View.GONE);
+            WatchListButton.setVisibility(View.GONE);
         }
         else{
             EditTextBookName.setEnabled(false);
