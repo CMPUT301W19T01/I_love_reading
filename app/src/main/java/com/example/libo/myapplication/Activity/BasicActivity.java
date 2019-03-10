@@ -18,12 +18,20 @@ import com.example.libo.myapplication.Fragment.RequestFragment;
 
 public class BasicActivity extends AppCompatActivity {
 
+    private static final String TAG = "ViewDatabase";
+    
     private OwnFragment ownFragment;
     private ProfileFragment profileFragment;
     private BorrowFragment borrowFragment;
     private AllFragment allFragment;
     private RequestFragment requestFragment;
-
+    
+    
+    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference myRef;
+    private  String userID;
 
     private Fragment[] fragments;
     private int lastFragment;
@@ -75,7 +83,45 @@ public class BasicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
 
+        mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        FirebaseUser user = mAuth.getCurrentUser();
+        userID = user.getUid();
+        
+        
+        //username = (TextView) findViewById(R.id.Username);
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG,"Successfully signed in with: " + user.getEmail());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                showData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        
         // Hide the action bar
         getSupportActionBar().hide();
         // Set full screen
@@ -83,7 +129,37 @@ public class BasicActivity extends AppCompatActivity {
 
         initFragment();
     }
+    
+    private void showData(DataSnapshot dataSnapshot) {
+        for(DataSnapshot ds : dataSnapshot.getChildren()){
+            Users uInfo = new Users();
+            uInfo.setUid(ds.child(userID).getValue(Users.class).getUid()); //set the name
+            uInfo.setEmail(ds.child(userID).getValue(Users.class).getEmail()); //set the email
+            uInfo.setUsername(ds.child(userID).getValue(Users.class).getUsername()); //set the phone_num
+            Log.d(TAG,"Successfully signed in with: " + uInfo.getUsername());
+            //username.setText(uInfo.getUsername());
 
+        }
+
+    }
+    
+    
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+    
     private void initFragment(){
 
         ownFragment = new OwnFragment();
