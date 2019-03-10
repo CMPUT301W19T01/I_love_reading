@@ -1,4 +1,4 @@
-package com.example.libo.myapplication.Activity;
+package com.example.project;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,9 +9,13 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,13 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.libo.myapplication.Adapter.CommentAdapter;
-import com.example.libo.myapplication.Model.Comment;
-import com.example.libo.myapplication.R;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ItemViewActivity extends AppCompatActivity {
 
@@ -51,6 +52,7 @@ public class ItemViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Intent result = getIntent();
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
         setContentView(R.layout.activity_item_view);
@@ -121,13 +123,13 @@ public class ItemViewActivity extends AppCompatActivity {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
                 mBuilder.setTitle(R.string.SelectionTile);
                 mBuilder.setMultiChoiceItems(ItemSet, SelectedItemSet, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        if (isChecked) {
-                            myUserItems.add(which); }
-                        else {
-                            myUserItems.remove((Integer.valueOf(which))); } }
-                });
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                if (isChecked) {
+                                    myUserItems.add(which); }
+                                else {
+                                    myUserItems.remove((Integer.valueOf(which))); } }
+                        });
                 mBuilder.setCancelable(false);
                 mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -202,13 +204,16 @@ public class ItemViewActivity extends AppCompatActivity {
             EditTextAuthorName.setEnabled(true);
             EditTextDescription.setEnabled(true);
             TextViewClassification.setClickable(true);
-            BorrowButton.setEnabled(false);
-            WatchListButton.setEnabled(false);
+            BorrowButton.setVisibility(View.GONE);
+            WatchListButton.setVisibility(View.GONE);
         }
         else{
-            EditTextBookName.setEnabled(false);
-            EditTextAuthorName.setEnabled(false);
-            EditTextDescription.setEnabled(false);
+            EditTextBookName.setCursorVisible(false);
+            EditTextBookName.setFocusable(false);
+            EditTextAuthorName.setCursorVisible(false);
+            EditTextAuthorName.setFocusable(false);
+            EditTextDescription.setCursorVisible(false);
+            EditTextDescription.setFocusable(false);
             ImageViewBookCover.setEnabled(false);
             TextViewClassification.setEnabled(false);
         }
@@ -224,7 +229,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         // When the return button is pressed. Automatically transfer the required information back
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
             // do something on back.
             Boolean Edit = temp.getBooleanExtra("edit",false);
             if (Edit){
