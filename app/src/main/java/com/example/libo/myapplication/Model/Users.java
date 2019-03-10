@@ -4,12 +4,15 @@ public class Users {
 
     private String email;
     private String username;
-    private String password;
+    private String uid;
 
-    public Users(String email, String username, String password) {
+    public Users(){
+
+    }
+    public Users(String email, String username, String uid) {
         this.email = email;
         this.username = username;
-        this.password = password;
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -28,11 +31,12 @@ public class Users {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUid() {
+        return uid;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
+}
 }
