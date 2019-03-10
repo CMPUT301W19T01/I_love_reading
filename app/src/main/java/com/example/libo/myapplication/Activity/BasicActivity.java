@@ -133,11 +133,13 @@ public class BasicActivity extends AppCompatActivity {
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             Users uInfo = new Users();
+            /*
             uInfo.setUid(ds.child(userID).getValue(Users.class).getUid()); //set the name
             uInfo.setEmail(ds.child(userID).getValue(Users.class).getEmail()); //set the email
             uInfo.setUsername(ds.child(userID).getValue(Users.class).getUsername()); //set the phone_num
             Log.d(TAG,"Successfully signed in with: " + uInfo.getUsername());
             //username.setText(uInfo.getUsername());
+            */
 
         }
 
