@@ -208,9 +208,12 @@ public class ItemViewActivity extends AppCompatActivity {
             WatchListButton.setVisibility(View.GONE);
         }
         else{
-            EditTextBookName.setEnabled(false);
-            EditTextAuthorName.setEnabled(false);
-            EditTextDescription.setEnabled(false);
+            EditTextBookName.setCursorVisible(false);
+            EditTextBookName.setFocusable(false);
+            EditTextAuthorName.setCursorVisible(false);
+            EditTextAuthorName.setFocusable(false);
+            EditTextDescription.setCursorVisible(false);
+            EditTextDescription.setFocusable(false);
             ImageViewBookCover.setEnabled(false);
             TextViewClassification.setEnabled(false);
         }
