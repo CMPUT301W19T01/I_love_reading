@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
     private void AddUser(String email, String username){
         String id = databaseUser.push().getKey();
-        User user = new User(email,username,id);
+        Users user = new Users(email,username,id);
         databaseUser.child(id).setValue(user);
         Toast.makeText(this,"User add successful",Toast.LENGTH_LONG).show();
     }
