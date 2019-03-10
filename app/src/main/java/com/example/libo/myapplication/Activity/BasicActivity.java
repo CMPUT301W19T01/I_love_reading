@@ -28,14 +28,14 @@ import com.google.firebase.database.ValueEventListener;
 public class BasicActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewDatabase";
-    
+
     private OwnFragment ownFragment;
     private ProfileFragment profileFragment;
     private BorrowFragment borrowFragment;
     private AllFragment allFragment;
     private RequestFragment requestFragment;
-    
-    
+
+
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -97,8 +97,8 @@ public class BasicActivity extends AppCompatActivity {
         myRef = mFirebaseDatabase.getReference();
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
-        
-        
+
+
         //username = (TextView) findViewById(R.id.Username);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -130,7 +130,7 @@ public class BasicActivity extends AppCompatActivity {
 
             }
         });
-        
+
         // Hide the action bar
         getSupportActionBar().hide();
         // Set full screen
@@ -138,21 +138,23 @@ public class BasicActivity extends AppCompatActivity {
 
         initFragment();
     }
-    
+
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             Users uInfo = new Users();
+            /*
             uInfo.setUid(ds.child(userID).getValue(Users.class).getUid()); //set the name
             uInfo.setEmail(ds.child(userID).getValue(Users.class).getEmail()); //set the email
             uInfo.setUsername(ds.child(userID).getValue(Users.class).getUsername()); //set the phone_num
             Log.d(TAG,"Successfully signed in with: " + uInfo.getUsername());
             //username.setText(uInfo.getUsername());
+            */
 
         }
 
     }
-    
-    
+
+
 
     @Override
     protected void onStart() {
@@ -168,7 +170,7 @@ public class BasicActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-    
+
     private void initFragment(){
 
         ownFragment = new OwnFragment();

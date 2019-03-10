@@ -10,9 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
-import com.example.libo.myapplication.User;
+import com.example.libo.myapplication.Model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -56,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
     private void AddUser(String email, String username){
-        String id = databaseUser.push().getKey();
+        String id = mAuth.getCurrentUser().getUid();
         Users user = new Users(email,username,id);
         databaseUser.child(id).setValue(user);
         Toast.makeText(this,"User add successful",Toast.LENGTH_LONG).show();
@@ -121,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                     Toast.makeText(getApplicationContext(),"User Registered Successfull",Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(SignUpActivity.this, BasicActivity.class);
+                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
