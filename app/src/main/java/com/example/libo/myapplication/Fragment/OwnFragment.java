@@ -31,6 +31,7 @@ public class OwnFragment extends Fragment {
     ArrayAdapter<Book> adapter;
     private ArrayList<Book> arrayOwnedbooks;
     private Book currentBook;
+    private int current_index = 0;
 
     @Nullable
     @Override
@@ -81,8 +82,8 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
                 ItemView.putExtra("CommentArray",currentBook.getComments());
-
-                startActivityForResult(ItemView, 1); // request code 0 means we are looking for if the user decide to borrow the book
+                current_index = i;
+                startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
         });
         return view;
@@ -150,6 +151,20 @@ public class OwnFragment extends Fragment {
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         currentBook.setAuthorName(order);
                         arrayOwnedbooks.add(currentBook);
+                    }
+                }
+            }
+            case (2): {// we are updating info of a book
+                if (resultCode == Activity.RESULT_OK) {
+                    String order = data.getStringExtra("do");
+                    if (order.equals("edit")) {
+                        currentBook = arrayOwnedbooks.get(current_index);
+                        currentBook.setBookName(data.getStringExtra("BookName"));
+                        currentBook.setAuthorName(data.getStringExtra("AuthorName"));
+                        currentBook.setDescription(data.getStringExtra("Description"));
+                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        currentBook.setAuthorName(order);
                     }
                 }
             }
