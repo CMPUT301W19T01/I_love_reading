@@ -76,13 +76,13 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
                 ItemView.putExtra("status", currentBook.getStatus());
-                ItemView.putExtra("edit",false);
+                ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
                 ItemView.putExtra("CommentArray",currentBook.getComments());
 
-                startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
+                startActivityForResult(ItemView, 1); // request code 0 means we are looking for if the user decide to borrow the book
             }
         });
         return view;
