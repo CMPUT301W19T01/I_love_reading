@@ -9,6 +9,8 @@ public class Comment implements Serializable {
     private String time;
     private String content;
 
+    public Comment(){};
+
     public Comment(double rating, String username, String time, String content){
         this.rating = rating;
         this.username = username;

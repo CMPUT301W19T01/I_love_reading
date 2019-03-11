@@ -7,11 +7,13 @@ public class Request implements Serializable {
     private String sender;
     private String receiver;
     private String senderEmail;
-
     private boolean isBorrowed;
-
     private boolean isAccepted;
     private Date date;
+
+    public  Request(){
+
+    };
 
     public Request(String sender, String receiver, String senderEmail,boolean isBorrowed,Date date) {
         this.sender = sender;

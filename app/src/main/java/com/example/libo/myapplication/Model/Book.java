@@ -18,6 +18,10 @@ public class Book {
     private Float rating;
     private Bitmap BookCover;
 
+    public Book(){
+
+    };
+
     public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification){
         this.setBookName(BookName);
         this.setStatus(status);
