@@ -30,8 +30,12 @@ import com.example.libo.myapplication.R;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ItemViewActivity extends AppCompatActivity {
 
@@ -42,6 +46,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private ImageView ImageViewBookCover;
     private Button BorrowButton;
     private Button WatchListButton;
+    private Button AddCommentButton;
     private Intent temp;
     private ListView ListViewComment;
     private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"}; // Possible selection in classification
@@ -50,7 +55,9 @@ public class ItemViewActivity extends AppCompatActivity {
     private ArrayList<String> resultClassification= new ArrayList<>(); //Selected items in terms of String
     private ArrayList<Comment> comments;
     private Intent resultIntent = new Intent();
+    private CommentAdapter adapter;
     final int GET_FROM_GALLERY = 2;
+    final int GET_FROM_COMMENT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,7 @@ public class ItemViewActivity extends AppCompatActivity {
         ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
         BorrowButton = findViewById(R.id.ButtonRentBook);
         WatchListButton = findViewById(R.id.ButtonWatchList);
+        AddCommentButton = findViewById(R.id.ButtonAddComment);
         ListViewComment = findViewById(R.id.ListViewComments);
         String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
@@ -82,7 +90,7 @@ public class ItemViewActivity extends AppCompatActivity {
             checkStatus(Status); // check if the book can be borrowed
         }
         checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover);
-        CommentAdapter adapter = new CommentAdapter(this, comments);
+        adapter = new CommentAdapter(this, comments);
         ListViewComment.setAdapter(adapter);
         setListViewHeightBasedOnChildren(ListViewComment);
 
@@ -168,6 +176,16 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
+        AddCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent CommentIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
+                startActivityForResult(CommentIntent,GET_FROM_COMMENT);
+            }
+        });
+
+
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -186,6 +204,26 @@ public class ItemViewActivity extends AppCompatActivity {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            }
+        }
+        if (requestCode == GET_FROM_COMMENT && resultCode == Activity.RESULT_OK){
+            Intent resultIntent = getIntent();
+            Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
+            if (!resultCommand) {
+                double Rate = resultIntent.getDoubleExtra("rate", '0');
+                String CommentText = resultIntent.getStringExtra("Comment");
+                String UserName = "........."; //To be done later
+                String CommentTime;
+                Calendar cal = Calendar.getInstance();
+                Date time = cal.getTime();
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String CurrentTime = timeFormat.format(time);
+                String CurrentDate = dateFormat.format(time);
+                CommentTime = CurrentDate + ' ' + CurrentTime;
+                Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
+                comments.add(newComment);
+                adapter.notifyDataSetChanged();
             }
         }
     }
@@ -210,6 +248,7 @@ public class ItemViewActivity extends AppCompatActivity {
             TextViewClassification.setClickable(true);
             BorrowButton.setVisibility(View.GONE);
             WatchListButton.setVisibility(View.GONE);
+            AddCommentButton.setVisibility(View.GONE);
         }
         else{
             EditTextBookName.setCursorVisible(false);
@@ -278,6 +317,7 @@ public class ItemViewActivity extends AppCompatActivity {
             }
             else{
                 resultIntent.putExtra("do","test");
+                resultIntent.putExtra("Comment",comments);
                 setResult(Activity.RESULT_OK,resultIntent);
                 finish();
             }

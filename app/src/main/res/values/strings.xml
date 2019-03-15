@@ -42,4 +42,7 @@
     <string name="RequestMap">Map</string>
     <string name="Button_accept">Accept</string>
     <string name="Button_deny">Deny</string>
+    <string name="AddComment">Add a new Comment</string>
+    <string name="EnterComment">Enter your comment</string>
+    <string name= "ClickRate">Click to select the rate</string>
 </resources>
