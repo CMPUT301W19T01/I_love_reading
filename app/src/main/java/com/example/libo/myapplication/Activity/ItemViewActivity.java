@@ -207,10 +207,10 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         }
         if (requestCode == GET_FROM_COMMENT && resultCode == Activity.RESULT_OK){
-            Intent resultIntent = getIntent();
+            Intent resultIntent = data;
             Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
             if (!resultCommand) {
-                double Rate = resultIntent.getDoubleExtra("rate", '0');
+                float Rate = resultIntent.getFloatExtra("rate", '0');
                 String CommentText = resultIntent.getStringExtra("Comment");
                 String UserName = "........."; //To be done later
                 String CommentTime;
@@ -224,6 +224,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
                 comments.add(newComment);
                 adapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(ListViewComment);
             }
         }
     }
@@ -308,6 +309,7 @@ public class ItemViewActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent resultIntent= new Intent();
                                 resultIntent.putExtra("do","donotedit");
+                                setResult(Activity.RESULT_OK,resultIntent);
                                 finish();
                             }
                         });

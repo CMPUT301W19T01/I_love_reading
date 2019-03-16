@@ -17,7 +17,7 @@ public class AddCommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comment);
-        final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CommentRatingBar);
+        final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CreateCommentRatingBar);
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
         Button CloseButton = (Button) findViewById(R.id.CommentCloseButton);
         final TextView ratingDisplayTextView = (TextView) findViewById(R.id.EnterCommentTextView);
@@ -29,7 +29,7 @@ public class AddCommentActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("close",false); //It's not closing comment
                 resultIntent.putExtra("rate",ratingRatingBar.getRating());
-                resultIntent.putExtra("Comment",ratingDisplayTextView.getText());
+                resultIntent.putExtra("Comment",ratingDisplayTextView.getText().toString());
                 setResult(Activity.RESULT_OK,resultIntent);
                 finish();
             }
@@ -40,6 +40,8 @@ public class AddCommentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("close", true);
+                setResult(Activity.RESULT_OK,resultIntent);
+                finish();
             }
         });
 

@@ -77,7 +77,7 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
                 ItemView.putExtra("status", currentBook.getStatus());
-                ItemView.putExtra("edit",true);
+                ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
