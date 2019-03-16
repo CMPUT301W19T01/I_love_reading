@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -46,7 +49,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private ImageView ImageViewBookCover;
     private Button BorrowButton;
     private Button WatchListButton;
-    private Button AddCommentButton;
+    private ImageButton AddCommentButton;
     private Intent temp;
     private ListView ListViewComment;
     private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"}; // Possible selection in classification
@@ -93,7 +96,6 @@ public class ItemViewActivity extends AppCompatActivity {
         adapter = new CommentAdapter(this, comments);
         ListViewComment.setAdapter(adapter);
         setListViewHeightBasedOnChildren(ListViewComment);
-
 
 
         BorrowButton.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +183,7 @@ public class ItemViewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent CommentIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
                 startActivityForResult(CommentIntent,GET_FROM_COMMENT);
+                ((Activity) ItemViewActivity.this).overridePendingTransition(R.layout.animate_slide_up_enter, R.layout.animate_slide_up_exit);
             }
         });
 
@@ -260,6 +263,9 @@ public class ItemViewActivity extends AppCompatActivity {
             EditTextDescription.setFocusable(false);
             ImageViewBookCover.setEnabled(false);
             TextViewClassification.setEnabled(false);
+            EditTextBookName.setBackgroundResource(R.drawable.edittext_trans_broader);
+            EditTextAuthorName.setBackgroundResource(R.drawable.edittext_trans_broader);
+            EditTextDescription.setBackgroundResource(R.drawable.edittext_trans_broader);
         }
         EditTextBookName.setText(BookName);
         EditTextAuthorName.setText(AuthorName);

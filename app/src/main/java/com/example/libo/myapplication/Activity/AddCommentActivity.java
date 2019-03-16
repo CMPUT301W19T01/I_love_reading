@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -19,7 +20,7 @@ public class AddCommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_comment);
         final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CreateCommentRatingBar);
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
-        Button CloseButton = (Button) findViewById(R.id.CommentCloseButton);
+        ImageButton CloseButton = (ImageButton) findViewById(R.id.CommentCloseButton);
         final TextView ratingDisplayTextView = (TextView) findViewById(R.id.EnterCommentTextView);
 
 

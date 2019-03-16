@@ -44,5 +44,6 @@
     <string name="Button_deny">Deny</string>
     <string name="AddComment">Add a new Comment</string>
     <string name="EnterComment">Enter your comment</string>
-    <string name= "ClickRate">Click to select the rate</string>
+    <string name="ClickRate">Click to select the rate</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
