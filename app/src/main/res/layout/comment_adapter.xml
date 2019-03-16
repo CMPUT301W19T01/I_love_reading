@@ -50,15 +50,14 @@
 
             <TextView
                 android:id="@+id/TextViewCommentTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="56dp"
+                android:layout_height="15dp"
                 android:layout_below="@id/TextViewUserName"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="120dp"
-                android:layout_marginRight="120dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="9dp"
+                android:layout_toEndOf="@+id/CommentRatingBar"
+                android:layout_toRightOf="@+id/CommentRatingBar"
                 android:text="@string/CommentTime"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textSize="10sp" />
@@ -72,13 +71,14 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/CommentContent"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <RatingBar

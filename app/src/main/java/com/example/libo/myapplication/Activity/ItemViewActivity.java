@@ -85,7 +85,7 @@ public class ItemViewActivity extends AppCompatActivity {
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         comments = (ArrayList<Comment>) result.getSerializableExtra("CommentArray");
-        Boolean Edit = result.getBooleanExtra("edit",false);
+        final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
         if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
@@ -134,47 +134,52 @@ public class ItemViewActivity extends AppCompatActivity {
         TextViewClassification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
-                mBuilder.setTitle(R.string.SelectionTile);
-                mBuilder.setMultiChoiceItems(ItemSet, SelectedItemSet, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                if (isChecked) {
-                                    myUserItems.add(which); }
-                                else {
-                                    myUserItems.remove((Integer.valueOf(which))); } }
-                        });
-                mBuilder.setCancelable(false);
-                mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        ArrayList<String> item = new ArrayList<>();
-                        for (int i = 0; i < myUserItems.size(); i++) {
-                            item.add(ItemSet[myUserItems.get(i)]); }
-                        resultClassification = item;
-                        TextViewClassification.setText(CombineStringList(item)); }
-                });
+                if (Edit){
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
+                    mBuilder.setTitle(R.string.SelectionTile);
+                    mBuilder.setMultiChoiceItems(ItemSet, SelectedItemSet, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            if (isChecked) {
+                                myUserItems.add(which); }
+                            else {
+                                myUserItems.remove((Integer.valueOf(which))); } }
+                    });
+                    mBuilder.setCancelable(false);
+                    mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            ArrayList<String> item = new ArrayList<>();
+                            for (int i = 0; i < myUserItems.size(); i++) {
+                                item.add(ItemSet[myUserItems.get(i)]); }
+                            resultClassification = item;
+                            TextViewClassification.setText(CombineStringList(item)); }
+                    });
 
-                mBuilder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        for (int i = 0; i < SelectedItemSet.length; i++) {
-                            SelectedItemSet[i] = false;
-                            myUserItems.clear();
-                            resultClassification = new ArrayList<String>();
-                            TextViewClassification.setText("");
+                    mBuilder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
                         }
-                    }
-                });
-                AlertDialog mDialog = mBuilder.create();
-                mDialog.show();
+                    });
+
+                    mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which) {
+                            for (int i = 0; i < SelectedItemSet.length; i++) {
+                                SelectedItemSet[i] = false;
+                                myUserItems.clear();
+                                resultClassification = new ArrayList<String>();
+                                TextViewClassification.setText("");
+                            }
+                        }
+                    });
+                    AlertDialog mDialog = mBuilder.create();
+                    mDialog.show();
+                }
+                else{
+                    TextViewClassification.setClickable(false);
+                }
             }
         });
 
@@ -262,7 +267,7 @@ public class ItemViewActivity extends AppCompatActivity {
             EditTextDescription.setCursorVisible(false);
             EditTextDescription.setFocusable(false);
             ImageViewBookCover.setEnabled(false);
-            TextViewClassification.setEnabled(false);
+            TextViewClassification.setClickable(false);
             EditTextBookName.setBackgroundResource(R.drawable.edittext_trans_broader);
             EditTextAuthorName.setBackgroundResource(R.drawable.edittext_trans_broader);
             EditTextDescription.setBackgroundResource(R.drawable.edittext_trans_broader);
@@ -271,6 +276,9 @@ public class ItemViewActivity extends AppCompatActivity {
         EditTextAuthorName.setText(AuthorName);
         EditTextDescription.setText(Description);
         TextViewClassification.setText(CombineStringList(ClassificationArray));
+        if (CombineStringList(ClassificationArray) == "" && !Edit){
+            TextViewClassification.setText("None");
+        }
         if (BookCover != null){
             ImageViewBookCover.setImageBitmap(BookCover);
         }

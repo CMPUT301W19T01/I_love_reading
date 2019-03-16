@@ -149,7 +149,6 @@ public class OwnFragment extends Fragment {
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
-                        currentBook.setAuthorName(order);
                         arrayOwnedbooks.add(currentBook);
                     }
                 }
