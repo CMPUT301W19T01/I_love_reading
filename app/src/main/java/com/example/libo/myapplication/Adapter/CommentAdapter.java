@@ -1,6 +1,7 @@
 package com.example.libo.myapplication.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             viewHolder.usericon = (ImageView) convertView.findViewById(R.id.ImageViewUserIcon);
 
             convertView.setTag(viewHolder);
+            convertView.setBackgroundColor(Color.parseColor("#00141414"));
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }

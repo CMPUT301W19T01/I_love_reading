@@ -23,7 +23,9 @@
             android:name=".Activity.BasicActivity"
             android:label="@string/title_activity_basic" />
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.ItemViewActivity" />
+        <activity android:name=".Activity.ItemViewActivity"
+            android:windowSoftInputMode="stateHidden"
+            />
     </application>
 
 </manifest>

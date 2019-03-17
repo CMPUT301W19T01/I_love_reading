@@ -29,7 +29,7 @@
     <string name="Author_Hint">Enter Your Author Name</string>
 
     <string name="Description_Hint">Enter Your Description</string>
-    <string name="Classification_Hint">Select the class this book belongs</string>
+    <string name="Classification_Hint">Select the class of this book</string>
     <string name="Classification">Classification</string>
     <string name="BorrowToast">Borrow request has been sent</string>
     <string name="WatchListToast">The Book has been added to the WatchList</string>
