@@ -1,4 +1,4 @@
-package com.example.project;
+package com.example.libo.myapplication.Activity;
 
 import org.junit.After;
 import org.junit.Before;
