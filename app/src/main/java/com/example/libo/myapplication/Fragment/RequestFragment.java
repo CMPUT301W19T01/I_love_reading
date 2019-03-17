@@ -32,6 +32,7 @@ public class RequestFragment extends Fragment {
     private ArrayList<Request> requests;
     private ArrayAdapter arrayAdapter;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

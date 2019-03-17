@@ -21,6 +21,7 @@ public class Request implements Serializable {
         this.senderEmail = senderEmail;
         this.isBorrowed = isBorrowed;
         this.date = date;
+        this.isAccepted = false;
     }
 
 

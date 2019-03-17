@@ -16,6 +16,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     private Button accept;
     private Button deny;
     private Request request;
+    private Button map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,15 @@ public class RequestDetailActivity extends AppCompatActivity {
 
         accept = findViewById(R.id.button_accept);
         deny = findViewById(R.id.button_deny);
+        map = findViewById(R.id.button_map);
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RequestDetailActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Intent intent = getIntent();
         request = (Request) intent.getSerializableExtra("request");
