@@ -44,7 +44,7 @@ public class AllFragment extends Fragment {
         Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>());
         arrayAllbooks.add(0,book1);
         arrayAllbooks.add(1,book2);
-        adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
+        adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_expandable_list_item_1,arrayAllbooks);
         all_book_lv.setAdapter(adapter);
 
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
