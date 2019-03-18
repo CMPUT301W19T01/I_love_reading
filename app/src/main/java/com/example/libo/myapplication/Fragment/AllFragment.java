@@ -51,32 +51,35 @@ public class AllFragment extends Fragment {
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
         arrayAllbooks = new ArrayList<>();
-        AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books").child(userid);
+        AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
         adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Log.d(TAG,"All database successfully");
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    for(DataSnapshot newds : ds.getChildren()) {
+                        Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
+                        Book book = newds.getValue(Book.class);
+                        Log.d(TAG,"ALL Book name" + book.getBookName());
 
-                    Book book = ds.getValue(Book.class);
-                    /*
-                    Log.d(TAG,"ALL BOOK TAG" +ds.toString());
-                    Log.d(TAG,"ALL Book name" + book.getBookName());
-                    */
-                    ArrayList<String> Classification = new ArrayList<String>();
 
-                    book.setClassification(Classification);
 
-                    Bitmap bitmap = Bitmap.createBitmap(5,5,Bitmap.Config.ARGB_8888);
-                    Comment comment_4 = new Comment(2.5,"海南蹦迪王","2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
 
-                    book.addComments(comment_4);
 
-                    arrayAllbooks.add(book);
+                        ArrayList<String> Classification = new ArrayList<String>();
 
+                        book.setClassification(Classification);
+
+                        Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
+                        Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+
+                        book.addComments(comment_4);
+
+                        arrayAllbooks.add(book);
+
+                    }
                 }
                 adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
                 all_book_lv.setAdapter(adapter);
