@@ -17,9 +17,7 @@
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="comment">comment</string>
     <string name="bookname">BookName</string>
-
     <string name="watchlist">Watch List</string>
-
     <string name="description">Description</string>
 
     <string name="borrow">Borrow</string>
@@ -31,5 +29,17 @@
     <string name="Author_Hint">Enter Your Author Name</string>
 
     <string name="Description_Hint">Enter Your Description</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="Classification_Hint">Select the class this book belongs to </string>
+    <string name="Classification">Classification</string>
+    <string name="BorrowToast">Borrow request has been sent</string>
+    <string name="WatchListToast">The Book has been added to the WatchList</string>
+    <string name="SelectionTile">"Select the possible classes"</string>
+    <string name="CommentTile">"Default Comment Title"</string>
+    <string name="UserName">Default User Name</string>
+    <string name="CommentContent">Default User Content</string>
+    <string name="CommentTime">2019/2/31</string>
+    <string name="RequestScan">Scan</string>
+    <string name="RequestMap">Map</string>
+    <string name="Button_accept">Accept</string>
+    <string name="Button_deny">Deny</string>
 </resources>

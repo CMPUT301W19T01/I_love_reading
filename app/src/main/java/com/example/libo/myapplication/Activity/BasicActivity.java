@@ -1,25 +1,37 @@
 package com.example.libo.myapplication.Activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Fragment.AllFragment;
 import com.example.libo.myapplication.Fragment.BorrowFragment;
 import com.example.libo.myapplication.Fragment.OwnFragment;
 import com.example.libo.myapplication.Fragment.ProfileFragment;
-import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Fragment.RequestFragment;
+import com.example.libo.myapplication.Model.Users;
+import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class BasicActivity extends AppCompatActivity {
+
+    private static final String TAG = "ViewDatabase";
+    private static final int CHOOSE_IMAGE = 101;
 
     private OwnFragment ownFragment;
     private ProfileFragment profileFragment;
@@ -27,11 +39,18 @@ public class BasicActivity extends AppCompatActivity {
     private AllFragment allFragment;
     private RequestFragment requestFragment;
 
-    private FirebaseAuth auth;
+    private DatabaseReference mFirebaseDatabase;
+    private FirebaseAuth mAuth;
+
+    private String userID;
+
+    private TextView Username;
+    private ImageView UserPhoto;
 
     private Fragment[] fragments;
     private int lastFragment;
-
+    private Uri uriprofileImage;
+    private String ProfileImageUri;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -80,6 +99,33 @@ public class BasicActivity extends AppCompatActivity {
         setContentView(R.layout.activity_basic);
 
 
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        userID = user.getUid();
+        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("users");
+        Username = (TextView) findViewById(R.id.TextViewUserName);
+
+
+        mFirebaseDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                Log.d(TAG,"USER TAG  datasnapshot   " + dataSnapshot.toString());
+                Users current_user = new Users();
+                //current_user.setUsername(dataSnapshot.child(userID).getValue(Users.class).getUsername());
+                //Username.setText(current_user.getUsername());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        
         // Hide the action bar
         getSupportActionBar().hide();
         // Set full screen
@@ -88,6 +134,10 @@ public class BasicActivity extends AppCompatActivity {
         initFragment();
     }
 
+
+
+
+
     private void initFragment(){
 
         ownFragment = new OwnFragment();
@@ -95,7 +145,6 @@ public class BasicActivity extends AppCompatActivity {
         borrowFragment = new BorrowFragment();
         allFragment = new AllFragment();
         requestFragment = new RequestFragment();
-
 
         fragments = new Fragment[]{profileFragment, ownFragment, borrowFragment, allFragment, requestFragment};
         lastFragment = 0;

@@ -60,7 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void Userlogin(){
 
-        String password = editTextPassword.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim(); //Get user password
+
+
 
         String email = editTextEmail.getText().toString().trim();
 

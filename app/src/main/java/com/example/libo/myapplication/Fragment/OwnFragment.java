@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Model.Book;
+import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+;
 
 public class OwnFragment extends Fragment {
 
@@ -101,6 +104,7 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
                 ItemView.putExtra("status", currentBook.getStatus());
+                Log.d(TAG,"the current status is " + currentBook.getStatus().toString());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
@@ -138,6 +142,16 @@ public class OwnFragment extends Fragment {
                     Book book = ds.getValue(Book.class);
                     Log.d(TAG,"BOOK TAG" +ds.toString());
                     Log.d(TAG,"Book name" + book.getBookName());
+
+                    ArrayList<String> Classification = new ArrayList<String>();
+
+                    book.setClassification(Classification);
+
+                    Bitmap bitmap = Bitmap.createBitmap(5,5,Bitmap.Config.ARGB_8888);
+                    Comment comment_4 = new Comment(2.5,"海南蹦迪王","2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+
+                    book.addComments(comment_4);
+
                     arrayOwnedbooks.add(book);
 
                 }
@@ -181,6 +195,8 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
                     if (data.getStringExtra("borrow").equals("true")) {
+                        Log.d(TAG,"The current book is " + data.toString());
+
                         this.currentBook.setStatus(true);
                         /* The book is now borrowed, update your information
 
@@ -213,7 +229,8 @@ public class OwnFragment extends Fragment {
                         String bood_id = databaseBook.push().getKey();
                         currentBook.setID(bood_id);
 
-
+                        /*make a new book item and upload to fireabse by using chid(userid).chid(bookid)
+                         */
                         Book data_book = new Book();
                         data_book.setID(bood_id);
                         data_book.setBookName(currentBook.getBookName());
@@ -221,8 +238,8 @@ public class OwnFragment extends Fragment {
                         data_book.setAuthorName(currentBook.getAuthorName());
                         data_book.setDescription(currentBook.getDescription());
 
+
                         databaseBook.child(bood_id).setValue(data_book);
-                        arrayOwnedbooks.add(currentBook);
                     }
                 }
             }
