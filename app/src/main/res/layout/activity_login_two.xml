@@ -8,14 +8,14 @@
     android:paddingLeft="18dp"
     android:paddingRight="18dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/bridge">
+    android:background="@drawable/bookbackground">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
@@ -25,7 +25,8 @@
                 android:padding="16dp"
                 android:layout_marginTop="70dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_camera_enhance_black_24dp"/>
+                android:src="@drawable/shuiyin_logo"
+                android:contentDescription="TODO" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -38,7 +39,8 @@
                 android:drawablePadding="12dp"
                 android:hint="Username"
                 android:textColorHint="#fff"
-                android:drawableLeft="@drawable/ic_person_white_24dp"/>
+                android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:drawableStart="@drawable/ic_person_white_24dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -58,7 +60,9 @@
                 android:background="@android:color/transparent"
                 android:maxLines="1"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_lock_white_24dp"/>
+                android:drawableLeft="@drawable/ic_lock_white_24dp"
+                android:drawableStart="@drawable/ic_lock_white_24dp"
+                android:autofillHints="" />
 
             <View
                 android:layout_width="match_parent"
@@ -85,7 +89,8 @@
                 android:textColor="#f16f71"
                 android:padding="16dp"
                 style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_marginTop="32dp"/>
+                android:layout_marginTop="32dp"
+                android:focusable="true" />
 
             <Button
                 android:layout_width="match_parent"
@@ -99,17 +104,19 @@
                 android:padding="16dp"
                 android:clickable="true"
                 style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:focusable="true" />
 
             <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:padding="16dp"
                 android:text="Forget password? "
                 android:textColor="#fff"
-                android:padding="16dp"
-                android:clickable="true"
-                android:layout_marginBottom="16dp"
-                style="@style/TextAppearance.AppCompat.Body1"/>
+                android:focusable="true" />
 
 
 
