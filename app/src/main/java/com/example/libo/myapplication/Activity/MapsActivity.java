@@ -47,8 +47,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                     .addApi(LocationServices.API)
                     .build();
         }
-
-
     }
 
 

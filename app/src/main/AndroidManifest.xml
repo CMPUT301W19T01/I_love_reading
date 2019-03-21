@@ -50,6 +50,7 @@
             android:label="@string/title_activity_basic" />
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.ItemViewActivity" />
+
     </application>
 
 </manifest>
