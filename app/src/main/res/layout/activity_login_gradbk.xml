@@ -39,9 +39,9 @@
                 android:padding="12dp"
                 android:drawablePadding="12dp"
                 android:hint="Username"
-                android:textColorHint="#fff"
-                android:drawableLeft="@drawable/ic_person_white_24dp"
-                android:drawableStart="@drawable/ic_person_white_24dp" />
+                android:textColorHint="#000"
+                android:drawableLeft="@drawable/ic_person_outline_red_400_24dp"
+                android:drawableStart="@drawable/ic_person_outline_red_400_24dp" />
 
             <View
                 android:layout_width="match_parent"
@@ -57,12 +57,12 @@
                 android:drawablePadding="16dp"
                 android:padding="16dp"
                 android:hint="Password"
-                android:textColorHint="#fff"
+                android:textColorHint="#000"
                 android:background="@android:color/transparent"
                 android:maxLines="1"
                 android:layout_marginTop="4dp"
-                android:drawableLeft="@drawable/ic_lock_white_24dp"
-                android:drawableStart="@drawable/ic_lock_white_24dp"
+                android:drawableLeft="@drawable/ic_lock_red_400_24dp"
+                android:drawableStart="@drawable/ic_lock_red_400_24dp"
                 android:autofillHints="" />
 
             <View
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Remember me "
-                android:textColor="#fff"
+                android:textColor="#000"
                 />
 
             <Button
@@ -120,7 +120,7 @@
                 android:clickable="true"
                 android:padding="16dp"
                 android:text="Forget password? "
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:focusable="true" />
 
 
