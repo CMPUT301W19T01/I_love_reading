@@ -13,6 +13,12 @@ public class Users {
         this.email = email;
         this.username = username;
         this.uid = uid;
+
+    }
+
+    public Users(String email, String uid) {
+        this.email = email;
+        this.uid = uid;
     }
 
     public String getEmail() {

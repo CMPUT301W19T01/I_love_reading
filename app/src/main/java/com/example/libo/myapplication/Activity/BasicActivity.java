@@ -40,7 +40,7 @@ public class BasicActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
-    private  String userID;
+    private String userID;
 
     private Fragment[] fragments;
     private int lastFragment;
