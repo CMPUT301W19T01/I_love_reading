@@ -8,6 +8,10 @@ public class Request implements Serializable {
     private String receiver;
     private String senderEmail;
 
+
+    private String senderId;
+    private String BookId;
+
     private boolean isBorrowed;
 
     private boolean isAccepted;
@@ -23,6 +27,23 @@ public class Request implements Serializable {
 
     public Request(){
 
+    }
+
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getBookId() {
+        return BookId;
+    }
+
+    public void setBookId(String bookId) {
+        BookId = bookId;
     }
 
     public String getSender() {

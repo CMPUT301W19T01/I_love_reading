@@ -23,6 +23,7 @@ import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,45 +64,6 @@ public class AllFragment extends Fragment {
 
         FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
 
-        AlldatabaseBook.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                arrayAllbooks.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    for(DataSnapshot newds : ds.getChildren()) {
-                        Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
-                        Book book = newds.getValue(Book.class);
-                        Log.d(TAG,"ALL Book name" + book.getBookName());
-
-
-
-
-
-                        ArrayList<String> Classification = new ArrayList<String>();
-
-                        book.setClassification(Classification);
-
-                        Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
-                        Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
-
-                        book.addComments(comment_4);
-
-                        arrayAllbooks.add(book);
-
-                    }
-                }
-                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
-                all_book_lv.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -163,6 +125,45 @@ public class AllFragment extends Fragment {
             }
 
         });
+        AlldatabaseBook.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                arrayAllbooks.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    for(DataSnapshot newds : ds.getChildren()) {
+                        Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
+                        Book book = newds.getValue(Book.class);
+                        Log.d(TAG,"ALL Book name" + book.getBookName());
+
+
+
+
+
+                        ArrayList<String> Classification = new ArrayList<String>();
+
+                        book.setClassification(Classification);
+
+                        Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
+                        Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+
+                        book.addComments(comment_4);
+
+                        arrayAllbooks.add(book);
+
+                    }
+                }
+                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
+                all_book_lv.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -176,7 +177,7 @@ public class AllFragment extends Fragment {
             Log.d(TAG,"The current book des is " + currentBook.getDescription());
 
             this.currentBook.setStatus(true);
-            SendRequset(currentBook.getOwnerId());
+            SendRequset(currentBook.getOwnerId(),currentBook.getID());
         }
         switch (requestCode) {
             case (0): { // In the case that we are looking for if the user is trying to borrow book
@@ -226,18 +227,22 @@ public class AllFragment extends Fragment {
         }
     }
 
-    private void SendRequset(String bookOwner) {
+    private void SendRequset(String bookOwner, String Bookid) {
         Request request = new Request();
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        String sender_email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String sender =currentUser.getDisplayName();
+        String sender_email = currentUser.getEmail();
         Date current_date = Calendar.getInstance().getTime();
+        String senderId = currentUser.getUid();
 
         String requestid = FirebaseRequests.push().getKey();
         request.setDate(current_date);
         request.setReceiver(bookOwner);
         request.setSender(sender);
         request.setSenderEmail(sender_email);
-
+        request.setSenderId(senderId);
+        request.setBookId(Bookid);
+        request.setBorrowed(false);
         FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
     }
 

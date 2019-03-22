@@ -38,6 +38,8 @@ public class RequestFragment extends Fragment {
     private ArrayList<Request> requests;
     private ArrayAdapter arrayAdapter;
     private DatabaseReference requestDatabseRef;
+    private DatabaseReference borrowedRef;
+    private DatabaseReference AllbooksRef;
     private String userid;
 
     @Nullable
@@ -46,6 +48,8 @@ public class RequestFragment extends Fragment {
         View view=inflater.inflate(R.layout.request_page,container,false);
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(userid);
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(userid);
         Log.d(TAG,"The current ref is   " + requestDatabseRef.toString());
 
         requestDatabseRef.addValueEventListener(new ValueEventListener() {
@@ -115,7 +119,11 @@ public class RequestFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data.getStringExtra("result").equals("accept")) {
                         Request request = requests.get(currentIndex);
+                        String borrowerId = request.getSenderId();
+                        String bookID = request.getBookId();
                         request.setAccepted(true);
+                        borrowedRef.child(borrowerId).child(bookID).setValue(bookID);
+
                     }
                     if (data.getStringExtra("result").equals("deny")) {
                         requests.remove(currentIndex);
