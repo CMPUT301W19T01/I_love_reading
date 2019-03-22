@@ -54,8 +54,8 @@ public class BorrowFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent ItemView = new Intent(getActivity().getApplication(), ItemViewActivity.class); // set the intent to start next activity
                 Book currentBook = arrayBorrowbooks.get(i);
-                //Uri = Book.getBookCover();
-                //Bitmap BookCover = MediaStore.Images.Media.getBitmap(c.getContentResolver() , Uri.parse(paths));
+                //imageUri = Book.getBookCover();
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri)
                 //ItemView.putExtra("BookCover", BookCover);
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
