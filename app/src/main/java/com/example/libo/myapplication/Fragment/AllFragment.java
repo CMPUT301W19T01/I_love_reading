@@ -1,5 +1,6 @@
 package com.example.libo.myapplication.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
+import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AllFragment extends Fragment {
     private static final String TAG = "AllBookDatabase";
@@ -39,8 +43,12 @@ public class AllFragment extends Fragment {
 
     ArrayAdapter<Book> adapter;
     private DatabaseReference AlldatabaseBook;
+    private DatabaseReference FirebaseRequests;
     private ArrayList<Book> arrayAllbooks;
     private String userid;
+    private Book currentBook;
+    private int current_index = 0;
+
     @Nullable
 
     @Override
@@ -52,12 +60,15 @@ public class AllFragment extends Fragment {
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
         arrayAllbooks = new ArrayList<>();
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
-        adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
+
+        FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
+
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                arrayAllbooks.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     for(DataSnapshot newds : ds.getChildren()) {
                         Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
@@ -96,7 +107,7 @@ public class AllFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent ItemView = new Intent(getActivity().getApplication(),ItemViewActivity.class); // set the intent to start next activity
-                Book currentBook = arrayAllbooks.get(i);
+                currentBook = arrayAllbooks.get(i);
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
@@ -107,15 +118,11 @@ public class AllFragment extends Fragment {
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
                 ItemView.putExtra("CommentArray",currentBook.getComments());
-
-                startActivityForResult(ItemView, 0); // request code 0 means we are looking for if the user decide to borrow the book
+                current_index = i;
+                startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book;
             }
         });
 
-
-        adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
-
-        all_book_lv.setAdapter(adapter);
 
         return view;
 
@@ -159,6 +166,79 @@ public class AllFragment extends Fragment {
 
 
 
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data.getStringExtra("borrow").equals("true")) {
+            Log.d(TAG,"The current book des is " + currentBook.getDescription());
+
+            this.currentBook.setStatus(true);
+            SendRequset(currentBook.getOwnerId());
+        }
+        switch (requestCode) {
+            case (0): { // In the case that we are looking for if the user is trying to borrow book
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+
+                    Log.d(TAG,"The current data is " + data.toString());
+                    if (data.getStringExtra("borrow").equals("true")) {
+                        this.currentBook.setStatus(true);
+                        /* The book is now borrowed, update your information
+                         */
+                    }
+                    if (data.getStringExtra("watchlist").equals("true")){
+                        /* The Book is now added to watchlist, update your information
+                         */
+                    }
+                }
+            }
+            case (1): {// we are looking for the new information that the user edited the book.
+                if (resultCode == Activity.RESULT_OK) {
+                    String order = data.getStringExtra("do");
+                    if (order.equals("edit")) {
+                        currentBook = new Book("", "", "", false,"", null,"");
+                        currentBook.setBookName(data.getStringExtra("BookName"));
+                        currentBook.setAuthorName(data.getStringExtra("AuthorName"));
+                        currentBook.setDescription(data.getStringExtra("Description"));
+                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        arrayAllbooks.add(currentBook);
+                    }
+                }
+            }
+            case (2): {// we are updating info of a book
+                if (resultCode == Activity.RESULT_OK) {
+                    String order = data.getStringExtra("do");
+                    if (order.equals("edit")) {
+                        currentBook = arrayAllbooks.get(current_index);
+                        currentBook.setBookName(data.getStringExtra("BookName"));
+                        currentBook.setAuthorName(data.getStringExtra("AuthorName"));
+                        currentBook.setDescription(data.getStringExtra("Description"));
+                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        currentBook.setAuthorName(order);
+                    }
+                }
+            }
+        }
+    }
+
+    private void SendRequset(String bookOwner) {
+        Request request = new Request();
+        String sender = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String sender_email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Date current_date = Calendar.getInstance().getTime();
+
+        String requestid = FirebaseRequests.push().getKey();
+        request.setDate(current_date);
+        request.setReceiver(bookOwner);
+        request.setSender(sender);
+        request.setSenderEmail(sender_email);
+
+        FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
     }
 
 }

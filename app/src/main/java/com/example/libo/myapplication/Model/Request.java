@@ -21,6 +21,9 @@ public class Request implements Serializable {
         this.date = date;
     }
 
+    public Request(){
+
+    }
 
     public String getSender() {
         return sender;

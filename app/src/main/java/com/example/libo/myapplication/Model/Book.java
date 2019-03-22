@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 
 public class Book {
+    private String OwnerId;
     private String BookName;
     private String AuthorName;
     private String ID;
@@ -22,7 +23,7 @@ public class Book {
 
     };
 
-    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification){
+    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification,String ownerId){
         this.setBookName(BookName);
         this.setStatus(status);
         this.setID(ID);
@@ -30,6 +31,7 @@ public class Book {
         this.setDescription(Description);
         this.setClassification(Classification);
         this.Comments = new ArrayList<Comment>();
+        this.OwnerId = ownerId;
     }
 
     public String getDescription() {
@@ -108,4 +110,11 @@ public class Book {
         this.Comments.add(newComment);
     }
 
+    public String getOwnerId() {
+        return OwnerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        OwnerId = ownerId;
+    }
 }

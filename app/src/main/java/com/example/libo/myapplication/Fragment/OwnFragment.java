@@ -3,6 +3,7 @@ package com.example.libo.myapplication.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -42,6 +45,7 @@ public class OwnFragment extends Fragment {
     private ArrayList<Book> arrayOwnedbooks;
     private Book currentBook;
     private DatabaseReference databaseBook;
+    private StorageReference storageRef;
 
 
 
@@ -65,14 +69,14 @@ public class OwnFragment extends Fragment {
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
         arrayOwnedbooks = new ArrayList<>();
-        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>());
-        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>());
+        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>(),"");
+        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>(),"");
         arrayOwnedbooks.add(0,book1);
         arrayOwnedbooks.add(1,book2);
         adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
         own_book_lv.setAdapter(adapter);
 
-
+        storageRef = FirebaseStorage.getInstance().getReference("bookcover");
         databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
 
         Button add_button = (Button) view.findViewById(R.id.AddButton);
@@ -81,7 +85,7 @@ public class OwnFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), ItemViewActivity.class);
                 ArrayList<String> Classification = new ArrayList<String>();
-                currentBook = new Book("", "", "", false,"", Classification);
+                currentBook = new Book("", "", "", false,"", Classification,"");
                 intent.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 intent.putExtra("AuthorName", currentBook.getAuthorName());
                 intent.putExtra("ID", currentBook.getID());
@@ -137,7 +141,9 @@ public class OwnFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Log.d(TAG,"Deading database successfully");
+                arrayOwnedbooks.clear();
+
+                Log.d(TAG,"Deading database successfully" + arrayOwnedbooks.toString());
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Book book = ds.getValue(Book.class);
                     Log.d(TAG,"BOOK TAG" +ds.toString());
@@ -218,7 +224,7 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-                        currentBook = new Book("", "", "", false,"", null);
+                        currentBook = new Book("", "", "", false,"", null,"");
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
@@ -237,13 +243,17 @@ public class OwnFragment extends Fragment {
                         data_book.setStatus(currentBook.getStatus());
                         data_book.setAuthorName(currentBook.getAuthorName());
                         data_book.setDescription(currentBook.getDescription());
-
-
+                        data_book.setOwnerId(userID);
+                        //uploadFile(currentBook.getBookCover(),currentBook.getID());
                         databaseBook.child(bood_id).setValue(data_book);
                     }
                 }
             }
         }
+    }
+
+    private void uploadFile(Uri bookCover, String bookid) {
+        StorageReference fireref = storageRef.child(bookid).child("");
     }
 
 
