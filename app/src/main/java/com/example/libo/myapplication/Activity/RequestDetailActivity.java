@@ -17,6 +17,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 public class RequestDetailActivity extends AppCompatActivity {
 
@@ -85,6 +86,13 @@ public class RequestDetailActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 Place place = PlacePicker.getPlace(data, this);
                 Log.d("BYF", place.getAddress().toString());
+                LatLng latLng = place.getLatLng();
+                double latitude = latLng.latitude;
+                double longitude = latLng.longitude;
+                Intent intent = new Intent(this, MapsActivity.class);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
             }
         }
     }
