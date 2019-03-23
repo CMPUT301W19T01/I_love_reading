@@ -1,8 +1,8 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Model.Book;
+import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,10 +41,8 @@ public class BorrowFragment extends Fragment {
 
     ArrayAdapter<Book> adapter;
     private ArrayList<Book> arrayBorrowbooks;
-    private ArrayList<String> borrowedbook;
     private String Userid;
     private DatabaseReference borrowedRef;
-    private DatabaseReference booksRef;
     private int current_index = 0;
     @Nullable
 
@@ -58,30 +57,9 @@ public class BorrowFragment extends Fragment {
 
         Userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        booksRef = FirebaseDatabase.getInstance().getReference("books");
+        arrayBorrowbooks = new ArrayList<Book>();
 
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
-
-        borrowedbook = new ArrayList<String>();
-
-        borrowedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    if(!borrowedbook.contains(ds.getKey())){
-                        Log.d(TAG,"ds.getKey is " + ds.getKey());
-                        borrowedbook.add(ds.getKey());
-                        Log.d(TAG,"THE current array is " + borrowedbook.toString());
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,22 +117,18 @@ public class BorrowFragment extends Fragment {
 
         });
 
-        Log.d(TAG,"the arraylist is " + borrowedbook.isEmpty());
-
        //Log.d(TAG,"the arraylist is " + borrowedbok.isEmpty());
-        /*
-        Log.d(TAG,"The current key is ===========" + borrowedRef.getRoot());
-        booksRef.addValueEventListener(new ValueEventListener() {
+
+
+        borrowedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                //arrayBorrowbooks.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    for(DataSnapshot newds : ds.getChildren()) {
 
-                        Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
-                        Book book = newds.getValue(Book.class);
+                arrayBorrowbooks.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+
+                        Book book = ds.getValue(Book.class);
                         Log.d(TAG,"ALL Book name" + book.getBookName());
 
 
@@ -172,7 +146,6 @@ public class BorrowFragment extends Fragment {
 
                         arrayBorrowbooks.add(book);
 
-                    }
                 }
                 adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
                 borrow_book_lv.setAdapter(adapter);
@@ -184,7 +157,6 @@ public class BorrowFragment extends Fragment {
 
             }
         });
-    */
 
     }
 

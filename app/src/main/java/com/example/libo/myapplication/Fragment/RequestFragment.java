@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +50,6 @@ public class RequestFragment extends Fragment {
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(userid);
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
-        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(userid);
         Log.d(TAG,"The current ref is   " + requestDatabseRef.toString());
 
         requestDatabseRef.addValueEventListener(new ValueEventListener() {
@@ -122,7 +122,7 @@ public class RequestFragment extends Fragment {
                         String borrowerId = request.getSenderId();
                         String bookID = request.getBookId();
                         request.setBorrowed(true);
-                        borrowedRef.child(borrowerId).child(bookID).setValue(bookID);
+                        uploadBorrowed(borrowerId,bookID,request.getReceiver());
 
                     }
                     if (data.getStringExtra("result").equals("deny")) {
@@ -132,5 +132,28 @@ public class RequestFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void uploadBorrowed(final String borrowerId, final String bookID, final String receiver) {
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
+        AllbooksRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Book book = ds.getValue(Book.class);
+                    Log.d(TAG,"borrwed ====================" + book.getBookName() + bookID);
+
+                    if (book.getID().equals(bookID)){
+                        Log.d(TAG,"borrwed ====================" + book.getBookName());
+                        borrowedRef.child(borrowerId).child(bookID).setValue(book);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
