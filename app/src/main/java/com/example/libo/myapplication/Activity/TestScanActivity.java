@@ -40,7 +40,7 @@ public class TestScanActivity extends AppCompatActivity{
         if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK){
             String resultText = data.getStringExtra("code"); // This is the result Text
             /*
-            Do What every you want with the result
+            Do Whatever you want with the result
 
 
              */
