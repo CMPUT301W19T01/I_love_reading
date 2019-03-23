@@ -121,7 +121,7 @@ public class RequestFragment extends Fragment {
                         Request request = requests.get(currentIndex);
                         String borrowerId = request.getSenderId();
                         String bookID = request.getBookId();
-                        request.setAccepted(true);
+                        request.setBorrowed(true);
                         borrowedRef.child(borrowerId).child(bookID).setValue(bookID);
 
                     }
