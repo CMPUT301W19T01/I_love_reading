@@ -2,6 +2,7 @@ package com.example.libo.myapplication.Fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,23 +16,24 @@ import android.widget.TextView;
 
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileFragment extends Fragment {
     private Button btn_save;
     private EditText userNameView;
-    private EditText userEmailView;
-    private EditText userId;
-    private EditText userLocation;
+    private TextView userEmailView;
+    private TextView userId;
+    private EditText userContact;
     private ImageView userImage;
-    private Users users = new Users("b@gmail.com","00001");
     final int GET_FROM_GALLERY = 2;
-
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.profile_page,container,false);
+        View view = inflater.inflate(R.layout.profile_page, container, false);
         return view;
     }
 
@@ -43,19 +45,20 @@ public class ProfileFragment extends Fragment {
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
         userId = getActivity().findViewById(R.id.profileUserID);
         userImage = getActivity().findViewById(R.id.profileUserImage);
-        userLocation = getActivity().findViewById(R.id.profileUserLocation);
+        userContact = getActivity().findViewById(R.id.profileUserContact);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userNameView.setText(user.getDisplayName());
+        userEmailView.setText(user.getEmail());
+        userId.setText(user.getUid());
+        userContact.setText(user.getPhoneNumber());
 
-        userNameView.setText(users.getUsername());
-        userEmailView.setText(users.getEmail());
-        userId.setText(users.getUid());
-        userLocation.setText("Southgate");
 
         btn_save = getActivity().findViewById(R.id.btn_saveProfile);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                users.setUsername(userNameView.getText().toString());
+                //users.setUsername(userNameView.getText().toString());
             }
         });
 
@@ -66,7 +69,6 @@ public class ProfileFragment extends Fragment {
                 startActivityForResult(gallery_intent, GET_FROM_GALLERY);
             }
         });
-
-
     }
+
 }
