@@ -62,7 +62,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private CommentAdapter adapter;
     final int GET_FROM_GALLERY = 2;
     final int GET_FROM_COMMENT = 3;
-
+    private Uri BookCoverUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,6 +204,7 @@ public class ItemViewActivity extends AppCompatActivity {
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
+            BookCoverUri = selectedImage;
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
@@ -303,6 +304,7 @@ public class ItemViewActivity extends AppCompatActivity {
                                 ImageViewBookCover.buildDrawingCache(); // send the image back
                                 Bitmap image= ImageViewBookCover.getDrawingCache();
                                 resultIntent.putExtra("BookCover",image);
+                                //resultIntent.putExtra("BookCover", BookCoverUri);
                                 String BookName = EditTextBookName.getText().toString();
                                 String AuthorName = EditTextAuthorName.getText().toString();
                                 String Description = EditTextDescription.getText().toString();
