@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.example.libo.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static int SPLASH_TIME_OUT=4000;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,14 +17,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.main_jump_btn);
-        button.setOnClickListener(new View.OnClickListener() {
+        this.getSupportActionBar().hide();
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+            public void run() {
+                Intent homeIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(homeIntent);
+                finish();
+
             }
-        });
+        },SPLASH_TIME_OUT);
 
 
     }
