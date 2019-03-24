@@ -16,7 +16,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
+
+import com.example.libo.myapplication.Model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RequestDetailActivity extends AppCompatActivity {
@@ -80,8 +81,8 @@ public class RequestDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // If user is borrower, only show location
                 latLng = request.getLatLng();
-                double latitude = latLng.latitude;
-                double longitude = latLng.longitude;
+                double latitude = latLng.getLatitude();
+                double longitude = latLng.getLongitude();
                 Intent intent = new Intent(RequestDetailActivity.this, MapActivity.class);
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
@@ -128,11 +129,11 @@ public class RequestDetailActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
                 Place place = PlacePicker.getPlace(data, this);
                 Log.d("BYF", place.getAddress().toString());
-                LatLng latLng = place.getLatLng();
+                LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                 Intent intent = new Intent();
                 intent.putExtra("result", "accept");
-                double latitude = latLng.latitude;
-                double longitude = latLng.longitude;
+                double latitude = latLng.getLatitude();
+                double longitude = latLng.getLongitude();
                 Log.d("byf", String.valueOf(latitude));
                 Log.d("byf", String.valueOf(longitude));
                 intent.putExtra("latitude", latitude);

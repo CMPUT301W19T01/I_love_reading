@@ -1,7 +1,5 @@
 package com.example.libo.myapplication.Model;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 import java.util.Date;
 
