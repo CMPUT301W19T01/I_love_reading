@@ -18,7 +18,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activity.MapActivity"></activity>
+        <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.CodeScanner" />
         <activity android:name=".Activity.TestScanActivity" />
         <activity android:name=".Activity.AddCommentActivity" />
