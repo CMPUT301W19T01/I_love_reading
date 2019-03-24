@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +21,38 @@ import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class RequestFragment extends Fragment {
-
+    private static final String TAG = "RequestDatabase";
     private TextView userNameTextView;
     private ListView requestList;
     private int currentIndex;
     private ArrayList<Request> requests;
     private ArrayAdapter arrayAdapter;
 
+    private DatabaseReference requestDatabseRef;
+    private DatabaseReference borrowedRef;
+    private DatabaseReference AllbooksRef;
+    private String userid;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.request_page,container,false);
+
+        userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(userid);
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
         return view;
     }
 
@@ -73,6 +90,27 @@ public class RequestFragment extends Fragment {
 
 
         });
+
+        requestDatabseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG,"The current news is   " + dataSnapshot.toString());
+                for(DataSnapshot newds : dataSnapshot.getChildren()) {
+                    Log.d(TAG,"The current news is   " + newds.toString());
+                    Request request = newds.getValue(Request.class);
+                    requests.add(request);
+                }
+                arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, requests);
+                requestList.setAdapter(arrayAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -84,6 +122,10 @@ public class RequestFragment extends Fragment {
                     if (data.getStringExtra("result").equals("accept")) {
                         Request request = requests.get(currentIndex);
                         request.setAccepted(true);
+                        String borrowerId = request.getSenderId();
+                        String bookID = request.getBookId();
+                        request.setBorrowed(true);
+                        uploadBorrowed(borrowerId,bookID,request.getReceiver());
                     }
                     if (data.getStringExtra("result").equals("deny")) {
                         requests.remove(currentIndex);
@@ -92,5 +134,28 @@ public class RequestFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void uploadBorrowed(final String borrowerId, final String bookID, final String receiver) {
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
+        AllbooksRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Book book = ds.getValue(Book.class);
+                    Log.d(TAG,"borrwed ====================" + book.getBookName() + bookID);
+
+                    if (book.getID().equals(bookID)){
+                        Log.d(TAG,"borrwed ====================" + book.getBookName());
+                        borrowedRef.child(borrowerId).child(bookID).setValue(book);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

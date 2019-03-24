@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,20 @@ import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Model.Book;
+import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class BorrowFragment extends Fragment {
+
+    private static final String TAG = "BorrowedBookDatabase";
     private Button button;
     private TextView userNameTextView;
     ListView borrow_book_lv;
@@ -30,6 +40,8 @@ public class BorrowFragment extends Fragment {
     private int current_index = 0;
     private Book currentBook;
     final ArrayList<Book> arrayBorrowbooks = new ArrayList<>();
+    private String Userid;
+    private DatabaseReference borrowedRef;
 
 
 
@@ -41,9 +53,11 @@ public class BorrowFragment extends Fragment {
 
         View view=inflater.inflate(R.layout.borrow_page,container,false);
         borrow_book_lv = (ListView)view.findViewById(R.id.borrow_book);
+        Userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
 
-        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>());
-        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>());
+        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>(),"");
+        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>(),"");
         arrayBorrowbooks.add(0,book1);
         arrayBorrowbooks.add(1,book2);
         adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
@@ -93,6 +107,45 @@ public class BorrowFragment extends Fragment {
             }
         });
 
+
+        borrowedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                arrayBorrowbooks.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+
+
+                    Book book = ds.getValue(Book.class);
+                    Log.d(TAG,"ALL Book name" + book.getBookName());
+
+
+
+
+
+                    ArrayList<String> Classification = new ArrayList<String>();
+
+                    book.setClassification(Classification);
+
+                    Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
+                    Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+
+                    book.addComments(comment_4);
+
+                    arrayBorrowbooks.add(book);
+
+                }
+                adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
+                borrow_book_lv.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -117,7 +170,7 @@ public class BorrowFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-                        currentBook = new Book("", "", "", false,"", null);
+                        currentBook = new Book("", "", "", false,"", null,"");
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));

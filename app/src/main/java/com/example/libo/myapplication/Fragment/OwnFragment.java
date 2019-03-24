@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,23 @@ import android.widget.TextView;
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Activity.MainActivity;
 import com.example.libo.myapplication.Model.Book;
+import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 public class OwnFragment extends Fragment {
 
-
+    private static final String TAG = "BorrowedBookDatabase";
     private TextView userNameTextView;
     ListView own_book_lv;
     ArrayAdapter<Book> adapter;
@@ -33,15 +44,31 @@ public class OwnFragment extends Fragment {
     private Book currentBook;
     private int current_index = 0;
 
+    private DatabaseReference databaseBook;
+    private StorageReference storageRef;
+
+
+
+    private FirebaseAuth mAuth;
+
+    private  String userID;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        userID = user.getUid();
+
+        storageRef = FirebaseStorage.getInstance().getReference("bookcover");
+        databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
+
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
         arrayOwnedbooks = new ArrayList<>();
-        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>());
-        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>());
+        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>(),"");
+        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>(),"");
         arrayOwnedbooks.add(0,book1);
         arrayOwnedbooks.add(1,book2);
         adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
@@ -54,7 +81,7 @@ public class OwnFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), ItemViewActivity.class);
                 ArrayList<String> Classification = new ArrayList<String>();
-                currentBook = new Book("", "", "", false,"", Classification);
+                currentBook = new Book("", "", "", false,"", Classification,"");
                 intent.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 intent.putExtra("AuthorName", currentBook.getAuthorName());
                 intent.putExtra("ID", currentBook.getID());
@@ -99,6 +126,47 @@ public class OwnFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
         SearchView searchView = getActivity().findViewById(R.id.searchView2);
+
+        databaseBook.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                arrayOwnedbooks.clear();
+
+                Log.d(TAG,"Deading database successfully" + arrayOwnedbooks.toString());
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Book book = ds.getValue(Book.class);
+                    Log.d(TAG,"BOOK TAG" +ds.toString());
+                    Log.d(TAG,"Book name" + book.getBookName());
+
+                    ArrayList<String> Classification = new ArrayList<String>();
+
+                    book.setClassification(Classification);
+
+                    Bitmap bitmap = Bitmap.createBitmap(5,5,Bitmap.Config.ARGB_8888);
+                    Comment comment_4 = new Comment(2.5,"海南蹦迪王","2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
+
+                    book.addComments(comment_4);
+
+                    arrayOwnedbooks.add(book);
+
+                }
+                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+                own_book_lv.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -143,7 +211,7 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-                        currentBook = new Book("", "", "", false,"", null);
+                        currentBook = new Book("", "", "", false,"", null,"");
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));

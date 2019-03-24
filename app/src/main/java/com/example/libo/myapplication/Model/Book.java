@@ -2,11 +2,10 @@ package com.example.libo.myapplication.Model;
 
 import android.graphics.Bitmap;
 
-import org.w3c.dom.Comment;
-
 import java.util.ArrayList;
 
 public class Book {
+    private String OwnerId;
     private String BookName;
     private String AuthorName;
     private String ID;
@@ -19,10 +18,10 @@ public class Book {
     private Bitmap BookCover;
 
     public Book(){
+        this.Comments = new ArrayList<Comment>();
+    }
 
-    };
-
-    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification){
+    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification,String ownerId){
         this.setBookName(BookName);
         this.setStatus(status);
         this.setID(ID);
@@ -30,6 +29,7 @@ public class Book {
         this.setDescription(Description);
         this.setClassification(Classification);
         this.Comments = new ArrayList<Comment>();
+        this.OwnerId = ownerId;
     }
 
     public String getDescription() {
@@ -106,6 +106,14 @@ public class Book {
 
     public void addComments(Comment newComment){
         this.Comments.add(newComment);
+    }
+
+    public String getOwnerId() {
+        return OwnerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        OwnerId = ownerId;
     }
 
 }
