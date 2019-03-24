@@ -1,25 +1,28 @@
 package com.example.libo.myapplication.Model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class Request implements Serializable {
+
     private String sender;
-    private String receiver;
+    private String receiverId;
     private String senderEmail;
-
-
     private String senderId;
     private String BookId;
 
+    //isBorrowed is used to check sender wants to borrow or return
     private boolean isBorrowed;
-
-    private boolean isAccepted;
+    //isAccept is used to hide the button when users select accept button
+    private boolean isAccepted = false;
     private Date date;
+    private LatLng latLng = null;
 
-    public Request(String sender, String receiver, String senderEmail,boolean isBorrowed,Date date) {
+    public Request(String sender, String receiver, String senderEmail, boolean isBorrowed, Date date) {
         this.sender = sender;
-        this.receiver = receiver;
+        this.receiverId = receiver;
         this.senderEmail = senderEmail;
         this.isBorrowed = isBorrowed;
         this.date = date;
@@ -55,11 +58,11 @@ public class Request implements Serializable {
     }
 
     public String getReceiver() {
-        return receiver;
+        return receiverId;
     }
 
     public void setReceiver(String receiver) {
-        this.receiver = receiver;
+        this.receiverId = receiver;
     }
 
     public String getSenderEmail() {
@@ -92,5 +95,13 @@ public class Request implements Serializable {
 
     public void setAccepted(boolean accepted) {
         isAccepted = accepted;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
     }
 }

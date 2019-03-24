@@ -17,6 +17,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RequestDetailActivity extends AppCompatActivity {
 
@@ -24,10 +25,11 @@ public class RequestDetailActivity extends AppCompatActivity {
     private Button deny;
     private Button scan;
     private Button map;
-
     private Request request;
     private int ScanResultCode = 4;
     private String ISBNCode;
+
+    private LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,36 +41,18 @@ public class RequestDetailActivity extends AppCompatActivity {
         scan = findViewById(R.id.button_scan);
         map = findViewById(R.id.button_map);
 
+
         Intent intent = getIntent();
         request = (Request) intent.getSerializableExtra("request");
 
-        //If the requirement is accepted, hide the choose button
-        if(request.isAccepted()){
-            accept.setVisibility(View.GONE);
-            deny.setVisibility(View.GONE);
+
+        //If current user is owner and not accept request, show accept and deny button. Otherwise, hide them.
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver()) && !request.isAccepted()){
+
+            accept.setVisibility(View.VISIBLE);
+            deny.setVisibility(View.VISIBLE);
         }
 
-        //if owner choose map to select the location
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                Intent intent = new Intent(RequestDetailActivity.this, MapsActivity.class);
-                startActivity(intent);
-                */
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
-                Intent intent;
-                try {
-                    intent = builder.build(RequestDetailActivity.this);
-                    startActivityForResult(intent, 1);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         TextView sender = findViewById(R.id.request_sender);
         TextView date = findViewById(R.id.request_date);
@@ -91,14 +75,33 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
 
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // If user is borrower, only show location
+                latLng = request.getLatLng();
+                double latitude = latLng.latitude;
+                double longitude = latLng.longitude;
+                Intent intent = new Intent(RequestDetailActivity.this, MapActivity.class);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
+                startActivity(intent);
+            }
+        });
     }
 
     public void accept(View view){
-        Intent intent = new Intent();
-        intent.putExtra("result", "accept");
-        setResult(RESULT_OK, intent);
-        Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
-        finish();
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        // when owner select accept, let owner choose geo immediately.
+        Intent placePickerIntent;
+        try {
+            placePickerIntent = builder.build(RequestDetailActivity.this);
+            startActivityForResult(placePickerIntent, 1);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deny(View view){
@@ -120,17 +123,23 @@ public class RequestDetailActivity extends AppCompatActivity {
 
              */
         }
+        // when owner user select location on the map and pass latLng to previous activity
         if(requestCode == 1){
             if(resultCode==RESULT_OK){
                 Place place = PlacePicker.getPlace(data, this);
                 Log.d("BYF", place.getAddress().toString());
                 LatLng latLng = place.getLatLng();
+                Intent intent = new Intent();
+                intent.putExtra("result", "accept");
                 double latitude = latLng.latitude;
                 double longitude = latLng.longitude;
-                Intent intent = new Intent(this, MapActivity.class);
+                Log.d("byf", String.valueOf(latitude));
+                Log.d("byf", String.valueOf(longitude));
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
-                startActivity(intent);
+                setResult(RESULT_OK, intent);
+                Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }

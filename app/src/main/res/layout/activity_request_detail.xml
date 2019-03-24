@@ -180,11 +180,15 @@
         android:id="@+id/button_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginEnd="76dp"
         android:layout_marginRight="76dp"
         android:text="@string/RequestMap"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_scan"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/button_scan" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
@@ -226,6 +230,7 @@
         android:layout_marginBottom="8dp"
         android:onClick="accept"
         android:text="@string/Button_accept"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.221"
@@ -243,6 +248,7 @@
         android:layout_marginRight="8dp"
         android:onClick="deny"
         android:text="@string/Button_deny"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_accept" />

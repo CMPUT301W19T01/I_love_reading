@@ -21,6 +21,7 @@ import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,6 +54,7 @@ public class RequestFragment extends Fragment {
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(userid);
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
+        requests = new ArrayList<>();
         return view;
     }
 
@@ -61,11 +63,6 @@ public class RequestFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         requestList = getActivity().findViewById(R.id.request_listview);
-        Request request1 = new Request("ybai5","123","b@gmail.com",true, Calendar.getInstance().getTime());
-        Request request2 = new Request("ybai5","123","b@gmail.com",false, Calendar.getInstance().getTime());
-        requests = new ArrayList<>();
-        requests.add(request1);
-        requests.add(request2);
 
         arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, requests);
         requestList.setAdapter(arrayAdapter);
@@ -125,6 +122,12 @@ public class RequestFragment extends Fragment {
                         String borrowerId = request.getSenderId();
                         String bookID = request.getBookId();
                         request.setBorrowed(true);
+                        double lat = data.getDoubleExtra("latitude", 999);
+                        double lng = data.getDoubleExtra("longitude", 999);
+                        Log.d("byf", String.valueOf(lat));
+                        Log.d("byf", String.valueOf(lng));
+                        LatLng latLng = new LatLng(lat, lng);
+                        request.setLatLng(latLng);
                         uploadBorrowed(borrowerId,bookID,request.getReceiver());
                     }
                     if (data.getStringExtra("result").equals("deny")) {
@@ -157,5 +160,7 @@ public class RequestFragment extends Fragment {
 
             }
         });
+
+        
     }
 }
