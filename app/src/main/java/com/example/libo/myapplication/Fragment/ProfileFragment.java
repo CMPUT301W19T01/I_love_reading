@@ -23,8 +23,8 @@ public class ProfileFragment extends Fragment {
     private TextView userEmailView;
     private TextView userId;
     private ImageView userImage;
-    final int GET_FROM_GALLERY = 2;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
 
@@ -70,18 +70,11 @@ public class ProfileFragment extends Fragment {
                // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
                 userNameView.setText("name: "+ user.getDisplayName());
                 userEmailView.setText("email: " + user.getEmail());
+                userImage.setImageURI(user.getPhotoUrl());
             }
         });
 
 
-
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gallery_intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery_intent, GET_FROM_GALLERY);
-            }
-        });
     }
 
 

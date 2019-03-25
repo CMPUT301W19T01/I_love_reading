@@ -1,7 +1,12 @@
 package com.example.libo.myapplication.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +28,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class profileEditActivity extends AppCompatActivity {
     private Button btn_save;
     private EditText userNameEditView;
@@ -33,8 +41,10 @@ public class profileEditActivity extends AppCompatActivity {
     private String UserName;
     private String UserContact;
     private DatabaseReference mDatabase;
+    private Uri UserEditImage;
+    final int GET_FROM_GALLERY = 2;
+    private Uri selectedImage;
 
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +54,26 @@ public class profileEditActivity extends AppCompatActivity {
         userNameEditView = (EditText) findViewById(R.id.profileEditUserName);
         userEmailEditView = findViewById(R.id.profileEditUserEmail);
         userIdEditView = findViewById(R.id.profileEditUserID);
-        userContactEditView = (EditText)findViewById(R.id.profileEditUserContact);
-        userEditImage = (ImageView)findViewById(R.id.profileEditUserImage);
+        userContactEditView = (EditText) findViewById(R.id.profileEditUserContact);
+        userEditImage = (ImageView) findViewById(R.id.profileEditUserImage);
 
         btn_save = findViewById(R.id.btn_saveProfile);
 
 
-        userEmailEditView.setText("CurrentEmail: "+ user.getEmail());
+        userEmailEditView.setText("CurrentEmail: " + user.getEmail());
         userIdEditView.setText("ID(unmodifiable): " + user.getUid());
         userNameEditView.setText(user.getDisplayName());
         userContactEditView.setText(user.getEmail());
         userEditImage.setImageURI(user.getPhotoUrl());
+
+
+        userEditImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery_intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery_intent, GET_FROM_GALLERY);
+            }
+        });
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +86,7 @@ public class profileEditActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     System.out.print("it worked");
                                 }
                             }
@@ -75,6 +94,7 @@ public class profileEditActivity extends AppCompatActivity {
 
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName(UserName)
+                        .setPhotoUri(selectedImage)
                         .build();
 
                 user.updateProfile(profileUpdates)
@@ -86,11 +106,27 @@ public class profileEditActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
             }
         });
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                userEditImage.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
     }
 }
