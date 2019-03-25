@@ -336,7 +336,6 @@ public class ItemViewActivity extends AppCompatActivity {
                                 ImageViewBookCover.buildDrawingCache(); // send the image back
                                 Bitmap image= ImageViewBookCover.getDrawingCache();
                                 resultIntent.putExtra("BookCover",image);
-                                //resultIntent.putExtra("BookCover", BookCoverUri);
                                 String BookName = EditTextBookName.getText().toString();
                                 String AuthorName = EditTextAuthorName.getText().toString();
                                 String Description = EditTextDescription.getText().toString();

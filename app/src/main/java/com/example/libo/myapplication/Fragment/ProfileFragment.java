@@ -22,7 +22,6 @@ public class ProfileFragment extends Fragment {
     public TextView userNameView;
     private TextView userEmailView;
     private TextView userId;
-    private TextView userContact;
     private ImageView userImage;
     final int GET_FROM_GALLERY = 2;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -45,12 +44,12 @@ public class ProfileFragment extends Fragment {
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = getActivity().findViewById(R.id.profileUserImage);
-        userContact = getActivity().findViewById(R.id.profileUserContact);
 
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
         userId.setText("id: "+user.getUid());
-        userContact.setText("contact: " + user.getPhoneNumber());
+        userImage.setImageURI(user.getPhotoUrl());
+
 
 
         btn_edit = getActivity().findViewById(R.id.btn_editProfile);
@@ -68,10 +67,11 @@ public class ProfileFragment extends Fragment {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
                 userNameView.setText("name: "+ user.getDisplayName());
+                userEmailView.setText("email: " + user.getEmail());
             }
         });
-
 
 
 
