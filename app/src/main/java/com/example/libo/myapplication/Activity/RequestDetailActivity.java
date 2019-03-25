@@ -41,11 +41,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         deny = findViewById(R.id.button_deny);
         scan = findViewById(R.id.button_scan);
         map = findViewById(R.id.button_map);
+        TextView ownerId = findViewById(R.id.request_owner_id);
 
 
         Intent intent = getIntent();
         request = (Request) intent.getSerializableExtra("request");
-
+        ownerId.setText(request.getReceiver());
 
         //If current user is owner and not accept request, show accept and deny button. Otherwise, hide them.
         if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver()) && !request.isAccepted()){

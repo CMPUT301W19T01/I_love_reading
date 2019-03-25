@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.Adapter.CommentAdapter;
 import com.example.libo.myapplication.Model.Comment;
+import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 
 import java.io.FileNotFoundException;
@@ -49,6 +50,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private TextView TextViewClassification;
     private ImageView ImageViewBookCover;
     private Button BorrowButton;
+    private Button ReturnButton;
     private Button WatchListButton;
     private ImageButton AddCommentButton;
     private Intent temp;
@@ -78,6 +80,7 @@ public class ItemViewActivity extends AppCompatActivity {
         TextViewClassification = findViewById(R.id.TextViewClassificationSelect);
         ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
         BorrowButton = findViewById(R.id.ButtonRentBook);
+        ReturnButton = findViewById(R.id.button_return);
         WatchListButton = findViewById(R.id.ButtonWatchList);
         AddCommentButton = findViewById(R.id.ButtonAddComment);
         ListViewComment = findViewById(R.id.ListViewComments);
@@ -99,6 +102,25 @@ public class ItemViewActivity extends AppCompatActivity {
         ListViewComment.setAdapter(adapter);
         setListViewHeightBasedOnChildren(ListViewComment);
 
+        int buttonCode = result.getIntExtra("ButtonCode", -1);
+        if( buttonCode == -1){
+            Toast.makeText(getBaseContext(), "Something Wrong!",
+                    Toast.LENGTH_LONG).show();
+        }else if( buttonCode == 0){
+            BorrowButton.setVisibility(View.INVISIBLE);
+            WatchListButton.setVisibility(View.INVISIBLE);
+            ReturnButton.setVisibility(View.VISIBLE);
+
+            ReturnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.putExtra("return", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
 
         BorrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,6 +260,8 @@ public class ItemViewActivity extends AppCompatActivity {
                 setListViewHeightBasedOnChildren(ListViewComment);
             }
         }
+
+
     }
 
 

@@ -91,7 +91,7 @@ public class OwnFragment extends Fragment {
                 intent.putExtra("BookCover", currentBook.getBookCover());
                 intent.putExtra("ClassificationArray", currentBook.getClassification());
                 intent.putExtra("CommentArray",currentBook.getComments());
-                startActivityForResult(intent, 1); // request code 0 means we are allowing the user to edit the book
+                startActivityForResult(intent, 1); // request code 1 means we are allowing the user to edit the book
             }
         });
 
