@@ -18,18 +18,22 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileFragment extends Fragment {
     private Button btn_edit;
-    private TextView userNameView;
+    private Button btn_refresh;
+    public TextView userNameView;
     private TextView userEmailView;
     private TextView userId;
     private TextView userContact;
     private ImageView userImage;
     final int GET_FROM_GALLERY = 2;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_page, container, false);
+
         return view;
     }
 
@@ -43,7 +47,6 @@ public class ProfileFragment extends Fragment {
         userImage = getActivity().findViewById(R.id.profileUserImage);
         userContact = getActivity().findViewById(R.id.profileUserContact);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
         userId.setText("id: "+user.getUid());
@@ -57,7 +60,18 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity().getApplication(), profileEditActivity.class);
                 startActivity(intent);
             }
+
+
         });
+
+        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userNameView.setText("name: "+ user.getDisplayName());
+            }
+        });
+
 
 
 
@@ -69,5 +83,7 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+
 
 }

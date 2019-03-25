@@ -19,9 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     FirebaseAuth mAuth;
-
     EditText editTextEmail,editTextPassword;
-
     ProgressBar progressBar;
 
 
@@ -33,26 +31,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login_gradbk);
-
-
-
         mAuth = FirebaseAuth.getInstance();
-
-
-
         findViewById(R.id.ButtonSignup).setOnClickListener(this);
-
         findViewById(R.id.ButtonLogin).setOnClickListener(this);
-
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
-
-
-
-
 
     }
 
@@ -61,33 +45,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void Userlogin(){
 
         String password = editTextPassword.getText().toString().trim();
-
         String email = editTextEmail.getText().toString().trim();
 
-
-
         if (password.isEmpty()){
-
             editTextPassword.setError("Password is required");
-
             editTextPassword.requestFocus();
-
         }
 
         if (email.isEmpty()){
-
             editTextEmail.setError("Email is required");
-
             editTextEmail.requestFocus();
-
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-
             editTextEmail.setError("Please enter a valid email");
-
             editTextEmail.requestFocus();
-
             return;
 
         }
@@ -101,21 +73,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
 
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if (task.isSuccessful()) {
-
                     Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
-
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
                     startActivity(intent);
-
                 }else {
-
                     Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
                 }
-
             }
 
 
@@ -131,25 +95,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
 
     public void onClick (View view){
-
         switch (view.getId()){
-
             case R.id.ButtonSignup:
-
                 startActivity(new Intent(this,SignUpActivity.class));
-
                 break;
 
 
 
             case R.id.ButtonLogin:
-
                 Userlogin();
-
                 break;
-
         }
-
     }
 
 }
