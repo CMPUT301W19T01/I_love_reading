@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,12 @@ import android.widget.Toast;
 import com.example.libo.myapplication.Adapter.CommentAdapter;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -62,6 +69,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private CommentAdapter adapter;
     final int GET_FROM_GALLERY = 2;
     final int GET_FROM_COMMENT = 3;
+    private DatabaseReference commentsRef;
     private Uri BookCoverUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +92,10 @@ public class ItemViewActivity extends AppCompatActivity {
         String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
+        //Get the book iD
+        String BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
-        comments = (ArrayList<Comment>) result.getSerializableExtra("CommentArray");
         final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
         if (!Edit){ // If we are viewing the info instead of borrowing
@@ -95,9 +104,33 @@ public class ItemViewActivity extends AppCompatActivity {
             checkStatus(Status); // check if the book can be borrowed
         }
         checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover);
-        adapter = new CommentAdapter(this, comments);
-        ListViewComment.setAdapter(adapter);
-        setListViewHeightBasedOnChildren(ListViewComment);
+
+        comments = new ArrayList<>();
+        //Get Comments from Firebase
+        commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(BookId);
+        commentsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                comments.clear();
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Comment comment = ds.getValue(Comment.class);
+                    comments.add(comment);
+                }
+
+                adapter = new CommentAdapter(getApplicationContext(), comments);
+                ListViewComment.setAdapter(adapter);
+                setListViewHeightBasedOnChildren(ListViewComment);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
 
         BorrowButton.setOnClickListener(new View.OnClickListener() {
@@ -223,7 +256,7 @@ public class ItemViewActivity extends AppCompatActivity {
             if (!resultCommand) {
                 float Rate = resultIntent.getFloatExtra("rate", '0');
                 String CommentText = resultIntent.getStringExtra("Comment");
-                String UserName = "........."; //To be done later
+                String UserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName(); //To be done later
                 String CommentTime;
                 Calendar cal = Calendar.getInstance();
                 Date time = cal.getTime();
@@ -233,9 +266,8 @@ public class ItemViewActivity extends AppCompatActivity {
                 String CurrentDate = dateFormat.format(time);
                 CommentTime = CurrentDate + ' ' + CurrentTime;
                 Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
-                comments.add(newComment);
-                adapter.notifyDataSetChanged();
-                setListViewHeightBasedOnChildren(ListViewComment);
+                String commentId =  commentsRef.push().getKey();
+                commentsRef.child(commentId).setValue(newComment);
             }
         }
     }

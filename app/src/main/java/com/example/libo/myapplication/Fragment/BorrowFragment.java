@@ -79,7 +79,6 @@ public class BorrowFragment extends Fragment {
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
-                ItemView.putExtra("CommentArray",currentBook.getComments());
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
@@ -128,10 +127,6 @@ public class BorrowFragment extends Fragment {
                     book.setClassification(Classification);
 
                     Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
-                    Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
-
-                    book.addComments(comment_4);
-
                     arrayBorrowbooks.add(book);
 
                 }
