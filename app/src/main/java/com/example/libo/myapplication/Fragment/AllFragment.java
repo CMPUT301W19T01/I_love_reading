@@ -100,22 +100,15 @@ public class AllFragment extends Fragment {
                         Book book = newds.getValue(Book.class);
                         Log.d(TAG,"ALL Book name" + book.getBookName());
 
-
-
-
-
                         ArrayList<String> Classification = new ArrayList<String>();
 
                         book.setClassification(Classification);
 
-
                         arrayAllbooks.add(book);
-
                     }
                 }
                 adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
                 all_book_lv.setAdapter(adapter);
-
             }
 
             @Override
