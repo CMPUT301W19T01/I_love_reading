@@ -136,10 +136,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
 
         int buttonCode = result.getIntExtra("ButtonCode", -1);
-        if( buttonCode == -1){
-            Toast.makeText(getBaseContext(), "Something Wrong!",
-                    Toast.LENGTH_LONG).show();
-        }else if( buttonCode == 0){
+        if( buttonCode == 0){
             BorrowButton.setVisibility(View.INVISIBLE);
             WatchListButton.setVisibility(View.INVISIBLE);
             ReturnButton.setVisibility(View.VISIBLE);
