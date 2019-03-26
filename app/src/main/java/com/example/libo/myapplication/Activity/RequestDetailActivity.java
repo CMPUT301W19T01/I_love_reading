@@ -41,33 +41,42 @@ public class RequestDetailActivity extends AppCompatActivity {
         deny = findViewById(R.id.button_deny);
         scan = findViewById(R.id.button_scan);
         map = findViewById(R.id.button_map);
-        TextView ownerId = findViewById(R.id.request_owner_id);
 
 
         Intent intent = getIntent();
         request = (Request) intent.getSerializableExtra("request");
-        ownerId.setText(request.getReceiver());
 
         //If current user is owner and not accept request, show accept and deny button. Otherwise, hide them.
-        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver()) && !request.isAccepted()){
-
-            accept.setVisibility(View.VISIBLE);
-            deny.setVisibility(View.VISIBLE);
+        TextView type = findViewById(R.id.request_type);
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver())){
+            if (request.isBorrowed()){
+                type.setText("I want to borrow your book.");
+            }
+            else{
+                type.setText("I want to return your book");
+            }
+            if (!request.isAccepted()){
+                accept.setVisibility(View.VISIBLE);
+                deny.setVisibility(View.VISIBLE);
+            }
+        }else{
+            if (request.isBorrowed()){
+                type.setText("Your borrow request has been sent.");
+            }
+            else{
+                type.setText("Your return request has been sent.");
+            }
         }
 
 
         TextView sender = findViewById(R.id.request_sender);
         TextView date = findViewById(R.id.request_date);
-        TextView type = findViewById(R.id.request_type);
+
 
         sender.setText(request.getSender()+ " ("+request.getSenderEmail()+")");
         date.setText(request.getDate().toString());
-        if (request.isBorrowed()){
-            type.setText("I want to borrow your book.");
-        }
-        else{
-            type.setText("I want to return your book");
-        }
+
+
 
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +89,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // If user is borrower, only show location
+                // If user is borrower, only show location, if the location is not selected yet, show error message
                 latLng = request.getLatLng();
+                if(latLng == null){
+                    Toast.makeText(RequestDetailActivity.this, "This book's owner has not picked the location.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 double latitude = latLng.getLatitude();
                 double longitude = latLng.getLongitude();
                 Intent intent = new Intent(RequestDetailActivity.this, MapActivity.class);
