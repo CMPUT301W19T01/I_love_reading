@@ -22,6 +22,7 @@ import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +59,7 @@ public class AllFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent ItemView = new Intent(getActivity().getApplication(), ItemViewActivity.class); // set the intent to start next activity
-                Book currentBook = arrayAllbooks.get(i);
+                currentBook = arrayAllbooks.get(i);
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
@@ -141,7 +142,7 @@ public class AllFragment extends Fragment {
             Log.d(TAG,"The current book des is " + currentBook.getDescription());
 
             this.currentBook.setStatus(true);
-            SendRequset(currentBook.getOwnerId(),currentBook.getID());
+            Util.SendRequset(currentBook.getOwnerId(),currentBook.getID(), true);
         }
 
         switch (requestCode) {
@@ -190,24 +191,5 @@ public class AllFragment extends Fragment {
         }
     }
 
-    private void SendRequset(String bookOwner, String Bookid) {
-
-        Request request = new Request();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String sender =currentUser.getDisplayName();
-        String sender_email = currentUser.getEmail();
-        Date current_date = Calendar.getInstance().getTime();
-        String senderId = currentUser.getUid();
-
-        String requestid = FirebaseRequests.push().getKey();
-        request.setDate(current_date);
-        request.setReceiver(bookOwner);
-        request.setSender(sender);
-        request.setSenderEmail(sender_email);
-        request.setSenderId(senderId);
-        request.setBookId(Bookid);
-        request.setBorrowed(false);
-        FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
-    }
 
 }

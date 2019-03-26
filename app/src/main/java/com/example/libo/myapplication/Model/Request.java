@@ -11,18 +11,17 @@ public class Request implements Serializable {
     private String senderId;
     private String BookId;
 
-    //isBorrowed is used to check sender wants to borrow or return
-    private boolean isBorrowed;
+    //isBorrowed is true means the user want to borrow the book; false means the user wants to return the book
+    private boolean isBorrowed = true;
     //isAccept is used to hide the button when users select accept button
     private boolean isAccepted = false;
     private Date date;
     private LatLng latLng = null;
 
-    public Request(String sender, String receiver, String senderEmail, boolean isBorrowed, Date date) {
+    public Request(String sender, String receiver, String senderEmail, Date date) {
         this.sender = sender;
         this.receiverId = receiver;
         this.senderEmail = senderEmail;
-        this.isBorrowed = isBorrowed;
         this.date = date;
     }
 

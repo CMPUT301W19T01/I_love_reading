@@ -84,7 +84,6 @@ public class RequestFragment extends Fragment {
         requestList.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-
                 return true;
             }
 
@@ -94,14 +93,14 @@ public class RequestFragment extends Fragment {
         requestDatabseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                requests.clear();
                 Log.d(TAG,"The current news is   " + dataSnapshot.toString());
                 for(DataSnapshot newds : dataSnapshot.getChildren()) {
                     Log.d(TAG,"The current news is   " + newds.toString());
                     Request request = newds.getValue(Request.class);
                     requests.add(request);
                 }
-                arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, requests);
-                requestList.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -110,6 +109,26 @@ public class RequestFragment extends Fragment {
             }
         });
 
+        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+        requestRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot owner : dataSnapshot.getChildren()){
+                    for(DataSnapshot request : owner.getChildren()){
+                        Request requestClass = request.getValue(Request.class);
+                        if (requestClass.getSenderId().equals(userid)){
+                            requests.add(requestClass);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
