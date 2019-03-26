@@ -46,4 +46,7 @@
     <string name="EnterComment">Enter your comment</string>
     <string name="ClickRate">Click to select the rate</string>
     <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="check_remember">Remember me</string>
+
 </resources>
