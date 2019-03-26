@@ -13,12 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.profileEditActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activity.MapActivity"></activity>
+        <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.CodeScanner" />
         <activity android:name=".Activity.TestScanActivity" />
         <activity android:name=".Activity.AddCommentActivity" />
@@ -38,6 +39,7 @@
         <activity
             android:name=".Activity.ItemViewActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Activity.ResetPassward" />
     </application>
 
 </manifest>

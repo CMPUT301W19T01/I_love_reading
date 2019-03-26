@@ -67,14 +67,6 @@ public class OwnFragment extends Fragment {
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
         arrayOwnedbooks = new ArrayList<>();
-        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>(),"");
-        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>(),"");
-        arrayOwnedbooks.add(0,book1);
-        arrayOwnedbooks.add(1,book2);
-        adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-        own_book_lv.setAdapter(adapter);
-
-
         Button add_button = (Button) view.findViewById(R.id.AddButton);
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +82,10 @@ public class OwnFragment extends Fragment {
                 intent.putExtra("Description", currentBook.getDescription());
                 intent.putExtra("BookCover", currentBook.getBookCover());
                 intent.putExtra("ClassificationArray", currentBook.getClassification());
+
                 intent.putExtra("CommentArray",currentBook.getComments());
                 startActivityForResult(intent, 1); // request code 1 means we are allowing the user to edit the book
+
             }
         });
 
@@ -108,7 +102,6 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
-                ItemView.putExtra("CommentArray",currentBook.getComments());
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
@@ -145,10 +138,6 @@ public class OwnFragment extends Fragment {
                     book.setClassification(Classification);
 
                     Bitmap bitmap = Bitmap.createBitmap(5,5,Bitmap.Config.ARGB_8888);
-                    Comment comment_4 = new Comment(2.5,"海南蹦迪王","2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
-
-                    book.addComments(comment_4);
-
                     arrayOwnedbooks.add(book);
 
                 }
@@ -232,6 +221,24 @@ public class OwnFragment extends Fragment {
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         currentBook.setAuthorName(order);
+
+
+
+                        String book_id = databaseBook.push().getKey();
+                        currentBook.setID(book_id);
+
+                        /*make a new book item and upload to fireabse by using chid(userid).chid(bookid)
+                         */
+                        Book data_book = new Book();
+                        data_book.setID(book_id);
+                        data_book.setBookName(currentBook.getBookName());
+                        data_book.setStatus(currentBook.getStatus());
+                        data_book.setAuthorName(currentBook.getAuthorName());
+                        data_book.setDescription(currentBook.getDescription());
+                        data_book.setOwnerId(userID);
+                        ArrayList<String> Classification = new ArrayList<String>();
+                        //uploadFile(currentBook.getBookCover(),currentBook.getID());
+                        databaseBook.child(book_id).setValue(data_book);
                     }
                 }
             }

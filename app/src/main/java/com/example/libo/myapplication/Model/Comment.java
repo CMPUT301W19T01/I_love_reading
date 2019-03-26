@@ -4,12 +4,15 @@ package com.example.libo.myapplication.Model;
 import java.io.Serializable;
 
 public class Comment implements Serializable {
+    private String BookId;
     private double rating;
     private String username;
     private String time;
     private String content;
 
-    public Comment(){};
+    public Comment(){
+
+    }
 
     public Comment(double rating, String username, String time, String content){
         this.rating = rating;
@@ -48,6 +51,14 @@ public class Comment implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getBookId() {
+        return BookId;
+    }
+
+    public void setBookId(String bookId) {
+        BookId = bookId;
     }
 
 

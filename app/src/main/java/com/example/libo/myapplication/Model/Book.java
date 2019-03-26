@@ -1,6 +1,7 @@
 package com.example.libo.myapplication.Model;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
@@ -12,13 +13,20 @@ public class Book {
     private Boolean status;
     private String Description;
     private ArrayList<String> Classification;
-    private ArrayList<Comment> Comments;
 
+    public Uri getBookcoverUri() {
+        return bookcoverUri;
+    }
+
+    public void setBookcoverUri(Uri bookcoverUri) {
+        this.bookcoverUri = bookcoverUri;
+    }
+
+    private Uri bookcoverUri;
     private Float rating;
     private Bitmap BookCover;
 
     public Book(){
-        this.Comments = new ArrayList<Comment>();
     }
 
     public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification,String ownerId){
@@ -28,7 +36,6 @@ public class Book {
         this.setAuthorName(AuthorName);
         this.setDescription(Description);
         this.setClassification(Classification);
-        this.Comments = new ArrayList<Comment>();
         this.OwnerId = ownerId;
     }
 
@@ -94,18 +101,6 @@ public class Book {
 
     public void setBookCover(Bitmap bookCover) {
         BookCover = bookCover;
-    }
-
-    public ArrayList<Comment> getComments() {
-        return Comments;
-    }
-
-    public void setComments(ArrayList<Comment> comments) {
-        Comments = comments;
-    }
-
-    public void addComments(Comment newComment){
-        this.Comments.add(newComment);
     }
 
     public String getOwnerId() {

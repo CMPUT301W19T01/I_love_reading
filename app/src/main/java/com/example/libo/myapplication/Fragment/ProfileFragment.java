@@ -1,7 +1,6 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,29 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.libo.myapplication.Model.Users;
+import com.example.libo.myapplication.Activity.profileEditActivity;
 import com.example.libo.myapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileFragment extends Fragment {
-    private Button btn_save;
-    private EditText userNameView;
-    private EditText userEmailView;
-    private EditText userId;
-    private EditText userLocation;
+    private Button btn_edit;
+    private Button btn_refresh;
+    public TextView userNameView;
+    private TextView userEmailView;
+    private TextView userId;
     private ImageView userImage;
-    private Users users = new Users("b@gmail.com","00001");
-    final int GET_FROM_GALLERY = 2;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.profile_page,container,false);
+        View view = inflater.inflate(R.layout.profile_page, container, false);
+
         return view;
     }
 
@@ -41,32 +42,41 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         userNameView = getActivity().findViewById(R.id.profileUserName);
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
-        userId = getActivity().findViewById(R.id.profileUserID);
+        userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = getActivity().findViewById(R.id.profileUserImage);
-        userLocation = getActivity().findViewById(R.id.profileUserLocation);
+
+        userNameView.setText("name: "+ user.getDisplayName());
+        userEmailView.setText("email: "+user.getEmail());
+        userId.setText("id: "+user.getUid());
+        userImage.setImageURI(user.getPhotoUrl());
 
 
-        userNameView.setText(users.getUsername());
-        userEmailView.setText(users.getEmail());
-        userId.setText(users.getUid());
-        userLocation.setText("Southgate");
 
-        btn_save = getActivity().findViewById(R.id.btn_saveProfile);
-        btn_save.setOnClickListener(new View.OnClickListener() {
+        btn_edit = getActivity().findViewById(R.id.btn_editProfile);
+        btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                users.setUsername(userNameView.getText().toString());
+                Intent intent = new Intent(getActivity().getApplication(), profileEditActivity.class);
+                startActivity(intent);
             }
+
+
         });
 
-        userImage.setOnClickListener(new View.OnClickListener() {
+        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gallery_intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery_intent, GET_FROM_GALLERY);
+               // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+                userNameView.setText("name: "+ user.getDisplayName());
+                userEmailView.setText("email: " + user.getEmail());
+                userImage.setImageURI(user.getPhotoUrl());
             }
         });
 
 
     }
+
+
+
 }

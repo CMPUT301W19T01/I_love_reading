@@ -55,13 +55,6 @@ public class AllFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
-        Book book1 = new Book("aaa","author1","001",true,"dscr1", new ArrayList<String>(),"");
-        Book book2 = new Book("bbb","author2","002",true,"dscr2", new ArrayList<String>(),"");
-        arrayAllbooks.add(0,book1);
-        arrayAllbooks.add(1,book2);
-        adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_expandable_list_item_1,arrayAllbooks);
-        all_book_lv.setAdapter(adapter);
-
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -75,7 +68,6 @@ public class AllFragment extends Fragment {
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
                 ItemView.putExtra("BookCover", currentBook.getBookCover());
-                ItemView.putExtra("CommentArray",currentBook.getComments());
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
@@ -109,26 +101,15 @@ public class AllFragment extends Fragment {
                         Book book = newds.getValue(Book.class);
                         Log.d(TAG,"ALL Book name" + book.getBookName());
 
-
-
-
-
                         ArrayList<String> Classification = new ArrayList<String>();
 
                         book.setClassification(Classification);
 
-                        Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
-                        Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
-
-                        book.addComments(comment_4);
-
                         arrayAllbooks.add(book);
-
                     }
                 }
                 adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
                 all_book_lv.setAdapter(adapter);
-
             }
 
             @Override
