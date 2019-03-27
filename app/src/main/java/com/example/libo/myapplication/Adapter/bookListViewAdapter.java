@@ -5,38 +5,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.R;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class bookListViewAdapter extends ArrayAdapter<Book> {
 
-    private static final String TAG = "BookListAdapter";
-    private Context bContext;
-    int mResource;
+    private ArrayList<Book> books;
+    private Context myContext;
 
 
-    public bookListViewAdapter(Context context, int resource, ArrayList<Book> objects) {
-        super(context, resource, objects);
-        this.bContext = bContext;
-        this.mResource = resource;
+    public bookListViewAdapter(Context context, ArrayList<Book> books) {
+        super(context, R.layout.adapter_book_listview,books);
+        this.books = books;
+        this.myContext = context;
+
     }
 
+    private static class ViewHolder {
+        TextView bookName;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String bookName = getItem(position).getBookName();
 
-        LayoutInflater inflater = LayoutInflater.from(bContext);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.adapter_book_listview, parent,false);
-        TextView bookNameV = (TextView)convertView.findViewById(R.id.BookListView1);
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.bookName = (TextView)convertView.findViewById(R.id.BookListView1);
 
-        bookNameV.setText(bookName);
+        viewHolder.bookName.setText(bookName);
         return convertView;
 
     }

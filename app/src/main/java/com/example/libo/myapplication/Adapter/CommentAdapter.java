@@ -33,6 +33,10 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     }
 
 
+
+
+
+
     public View getView(int position, View convertView, ViewGroup parent) { // design a custom view
 
         Comment comment = getItem(position); // get current item

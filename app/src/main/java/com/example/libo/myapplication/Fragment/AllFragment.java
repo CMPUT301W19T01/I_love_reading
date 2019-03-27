@@ -112,8 +112,8 @@ public class AllFragment extends Fragment {
                     }
                 }
 
-                 //adapter = new bookListViewAdapter(getContext().getApplicationContext(), android.R.layout.simple_list_item_1,arrayAllbooks);
-                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
+                adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayAllbooks);
+                //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
                 all_book_lv.setAdapter(adapter);
             }
 
