@@ -151,13 +151,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 } else {
 
                     if (task.getException() instanceof FirebaseAuthUserCollisionException){
-
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"User email already registered",Toast.LENGTH_SHORT).show();
 
                     }
 
                     else {
-
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                     }

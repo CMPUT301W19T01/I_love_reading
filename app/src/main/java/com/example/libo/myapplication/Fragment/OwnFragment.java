@@ -178,6 +178,7 @@ public class OwnFragment extends Fragment {
         switch (requestCode) {
 
             case (1): {// we are looking for the new information that the user edited the book.
+                Log.d(TAG,"THIS IS CASE ONE AND --------------------");
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
@@ -192,6 +193,7 @@ public class OwnFragment extends Fragment {
                 }
             }
             case (2): {// we are updating info of a book
+                Log.d(TAG,"THIS IS CASE TWo AND +++++++++++++++++++++++");
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
