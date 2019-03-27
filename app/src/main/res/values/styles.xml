@@ -20,9 +20,9 @@
     </style>
 
     <style name="item_view_title" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#66141414</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">#26141414</item>
         <item name="android:windowNoTitle">true</item>
     </style>
     
