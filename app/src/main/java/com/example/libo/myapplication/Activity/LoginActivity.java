@@ -39,8 +39,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawableResource(R.drawable.login_background);
 
         setContentView(R.layout.activity_login_gradbk);
+
         this.getSupportActionBar().hide();
 
 

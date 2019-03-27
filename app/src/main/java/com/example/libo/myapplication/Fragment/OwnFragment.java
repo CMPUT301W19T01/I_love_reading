@@ -174,27 +174,7 @@ public class OwnFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (0): { // In the case that we are looking for if the user is trying to borrow book
-                if (resultCode == Activity.RESULT_OK) {
-                    // TODO Extract the data returned from the child Activity.
-                    if (data.getStringExtra("borrow").equals("true")) {
-                        this.currentBook.setStatus(true);
-                        /* The book is now borrowed, update your information
 
-
-
-                         */
-                    }
-                    if (data.getStringExtra("watchlist").equals("true")){
-
-                        /* The Book is now added to watchlist, update your information
-
-
-
-                         */
-                    }
-                }
-            }
             case (1): {// we are looking for the new information that the user edited the book.
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
@@ -219,25 +199,22 @@ public class OwnFragment extends Fragment {
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
-                        currentBook.setAuthorName(order);
-
-
 
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
 
                         /*make a new book item and upload to fireabse by using chid(userid).chid(bookid)
                          */
-                        Book data_book = new Book();
-                        data_book.setID(book_id);
-                        data_book.setBookName(currentBook.getBookName());
-                        data_book.setStatus(currentBook.getStatus());
-                        data_book.setAuthorName(currentBook.getAuthorName());
-                        data_book.setDescription(currentBook.getDescription());
-                        data_book.setOwnerId(userID);
-                        ArrayList<String> Classification = new ArrayList<String>();
+                       // Book data_book = new Book();
+                       // data_book.setID(book_id);
+                       // data_book.setBookName(currentBook.getBookName());
+                        //data_book.setStatus(currentBook.getStatus());
+                       // data_book.setAuthorName(currentBook.getAuthorName());
+                       // data_book.setDescription(currentBook.getDescription());
+                      //  data_book.setOwnerId(userID);
+                       // ArrayList<String> Classification = new ArrayList<String>();
                         //uploadFile(currentBook.getBookCover(),currentBook.getID());
-                        databaseBook.child(book_id).setValue(data_book);
+                       // databaseBook.child(book_id).setValue(data_book);
                     }
                 }
             }

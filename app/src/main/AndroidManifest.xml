@@ -22,7 +22,9 @@
         <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.CodeScanner" />
         <activity android:name=".Activity.TestScanActivity" />
-        <activity android:name=".Activity.AddCommentActivity" />
+        <activity android:name=".Activity.AddCommentActivity"
+            android:theme="@style/add_comment_title"
+            />
         <activity android:name=".Activity.RequestDetailActivity" />
         <activity android:name=".Activity.SignUpActivity" />
         <activity android:name=".Activity.MainActivity">
@@ -38,8 +40,10 @@
         <activity android:name=".Activity.LoginActivity" />
         <activity
             android:name=".Activity.ItemViewActivity"
+            android:theme="@style/item_view_title"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activity.ResetPassward" />
+
     </application>
 
 </manifest>

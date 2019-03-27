@@ -12,6 +12,19 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="add_comment_title" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#f2eae3</item>
+    </style>
+
+    <style name="item_view_title" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#26141414</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
     
 
 </resources>

@@ -82,6 +82,8 @@ public class ItemViewActivity extends AppCompatActivity {
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
         setContentView(R.layout.activity_item_view);
+        getSupportActionBar().setTitle("Details View");
+
         EditTextBookName = findViewById(R.id.EditTextBookName);
         EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);

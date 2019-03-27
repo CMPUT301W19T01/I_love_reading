@@ -7,30 +7,7 @@
     android:background="#f2eae1"
     tools:context=".Activity.AddCommentActivity">
 
-    <Button
-        android:id="@+id/CommentConfirmButton"
-        android:layout_width="61dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#f7a847"
-        android:text="OK"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/CommentCloseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:background="#00141414"
-        app:srcCompat = "@drawable/ic_baseline_clear_24px"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
         android:id="@+id/CreateCommentRatingBar"

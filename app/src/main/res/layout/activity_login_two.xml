@@ -114,10 +114,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="16dp"
                 android:text="Forget password? "
-                android:textColor="#fff"
-                android:focusable="true" />
+                android:textColor="#fff" />
 
 
 

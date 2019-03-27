@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.support.v7.app.ActionBar;
+
 
 import com.example.libo.myapplication.R;
 
@@ -24,9 +26,12 @@ public class AddCommentActivity extends AppCompatActivity {
 
         //Remove notification bar
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        this.getSupportActionBar().hide();
+        //this.getSupportActionBar().hide();
 
         setContentView(R.layout.activity_add_comment);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.add_comment_title_bar);
+        getSupportActionBar().setElevation(2);
         final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CreateCommentRatingBar);
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
         ImageButton CloseButton = (ImageButton) findViewById(R.id.CommentCloseButton);
