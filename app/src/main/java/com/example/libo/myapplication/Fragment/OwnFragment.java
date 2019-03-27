@@ -3,7 +3,9 @@ package com.example.libo.myapplication.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,6 +25,11 @@ import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +39,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class OwnFragment extends Fragment {
@@ -202,7 +211,8 @@ public class OwnFragment extends Fragment {
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
-                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
+                        //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
 
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
@@ -217,7 +227,7 @@ public class OwnFragment extends Fragment {
                        // data_book.setDescription(currentBook.getDescription());
                       //  data_book.setOwnerId(userID);
                        // ArrayList<String> Classification = new ArrayList<String>();
-                        //uploadFile(currentBook.getBookCover(),currentBook.getID());
+                        //uploadFile(temp,currentBook.getID(),currentBook);
                        // databaseBook.child(book_id).setValue(data_book);
                     }
                 }
@@ -225,6 +235,45 @@ public class OwnFragment extends Fragment {
         }
     }
 
+    private void uploadFile(Bitmap bookCover, final String id, final Book data_book){
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference storageReference = storage.getReference("book_photo").child("image/"+id+".jpg");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bookCover.compress(Bitmap.CompressFormat.JPEG,20,baos);
+        byte[] data = baos.toByteArray();
+        final UploadTask uploadTask = storageReference.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("Upload image fail",e.toString());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task)  {
+                        if (!task.isSuccessful()){
+                            Log.i("problem", task.getException().toString());
+                        }
+                        return storageReference.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()){
+                            Uri downloadUri = task.getResult();
+                            Log.i("seeThisUri", downloadUri.toString());
+                            data_book.setBookcoverUri(downloadUri);
+                            Log.d(TAG,"==============================================");
+                            databaseBook.child(id).setValue(data_book);
+                        }
+                    }
+                });
+            }
+        });
+    }
 
 
 }
