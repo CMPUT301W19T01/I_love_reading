@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,7 @@ public class ItemViewActivity extends AppCompatActivity {
         temp = result;
         setContentView(R.layout.activity_item_view);
         getSupportActionBar().setTitle("Details View");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         EditTextBookName = findViewById(R.id.EditTextBookName);
         EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
@@ -432,5 +433,15 @@ public class ItemViewActivity extends AppCompatActivity {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

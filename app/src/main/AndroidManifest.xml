@@ -43,7 +43,8 @@
         <activity
             android:name=".Activity.ItemViewActivity"
             android:theme="@style/item_view_title"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden"
+            />
         <activity android:name=".Activity.ResetPassward" />
 
     </application>

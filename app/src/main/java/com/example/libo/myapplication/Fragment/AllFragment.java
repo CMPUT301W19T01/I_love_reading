@@ -149,11 +149,13 @@ public class AllFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data.getStringExtra("borrow").equals("true")) {
-            Log.d(TAG,"The current book des is " + currentBook.getDescription());
+        if (resultCode == Activity.RESULT_OK){
+            if (data.getStringExtra("borrow").equals("true")) {
+                Log.d(TAG,"The current book des is " + currentBook.getDescription());
 
-            this.currentBook.setStatus(true);
-            Util.SendRequset(currentBook.getOwnerId(),currentBook.getID(), true);
+                this.currentBook.setStatus(true);
+                Util.SendRequset(currentBook.getOwnerId(),currentBook.getID(), true);
+            }
         }
 
         switch (requestCode) {
