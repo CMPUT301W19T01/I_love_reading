@@ -37,7 +37,9 @@
         <activity
             android:name=".Activity.BasicActivity"
             android:label="@string/title_activity_basic" />
-        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
             android:name=".Activity.ItemViewActivity"
             android:theme="@style/item_view_title"

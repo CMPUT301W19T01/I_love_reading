@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
@@ -51,6 +53,7 @@ public class AllFragment extends Fragment {
 
 
 
+
     @Nullable
 
     @Override
@@ -77,7 +80,10 @@ public class AllFragment extends Fragment {
         });
         return view;
 
+
     }
+
+
 
     @Override
 
@@ -195,6 +201,8 @@ public class AllFragment extends Fragment {
             }
         }
     }
+
+
 
 
 }
