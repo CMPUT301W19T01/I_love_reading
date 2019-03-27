@@ -1,6 +1,7 @@
 package com.example.libo.myapplication.Activity;
 
 import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -38,7 +39,7 @@ public class BasicActivity extends AppCompatActivity {
     private AllFragment allFragment;
     private RequestFragment requestFragment;
 
-
+    public static Context contextOfApplication;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -96,7 +97,7 @@ public class BasicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
-
+        contextOfApplication = getApplicationContext();
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
@@ -229,6 +230,10 @@ public class BasicActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.basic_layout, fragment);
         }
         fragmentTransaction.show(fragment).commitAllowingStateLoss();
+    }
+    public static Context getContextOfApplication()
+    {
+        return contextOfApplication;
     }
 
 }
