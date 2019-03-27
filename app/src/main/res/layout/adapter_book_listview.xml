@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum = "100">
+
+
+    <TextView
+        android:layout_width="172dp"
+        android:layout_height="69dp"
+        android:layout_weight="66.6"
+        android:text="textview1"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="59dp"
+        tools:layout_editor_absoluteY="136dp"
+        android:id="@+id/BookListView1"/>
+
+</RelativeLayout>
