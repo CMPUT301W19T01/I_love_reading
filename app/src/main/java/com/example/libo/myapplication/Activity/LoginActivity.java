@@ -1,6 +1,5 @@
 package com.example.libo.myapplication.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -8,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -30,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private CheckBox mCheckBoxRemember;
 
-    private SharedPreferences mPrefs;
+    private static SharedPreferences mPrefs;
 
     private static final String PREFS_NAME="PrefsFile";
 
@@ -41,12 +39,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         getWindow().setBackgroundDrawableResource(R.drawable.login_background);
 
         setContentView(R.layout.activity_login_gradbk);
 
         this.getSupportActionBar().hide();
+
+
 
         mAuth = FirebaseAuth.getInstance();
         mPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -66,6 +65,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mCheckBoxRemember = (CheckBox) findViewById(R.id.CheckBoxRememberMe);
         getPreferencesData();
 
+        if (mPrefs.getString("pref_name","").length() != 0){
+            SharedPreferences temp = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String result_username = temp.getString("pref_name","not found");
+            Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
+            intent.putExtra("username", result_username);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
 
 
     }
@@ -148,14 +155,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         mPrefs.edit().clear().apply();
                     }
 
-                    Intent intent = new Intent();
+                    Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
+                    intent.putExtra("username",editTextEmail.getText().toString());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    intent.putExtra("username",editTextEmail.getText().toString()); //Pass user name to basic activity
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
                     editTextEmail.getText().clear();
                     editTextPassword.getText().clear();
-                    setResult(RESULT_OK, intent);
-                    finish();
+
 
                 }else {
 

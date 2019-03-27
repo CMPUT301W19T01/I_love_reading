@@ -27,66 +27,21 @@ public class MainActivity extends AppCompatActivity {
 
         this.getSupportActionBar().hide();
 
-        if(SaveSharedPreference.getUserName(MainActivity.this).length() == 0)
-        {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     Intent homeIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivityForResult(homeIntent,10);
-                    SaveSharedPreference.setUserName(MainActivity.this,user_name);
-                    Intent basicIntent = new Intent(MainActivity.this,BasicActivity.class);
-                    startActivity(basicIntent);
-                    finish();
-                }
-            },SPLASH_TIME_OUT);
-        }
-        else
-        {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent homeIntent = new Intent(MainActivity.this, BasicActivity.class);
-                    homeIntent.putExtra("username",SaveSharedPreference.getUserName(MainActivity.this)); //Pass user name to basic activity
+                    //homeIntent.putExtra("preference",SaveSharedPreference.getSharedPreferences(MainActivity.this));
+                    //SaveSharedPreference.setUserName(MainActivity.this,user_name);
+                    //Intent basicIntent = new Intent(MainActivity.this,BasicActivity.class);
                     startActivity(homeIntent);
                     finish();
-
                 }
             },SPLASH_TIME_OUT);
         }
 
     }
 
-    public static class SaveSharedPreference
-    {
-        static final String PREF_USER_NAME= "username";
-
-        static SharedPreferences getSharedPreferences(Context ctx) {
-            return PreferenceManager.getDefaultSharedPreferences(ctx);
-        }
-
-        public static void setUserName(Context ctx, String userName)
-        {
-            SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
-            editor.putString(PREF_USER_NAME, userName);
-            editor.apply();
-        }
-
-        public static String getUserName(Context ctx)
-        {
-            return getSharedPreferences(ctx).getString(PREF_USER_NAME, "");
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //Detects request codes
-        if(requestCode==10 && resultCode == Activity.RESULT_OK) {
-            user_name = data.getStringExtra("username");
-        }
-    }
 
 
 
-    }
