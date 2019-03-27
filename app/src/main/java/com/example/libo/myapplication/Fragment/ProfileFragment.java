@@ -43,7 +43,7 @@ public class ProfileFragment extends Fragment {
         userNameView = getActivity().findViewById(R.id.profileUserName);
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
         userId = getActivity().findViewById(R.id.profileEditUserID);
-        userImage = getActivity().findViewById(R.id.profileUserImage);
+        userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
 
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());

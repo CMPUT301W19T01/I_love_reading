@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
+import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.Model.Request;
@@ -43,6 +44,7 @@ public class AllFragment extends Fragment {
     private TextView userNameTextView;
     ListView all_book_lv;
     ArrayAdapter<Book> adapter;
+    //bookListViewAdapter adapter;
     ArrayList<Book> arrayAllbooks = new ArrayList<>();
     private int current_index = 0;
     private Book currentBook;
@@ -54,6 +56,7 @@ public class AllFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
+
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -108,6 +111,8 @@ public class AllFragment extends Fragment {
                         arrayAllbooks.add(book);
                     }
                 }
+
+                 //adapter = new bookListViewAdapter(getContext().getApplicationContext(), android.R.layout.simple_list_item_1,arrayAllbooks);
                 adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
                 all_book_lv.setAdapter(adapter);
             }
