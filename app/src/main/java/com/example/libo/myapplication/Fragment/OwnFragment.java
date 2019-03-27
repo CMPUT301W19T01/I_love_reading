@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Activity.MainActivity;
+import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
@@ -140,7 +141,8 @@ public class OwnFragment extends Fragment {
                     arrayOwnedbooks.add(book);
 
                 }
-                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+                adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
                 own_book_lv.setAdapter(adapter);
 
             }

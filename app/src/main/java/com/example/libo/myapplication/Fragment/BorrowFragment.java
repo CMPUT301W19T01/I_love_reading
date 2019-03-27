@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
+import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
@@ -56,8 +57,8 @@ public class BorrowFragment extends Fragment {
         borrow_book_lv = (ListView)view.findViewById(R.id.borrow_book);
         Userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
-
-        adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
+        adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
+        //adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
         borrow_book_lv.setAdapter(adapter);
 
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -27,19 +27,26 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
     }
 
     private static class ViewHolder {
-        TextView bookName;
+        TextView bookNameView;
+        TextView authorNameView;
+        TextView idView;
+
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String bookName = getItem(position).getBookName();
+        String authorName = getItem(position).getAuthorName();
+        String id = getItem(position).getID();
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.adapter_book_listview, parent,false);
         ViewHolder viewHolder = new ViewHolder();
-        viewHolder.bookName = (TextView)convertView.findViewById(R.id.BookListView1);
+        viewHolder.bookNameView = (TextView)convertView.findViewById(R.id.BookListView1);
+        viewHolder.authorNameView = (TextView)convertView.findViewById(R.id.BookListView2);
+        viewHolder.idView = (TextView)convertView.findViewById(R.id.BookListView3);
 
-        viewHolder.bookName.setText(bookName);
+        viewHolder.bookNameView.setText(bookName);
         return convertView;
 
     }
