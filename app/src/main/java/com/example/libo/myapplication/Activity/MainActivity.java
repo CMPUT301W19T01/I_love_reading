@@ -1,5 +1,6 @@
 package com.example.libo.myapplication.Activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,9 +16,9 @@ import com.example.libo.myapplication.R;
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT=4000;
+    private String user_name;
 
     @Override
-
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Intent homeIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(homeIntent);
+                    startActivityForResult(homeIntent,10);
+                    SaveSharedPreference.setUserName(MainActivity.this,user_name);
+                    Intent basicIntent = new Intent(MainActivity.this,BasicActivity.class);
+                    startActivity(basicIntent);
                     finish();
-
                 }
             },SPLASH_TIME_OUT);
         }
@@ -51,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             },SPLASH_TIME_OUT);
         }
-
-
-
 
     }
 
@@ -78,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //Detects request codes
+        if(requestCode==10 && resultCode == Activity.RESULT_OK) {
+            user_name = data.getStringExtra("username");
+        }
+    }
 
 
-}
+
+    }

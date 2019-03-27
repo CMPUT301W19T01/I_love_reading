@@ -148,18 +148,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         mPrefs.edit().clear().apply();
                     }
 
-                    Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
+                    Intent intent = new Intent();
 
                     intent.putExtra("username",editTextEmail.getText().toString()); //Pass user name to basic activity
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    MainActivity.SaveSharedPreference.setUserName(MainActivity.getContext,editTextEmail.getText());
-
-
-                    startActivity(intent);
-
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     editTextEmail.getText().clear();
                     editTextPassword.getText().clear();
-
+                    setResult(RESULT_OK, intent);
+                    finish();
 
                 }else {
 
