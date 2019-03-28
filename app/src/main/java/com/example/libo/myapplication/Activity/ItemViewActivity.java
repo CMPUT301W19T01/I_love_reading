@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * The Item view activity.
@@ -80,6 +82,8 @@ public class ItemViewActivity extends AppCompatActivity {
     final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
 
     final int GET_FROM_COMMENT = 3; // result code for getting new comment
+    final int UPDATE_COMMENT = 4; // update the information in comment
+    private int current_comment_position = -1;
     private DatabaseReference commentsRef;
     private Uri BookCoverUri;
     @Override
@@ -270,8 +274,40 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
+        ListViewComment.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                Toast.makeText(ItemViewActivity.this, "Long Click to edit", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-
+        ListViewComment.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                Comment current_comment = (Comment) ListViewComment.getItemAtPosition(position);
+                Boolean check = (username.equals(current_comment.getUsername()));
+                if (!check){
+                    Toast.makeText(ItemViewActivity.this, "Sorry this is not your comment", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent CommentIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
+                    CommentIntent.putExtra("update",true);
+                    CommentIntent.putExtra("rate", current_comment.getRating());
+                    CommentIntent.putExtra("comment",current_comment.getContent());
+                    current_comment_position = position;
+                    startActivityForResult(CommentIntent,UPDATE_COMMENT);
+                    ((Activity) ItemViewActivity.this).overridePendingTransition(R.layout.animate_slide_up_enter, R.layout.animate_slide_up_exit);
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -315,6 +351,26 @@ public class ItemViewActivity extends AppCompatActivity {
                 newComment.setUser_photo(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                 commentsRef.child(commentId).setValue(newComment);
             }
+        }
+        if (requestCode == UPDATE_COMMENT && resultCode == Activity.RESULT_OK){
+            float Rate = resultIntent.getFloatExtra("rate", '0');
+            String CommentText = resultIntent.getStringExtra("Comment");
+            String CommentTime;
+            Calendar cal = Calendar.getInstance();
+            Date time = cal.getTime();
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            String CurrentTime = timeFormat.format(time);
+            String CurrentDate = dateFormat.format(time);
+            CommentTime = CurrentDate + ' ' + CurrentTime;
+            Comment temp_comment = comments.get(current_comment_position);
+            temp_comment.setContent(CommentText);
+            temp_comment.setRating(Rate);
+            temp_comment.setTime(CommentTime);
+            // Wait for update comment
+            //
+            //
+            //
         }
     }
 
