@@ -15,12 +15,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
+import com.example.libo.myapplication.Activity.ResetPassward;
+import com.example.libo.myapplication.Activity.SignUpActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
@@ -54,6 +59,10 @@ public class AllFragment extends Fragment {
     private int current_index = 0;
     private Book currentBook;
 
+    private EditText allbooksearch;
+    private ImageButton allbooksearchbutton;
+    private ListView allsearchresesult;
+
 
 
 
@@ -62,8 +71,15 @@ public class AllFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
+        view.findViewById(R.id.all_search_button).setOnClickListener((View.OnClickListener) this);
 
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
+        allbooksearch = (EditText)view.findViewById(R.id.all_search_text);
+        allbooksearchbutton = (ImageButton) view.findViewById(R.id.all_search_button);
+
+
+
+
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -198,6 +214,19 @@ public class AllFragment extends Fragment {
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

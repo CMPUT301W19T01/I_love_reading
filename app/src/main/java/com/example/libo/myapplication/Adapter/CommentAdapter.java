@@ -1,8 +1,13 @@
 package com.example.libo.myapplication.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +40,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         TextView favorNum;
     }
 
+
     public CommentAdapter(Context context, ArrayList<Comment> comments) {
         super(context, R.layout.comment_adapter, comments);
         this.comments = comments;
@@ -59,12 +65,11 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             viewHolder.favorButton = (SparkButton) convertView.findViewById(R.id.spark_button);
             viewHolder.favorNum = (TextView) convertView.findViewById(R.id.TextViewFavorNumber);
             convertView.setTag(viewHolder);
-            convertView.setBackgroundColor(Color.parseColor("#00141414"));
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
+        convertView.setBackgroundColor(Color.parseColor("#00141414"));
         viewHolder.username.setText(comment.getUsername()); // show the text in the text view
         viewHolder.time.setText(comment.getTime());
         viewHolder.content.setText(comment.getContent());

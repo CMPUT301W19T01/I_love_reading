@@ -2,6 +2,7 @@ package com.example.libo.myapplication.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -19,6 +21,12 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import com.example.libo.myapplication.Model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RequestDetailActivity extends AppCompatActivity {
 
@@ -29,6 +37,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     private Request request;
     private int ScanResultCode = 4;
     private String ISBNCode;
+    private Book book;
 
     private LatLng latLng;
 
@@ -69,14 +78,37 @@ public class RequestDetailActivity extends AppCompatActivity {
         }
 
 
+        //Show the basic information of request
         TextView sender = findViewById(R.id.request_sender);
         TextView date = findViewById(R.id.request_date);
+        final TextView des = findViewById(R.id.request_des);
+        final TextView bookNmae = findViewById(R.id.request_book_name);
+        final TextView owner  =  findViewById(R.id.request_book_owner);
 
+        DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference().child("books");
+        bookRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+                    Log.d("byf", user.getKey());
+                    if(user.hasChild(request.getBookId())){
+                        book = user.child(request.getBookId()).getValue(Book.class);
+                        des.setText(book.getDescription());
+                        bookNmae.setText(book.getBookName());
+                        owner.setText(book.getOwnerId());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         sender.setText(request.getSender()+ " ("+request.getSenderEmail()+")");
         date.setText(request.getDate().toString());
-
-
 
         scan.setOnClickListener(new View.OnClickListener() {
             @Override

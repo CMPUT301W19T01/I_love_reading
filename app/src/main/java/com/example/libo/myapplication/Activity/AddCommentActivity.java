@@ -27,7 +27,6 @@ public class AddCommentActivity extends AppCompatActivity {
         //Remove notification bar
         //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //this.getSupportActionBar().hide();
-
         setContentView(R.layout.activity_add_comment);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.add_comment_title_bar);
@@ -36,6 +35,14 @@ public class AddCommentActivity extends AppCompatActivity {
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
         ImageButton CloseButton = (ImageButton) findViewById(R.id.CommentCloseButton);
         final TextView ratingDisplayTextView = (TextView) findViewById(R.id.EnterCommentTextView);
+        final Intent data = getIntent();
+        Boolean update = data.getBooleanExtra("update",false); // If we want to update the comment instead of edit
+        if (update){
+            float rate = data.getFloatExtra("rate",0);
+            String commentContent = data.getStringExtra("comment");
+            ratingRatingBar.setRating(rate);
+            ratingDisplayTextView.setText(commentContent);
+        }
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
