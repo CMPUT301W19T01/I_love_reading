@@ -194,6 +194,7 @@ public class OwnFragment extends Fragment {
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                         //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        currentBook.setOwnerId(FirebaseAuth.getInstance().getUid());
                         Log.d("CURRENT BOOK: +++++++++",currentBook.getClassification());
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = databaseBook.push().getKey();
