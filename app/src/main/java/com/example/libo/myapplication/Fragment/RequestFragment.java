@@ -2,7 +2,6 @@ package com.example.libo.myapplication.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
+import com.example.libo.myapplication.Adapter.RequestAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.LatLng;
 import com.example.libo.myapplication.Model.Request;
@@ -31,10 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RequestFragment extends Fragment {
     private static final String TAG = "RequestDatabase";
@@ -42,7 +37,7 @@ public class RequestFragment extends Fragment {
     private ListView requestList;
     private int currentIndex;
     private ArrayList<Request> requests;
-    private ArrayAdapter arrayAdapter;
+    private RequestAdapter requestAdapter;
 
     private DatabaseReference requestDatabseRef;
     private DatabaseReference borrowedRef;
@@ -67,8 +62,8 @@ public class RequestFragment extends Fragment {
 
         requestList = getActivity().findViewById(R.id.request_listview);
 
-        arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, requests);
-        requestList.setAdapter(arrayAdapter);
+        requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
+        requestList.setAdapter(requestAdapter);
 
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,21 +81,18 @@ public class RequestFragment extends Fragment {
             public boolean onLongClick(View view) {
                 return true;
             }
-
-
         });
 
         requestDatabseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                requests.clear();
                 Log.d(TAG,"The current news is   " + dataSnapshot.toString());
                 for(DataSnapshot newds : dataSnapshot.getChildren()) {
                     Log.d(TAG,"The current news is   " + newds.toString());
                     Request request = newds.getValue(Request.class);
                     requests.add(request);
                 }
-                arrayAdapter.notifyDataSetChanged();
+                requestAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -113,7 +105,7 @@ public class RequestFragment extends Fragment {
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                requests.clear();
                 for(DataSnapshot owner : dataSnapshot.getChildren()){
                     for(DataSnapshot request : owner.getChildren()){
                         Request requestClass = request.getValue(Request.class);
@@ -122,6 +114,7 @@ public class RequestFragment extends Fragment {
                         }
                     }
                 }
+                requestAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -155,7 +148,7 @@ public class RequestFragment extends Fragment {
                     }
                     if (data.getStringExtra("result").equals("deny")) {
                         requests.remove(currentIndex);
-                        arrayAdapter.notifyDataSetChanged();
+                        requestAdapter.notifyDataSetChanged();
                     }
                 }
             }
