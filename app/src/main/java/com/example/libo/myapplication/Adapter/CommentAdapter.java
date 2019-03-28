@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
@@ -67,8 +68,9 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         viewHolder.username.setText(comment.getUsername()); // show the text in the text view
         viewHolder.time.setText(comment.getTime());
         viewHolder.content.setText(comment.getContent());
-        //Uri photo = Uri.parse(comment.getUser_photo());
-        //Picasso.with(this.myContext).load(photo).into(viewHolder.usericon);
+        if (comment.getUser_photo() != null){
+            Picasso.with(this.myContext).load(comment.getUser_photo()).into(viewHolder.usericon);
+        }
         viewHolder.ratingbar.setRating((float) comment.getRating());
         viewHolder.favorNum.setText(comment.getFavor_number().toString());
         viewHolder.favorButton.setEventListener(new SparkEventListener(){

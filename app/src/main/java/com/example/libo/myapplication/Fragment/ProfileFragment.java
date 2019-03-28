@@ -54,7 +54,7 @@ public class ProfileFragment extends Fragment {
         userId.setText("id: "+user.getUid());
         if (user.getPhotoUrl() != null){
             Log.d("USER PFORILE" ,""+ user.getPhotoUrl().toString());
-            Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+            Picasso.with(getContext()).load(user.getPhotoUrl()).into(userImage);
         }
 
 
