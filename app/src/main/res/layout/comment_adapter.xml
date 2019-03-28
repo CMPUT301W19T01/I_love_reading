@@ -46,25 +46,24 @@
                 android:layout_below="@+id/TextViewCommentContent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="-2dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="-8dp"
                 app:sparkbutton_activeImage="@drawable/thumb_on"
                 app:sparkbutton_iconSize="15dp"
                 app:sparkbutton_inActiveImage="@drawable/thumb_off"
                 app:sparkbutton_primaryColor="@color/heart_primary_color"
                 app:sparkbutton_secondaryColor="@color/heart_secondary_color" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ImageViewUserIcon"
-                android:layout_width="59dp"
-                android:layout_height="49dp"
+                android:layout_width="62dp"
+                android:layout_height="53dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-
                 android:layout_marginTop="8dp"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
@@ -84,21 +83,21 @@
 
             <TextView
                 android:id="@+id/TextViewCommentContent"
-                android:layout_width="378dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/TextViewUserName"
+                android:layout_below="@+id/TextViewCommentTime"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginStart="80dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="11dp"
                 android:text="@string/CommentContent"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <RatingBar
@@ -121,9 +120,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/TextViewCommentContent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="7dp"
                 android:layout_toEndOf="@+id/spark_button"
                 android:layout_toRightOf="@+id/spark_button"
                 android:text="0" />
