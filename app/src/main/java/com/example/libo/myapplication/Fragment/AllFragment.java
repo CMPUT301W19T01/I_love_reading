@@ -78,9 +78,9 @@ public class AllFragment extends Fragment {
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
         });
+        adapter = new bookListViewAdapter(this.getContext().getApplicationContext(), arrayAllbooks);
+        all_book_lv.setAdapter(adapter);
         return view;
-
-
     }
 
 
@@ -118,9 +118,10 @@ public class AllFragment extends Fragment {
                     }
                 }
 
-                adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayAllbooks);
+                //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayAllbooks);
                 //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
-                all_book_lv.setAdapter(adapter);
+                //all_book_lv.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -154,7 +155,7 @@ public class AllFragment extends Fragment {
                 Log.d(TAG,"The current book des is " + currentBook.getDescription());
 
                 this.currentBook.setStatus(true);
-                Util.SendRequset(currentBook.getOwnerId(),currentBook.getID(), true);
+                Util.SendRequset(currentBook.getOwnerId(),currentBook, true);
             }
         }
 

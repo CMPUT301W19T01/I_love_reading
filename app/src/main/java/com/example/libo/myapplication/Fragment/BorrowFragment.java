@@ -147,7 +147,7 @@ public class BorrowFragment extends Fragment {
                     */
 
                     if (data.getBooleanExtra("return", false)){
-                        Util.SendRequset(currentBook.getOwnerId(), currentBook.getID(),false);
+                        Util.SendRequset(currentBook.getOwnerId(), currentBook,false);
                     }
 
                 }
