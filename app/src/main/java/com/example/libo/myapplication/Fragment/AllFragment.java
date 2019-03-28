@@ -3,6 +3,7 @@ package com.example.libo.myapplication.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -73,7 +74,8 @@ public class AllFragment extends Fragment {
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
-                ItemView.putExtra("BookCover", currentBook.getBookCover());
+                Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
+                ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }

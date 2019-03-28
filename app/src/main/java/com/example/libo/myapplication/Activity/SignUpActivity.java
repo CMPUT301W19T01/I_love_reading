@@ -172,7 +172,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void undateUserinfo(final String username, final Uri uriProfileImage, final FirebaseUser currentUser) {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("user_photo");
-        final StorageReference imageFilepath = mStorage.child(uriProfileImage.getLastPathSegment());
+        final StorageReference imageFilepath = mStorage.child(currentUser.getUid());
         imageFilepath.putFile(uriProfileImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

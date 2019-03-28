@@ -52,7 +52,8 @@ public class ProfileFragment extends Fragment {
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
         userId.setText("id: "+user.getUid());
-        userImage.setImageURI(user.getPhotoUrl());
+        Log.d("USER PFORILE" ,""+ user.getPhotoUrl().toString());
+        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
 
 
 
@@ -74,7 +75,7 @@ public class ProfileFragment extends Fragment {
                // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
                 userNameView.setText("name: "+ user.getDisplayName());
                 userEmailView.setText("email: " + user.getEmail());
-                userImage.setImageURI(user.getPhotoUrl());
+                Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
             }
         });
 

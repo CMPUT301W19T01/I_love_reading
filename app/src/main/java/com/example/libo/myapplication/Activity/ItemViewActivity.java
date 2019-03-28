@@ -40,6 +40,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -101,7 +103,7 @@ public class ItemViewActivity extends AppCompatActivity {
         //Get the book iD
         String BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
-        Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
+        Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
         if (!Edit){ // If we are viewing the info instead of borrowing
@@ -113,7 +115,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         comments = new ArrayList<>();
         //Get Comments from Firebase
-        commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(BookId);
+        commentsRef = FirebaseDatabase.getInstance().getReference("commentsTEST").child(BookId);
         commentsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -121,11 +123,10 @@ public class ItemViewActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Comment comment = ds.getValue(Comment.class);
                     comments.add(comment);
+                    adapter = new CommentAdapter(getApplicationContext(), comments);
+                    ListViewComment.setAdapter(adapter);
+                    setListViewHeightBasedOnChildren(ListViewComment);
                 }
-
-                adapter = new CommentAdapter(getApplicationContext(), comments);
-                ListViewComment.setAdapter(adapter);
-                setListViewHeightBasedOnChildren(ListViewComment);
 
             }
 
@@ -289,6 +290,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 CommentTime = CurrentDate + ' ' + CurrentTime;
                 Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
                 String commentId =  commentsRef.push().getKey();
+                newComment.setUser_photo(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                 commentsRef.child(commentId).setValue(newComment);
             }
         }
@@ -306,7 +308,7 @@ public class ItemViewActivity extends AppCompatActivity {
         }
     }
 
-    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Bitmap BookCover){
+    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Uri BookCover){
         // This function checks if the Book is editable
         // If it's editable, text view will be able to edit
         if (Edit){
@@ -339,7 +341,7 @@ public class ItemViewActivity extends AppCompatActivity {
             TextViewClassification.setText("None");
         }
         if (BookCover != null){
-            ImageViewBookCover.setImageBitmap(BookCover);
+            Picasso.with(this).load(BookCover).into(ImageViewBookCover);
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.libo.myapplication.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -76,7 +77,8 @@ public class BorrowFragment extends Fragment {
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
-                ItemView.putExtra("BookCover", currentBook.getBookCover());
+                Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
+                ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
                 ItemView.putExtra("ButtonCode", 0);
                 startActivityForResult(ItemView, BORROW_REQUEST_CODE); // request code 0 means it is from borrow fragement
