@@ -207,16 +207,16 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-                        /*
-                        currentBook = arrayOwnedbooks.get(current_index);
-                        currentBook.setBookName(data.getStringExtra("BookName"));
-                        currentBook.setAuthorName(data.getStringExtra("AuthorName"));
-                        currentBook.setDescription(data.getStringExtra("Description"));
-                        currentBook.setClassification(data.getStringExtra("ClassificationArray"));
-                        Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
-                        String bookID = currentBook.getID();
-                        uploadFile(temp,currentBook.getID(),currentBook);
-                        */
+                        if (!arrayOwnedbooks.isEmpty()) {
+                            currentBook = arrayOwnedbooks.get(current_index);
+                            currentBook.setBookName(data.getStringExtra("BookName"));
+                            currentBook.setAuthorName(data.getStringExtra("AuthorName"));
+                            currentBook.setDescription(data.getStringExtra("Description"));
+                            currentBook.setClassification(data.getStringExtra("ClassificationArray"));
+                            Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
+                            String bookID = currentBook.getID();
+                            uploadFile(temp, currentBook.getID(), currentBook);
+                        }
                     }
                 }
             }
