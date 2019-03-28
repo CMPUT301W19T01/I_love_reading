@@ -1,6 +1,8 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -73,7 +75,7 @@ public class OwnFragment extends Fragment {
         userID = user.getUid();
 
         storageRef = FirebaseStorage.getInstance().getReference("bookcover");
-        databaseBook = FirebaseDatabase.getInstance().getReference("Tbooks").child(userID);
+        databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
 
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
@@ -118,6 +120,28 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
+            }
+
+        });
+
+        own_book_lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Delete Book");
+                builder.setMessage("Want to Delete the book ?");
+                builder.setNeutralButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Book currentBook = arrayOwnedbooks.get(position);
+                        databaseBook.child(currentBook.getID()).removeValue();
+                        dialog.dismiss();
+                    }
+
+                });
+                builder.show();
+                return false;
             }
         });
         return view;
