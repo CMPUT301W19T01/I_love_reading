@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Util {
-    private static DatabaseReference FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
+    public static DatabaseReference FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
 
     public static void SendRequset(String bookOwner, Book book, Boolean isBorrowed) {
 
@@ -22,6 +22,7 @@ public class Util {
         Date current_date = Calendar.getInstance().getTime();
         String senderId = currentUser.getUid();
 
+
         String requestid = FirebaseRequests.push().getKey();
         request.setDate(current_date);
         request.setReceiver(bookOwner);
@@ -31,6 +32,7 @@ public class Util {
         request.setBookId(book.getID());
         request.setBookName(book.getBookName());
         request.setBorrowed(isBorrowed);
+        request.setRequestId(requestid);
         FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
     }
 }

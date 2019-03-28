@@ -1,6 +1,8 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Adapter.RequestAdapter;
@@ -21,6 +24,7 @@ import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.LatLng;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +60,8 @@ public class RequestFragment extends Fragment {
         return view;
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -76,40 +82,46 @@ public class RequestFragment extends Fragment {
             }
         });
 
-        requestList.setOnLongClickListener(new View.OnLongClickListener() {
+        //Let user decline the requests by clicking long on the request
+        requestList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final Request request = requests.get(i);
+                AlertDialog.Builder a_builder = new AlertDialog.Builder(RequestFragment.this.getContext());
+                a_builder.setMessage("Are you sure to delete this request?")
+                        .setCancelable(false)
+                        .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                requests.remove(request);
+                                Util.FirebaseRequests.child(request.getReceiver()).child(request.getRequestId()).removeValue();
+                                // make notification for user
+                                Toast.makeText(RequestFragment.this.getContext(), "Delete the request successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog alert = a_builder.create();
+                alert.show(); // show the alert
                 return true;
             }
         });
 
-        requestDatabseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG,"The current news is   " + dataSnapshot.toString());
-                for(DataSnapshot newds : dataSnapshot.getChildren()) {
-                    Log.d(TAG,"The current news is   " + newds.toString());
-                    Request request = newds.getValue(Request.class);
-                    requests.add(request);
-                }
-                requestAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        //Update request from database
         DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                requests.clear();
+                //requests.clear();
                 for(DataSnapshot owner : dataSnapshot.getChildren()){
                     for(DataSnapshot request : owner.getChildren()){
                         Request requestClass = request.getValue(Request.class);
-                        if (requestClass.getSenderId().equals(userid)){
+                        if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
+
                             requests.add(requestClass);
                         }
                     }
@@ -155,6 +167,7 @@ public class RequestFragment extends Fragment {
         }
     }
 
+    //After accepting the request, update the borrow and all lists
     private void uploadBorrowed(final String borrowerId, final String bookID, final String receiver) {
         AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
         AllbooksRef.addValueEventListener(new ValueEventListener() {
