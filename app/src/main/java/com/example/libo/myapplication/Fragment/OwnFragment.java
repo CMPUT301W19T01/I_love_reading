@@ -73,7 +73,7 @@ public class OwnFragment extends Fragment {
         userID = user.getUid();
 
         storageRef = FirebaseStorage.getInstance().getReference("bookcover");
-        databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
+        databaseBook = FirebaseDatabase.getInstance().getReference("Tbooks").child(userID);
 
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
@@ -181,10 +181,11 @@ public class OwnFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
+        Log.d(TAG,"THIS IS CASE ============================"+requestCode);
 
-            case (1): {// we are looking for the new information that the user edited the book.
-                Log.d(TAG,"THIS IS CASE ONE AND --------------------");
+
+            if(requestCode == 1) {// we are looking for the new information that the user edited the book.
+                Log.d(TAG,"THIS IS CASE ONE AND --------------------"+requestCode);
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
@@ -203,8 +204,8 @@ public class OwnFragment extends Fragment {
                     }
                 }
             }
-            case (2): {// we are updating info of a book
-                Log.d(TAG,"THIS IS CASE TWo AND +++++++++++++++++++++++");
+            else if (requestCode == 2){// we are updating info of a book
+                Log.d(TAG,"THIS IS CASE TWo AND +++++++++++++++++++++++"+ requestCode);
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
@@ -221,7 +222,7 @@ public class OwnFragment extends Fragment {
                     }
                 }
             }
-        }
+
     }
 
     private void uploadFile(Bitmap bookCover, final String id, final Book data_book){
