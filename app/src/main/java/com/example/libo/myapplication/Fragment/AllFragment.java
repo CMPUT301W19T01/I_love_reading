@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,37 +13,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
-import com.example.libo.myapplication.Activity.ResetPassward;
-import com.example.libo.myapplication.Activity.SignUpActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
-import com.example.libo.myapplication.Model.Comment;
-import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 
 public class AllFragment extends Fragment {
     private static final String TAG = "AllBookDatabase";
@@ -64,20 +50,25 @@ public class AllFragment extends Fragment {
     private ListView allsearchresesult;
 
 
-
-
     @Nullable
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
-        view.findViewById(R.id.all_search_button).setOnClickListener((View.OnClickListener) this);
+
+        /*
+            Fix the error, please add the code here when clicking the search button
+         */
+        view.findViewById(R.id.all_search_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
-        allbooksearch = (EditText)view.findViewById(R.id.all_search_text);
+        allbooksearch = (EditText)view.findViewById(R.id.borrow_search_text);
         allbooksearchbutton = (ImageButton) view.findViewById(R.id.all_search_button);
-
-
 
 
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,12 +103,9 @@ public class AllFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
         FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
-
-        //Query query = FirebaseDatabase.getInstance().getReference("books").orderByChild().
 
 
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
@@ -142,20 +130,26 @@ public class AllFragment extends Fragment {
             }
         });
 
+        /*
+            Commented the code below since there are no SearchView with id searchView2 in the layout of all_page.
+            If you want to use search view to implement some features of searching,
+            please add a search view in the layout that named "all_page".
+        */
 
-
+        /*
+        SearchView searchView = getActivity().findViewById(R.id.searchView2);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
                 return false;
             }
         });
+        */
     }
 
     @Override

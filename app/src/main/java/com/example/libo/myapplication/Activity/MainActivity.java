@@ -27,20 +27,20 @@ public class MainActivity extends AppCompatActivity {
 
         this.getSupportActionBar().hide();
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent homeIntent = new Intent(MainActivity.this, LoginActivity.class);
-                    //homeIntent.putExtra("preference",SaveSharedPreference.getSharedPreferences(MainActivity.this));
-                    //SaveSharedPreference.setUserName(MainActivity.this,user_name);
-                    //Intent basicIntent = new Intent(MainActivity.this,BasicActivity.class);
-                    startActivity(homeIntent);
-                    finish();
-                }
-            },SPLASH_TIME_OUT);
-        }
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent homeIntent = new Intent(MainActivity.this, LoginActivity.class);
+                //homeIntent.putExtra("preference",SaveSharedPreference.getSharedPreferences(MainActivity.this));
+                //SaveSharedPreference.setUserName(MainActivity.this,user_name);
+                //Intent basicIntent = new Intent(MainActivity.this,BasicActivity.class);
+                startActivity(homeIntent);
+                finish();
+            }
+        },SPLASH_TIME_OUT);
     }
+
+}
 
 
 
