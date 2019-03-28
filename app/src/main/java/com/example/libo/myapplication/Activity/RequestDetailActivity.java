@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
+import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -86,6 +87,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         final TextView owner  =  findViewById(R.id.request_book_owner);
 
         DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference().child("books");
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users");
         bookRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -95,7 +97,24 @@ public class RequestDetailActivity extends AppCompatActivity {
                         book = user.child(request.getBookId()).getValue(Book.class);
                         des.setText(book.getDescription());
                         bookNmae.setText(book.getBookName());
-                        owner.setText(book.getOwnerId());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+                    if(user.getKey().equals(book.getOwnerId())){
+                        Users users = user.getValue(Users.class);
+                        owner.setText(users.getUsername());
                         break;
                     }
                 }
