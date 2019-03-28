@@ -29,6 +29,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import com.example.libo.myapplication.Adapter.CommentAdapter;
 import com.example.libo.myapplication.Model.Comment;
@@ -85,7 +87,7 @@ public class ItemViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
         final Intent result = getIntent();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
         /*
@@ -116,9 +118,9 @@ public class ItemViewActivity extends AppCompatActivity {
         //Get the book iD
         String BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
-        Bitmap BookCover = (Bitmap) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
-        final Boolean Edit = result.getBooleanExtra("edit",false); // Check if we are allowed to edit the book
-        final Boolean Status = result.getBooleanExtra("status",false); //Check if the Book is available for rent
+        Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
+        final Boolean Edit = result.getBooleanExtra("edit",false);
+        final Boolean Status = result.getBooleanExtra("status",false);
 
         if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
@@ -130,7 +132,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         comments = new ArrayList<>(); // Initialization of comment array
         //Get Comments from Firebase
-        commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(BookId);
+        commentsRef = FirebaseDatabase.getInstance().getReference("commentsTEST").child(BookId);
         commentsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -310,6 +312,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 CommentTime = CurrentDate + ' ' + CurrentTime;
                 Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
                 String commentId =  commentsRef.push().getKey();
+                newComment.setUser_photo(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                 commentsRef.child(commentId).setValue(newComment);
             }
         }
@@ -340,7 +343,7 @@ public class ItemViewActivity extends AppCompatActivity {
      * @param ClassificationArray the classification array
      * @param BookCover           the book cover
      */
-    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Bitmap BookCover){
+    public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Uri BookCover){
         // This function checks if the Book is editable
         // If it's editable, text view will be able to edit
         if (Edit){
@@ -373,12 +376,11 @@ public class ItemViewActivity extends AppCompatActivity {
             TextViewClassification.setText("None");
         }
         if (BookCover != null){
-            ImageViewBookCover.setImageBitmap(BookCover);
+            Picasso.with(this).load(BookCover).into(ImageViewBookCover);
         }
     }
 
 
-    // When the return button is pressed
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         // When the return button is pressed. Automatically transfer the required information back
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
