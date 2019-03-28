@@ -30,6 +30,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.libo.myapplication.RequestPopup;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
@@ -78,6 +80,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private ArrayList<Comment> comments;
     private Intent resultIntent = new Intent(); //Initialization of result Intent
     private CommentAdapter adapter; // Adapter for Comment list view
+    private String BookId;
 
     final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
 
@@ -120,7 +123,7 @@ public class ItemViewActivity extends AppCompatActivity {
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
         //Get the book iD
-        String BookId = result.getStringExtra("ID");
+        BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         final Boolean Edit = result.getBooleanExtra("edit",false);
@@ -173,6 +176,20 @@ public class ItemViewActivity extends AppCompatActivity {
                     intent.putExtra("return", true);
                     setResult(RESULT_OK, intent);
                     finish();
+                }
+            });
+        }
+        else if(buttonCode == 1){
+            BorrowButton.setVisibility(View.INVISIBLE);
+            WatchListButton.setVisibility(View.INVISIBLE);
+            ReturnButton.setVisibility(View.VISIBLE);
+            ReturnButton.setText("View Requests");
+
+            ReturnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RequestPopup requestPopup = new RequestPopup(ItemViewActivity.this,BookId);
+                    requestPopup.showRequests();
                 }
             });
         }

@@ -119,6 +119,8 @@ public class OwnFragment extends Fragment {
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
+                //ButtonCode 1 means user can view requests on one book by clicking request button
+                ItemView.putExtra("ButtonCode",1);
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
 
