@@ -11,6 +11,7 @@ public class Request implements Serializable {
     private String senderId;
     private String BookId;
     private String bookName;
+    private String requestId;
 
     //isBorrowed is true means the user want to borrow the book; false means the user wants to return the book
     private boolean isBorrowed = true;
@@ -110,4 +111,13 @@ public class Request implements Serializable {
     public void setBookName(String bookName) {
         this.bookName = bookName;
     }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
 }
