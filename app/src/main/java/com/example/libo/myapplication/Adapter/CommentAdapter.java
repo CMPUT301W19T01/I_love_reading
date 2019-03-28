@@ -67,8 +67,8 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         viewHolder.username.setText(comment.getUsername()); // show the text in the text view
         viewHolder.time.setText(comment.getTime());
         viewHolder.content.setText(comment.getContent());
-        Uri photo = Uri.parse(comment.getUser_photo());
-        Picasso.with(this.myContext).load(photo).into(viewHolder.usericon);
+        //Uri photo = Uri.parse(comment.getUser_photo());
+        //Picasso.with(this.myContext).load(photo).into(viewHolder.usericon);
         viewHolder.ratingbar.setRating((float) comment.getRating());
         viewHolder.favorNum.setText(comment.getFavor_number().toString());
         viewHolder.favorButton.setEventListener(new SparkEventListener(){
@@ -78,8 +78,10 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     comment.setFavor_number(comment.getFavor_number() +1);
                     notifyDataSetChanged();
                 } else {
-                    comment.setFavor_number(comment.getFavor_number() -1);
-                    notifyDataSetChanged();
+                    if (comment.getFavor_number() > 0) {
+                        comment.setFavor_number(comment.getFavor_number() - 1);
+                        notifyDataSetChanged();
+                    }
                 }
             }
             public void onEventAnimationEnd(ImageView button,boolean buttonState){
