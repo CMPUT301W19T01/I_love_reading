@@ -12,7 +12,7 @@ public class Book {
     private String ID;
     private Boolean status;
     private String Description;
-    private ArrayList<String> Classification;
+    private String Classification;
 
     public String getBookcoverUri() {
         return bookcoverUri;
@@ -29,7 +29,7 @@ public class Book {
     public Book(){
     }
 
-    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, ArrayList<String> Classification,String ownerId){
+    public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, String Classification,String ownerId){
         this.setBookName(BookName);
         this.setStatus(status);
         this.setID(ID);
@@ -79,11 +79,11 @@ public class Book {
     public void setStatus(Boolean status) {
         this.status = status; // True means the item is borrowed, False means the item is still available
     }
-    public ArrayList<String> getClassification() {
+    public String getClassification() {
         return Classification;
     }
 
-    public void setClassification(ArrayList<String> classification) {
+    public void setClassification(String classification) {
         this.Classification = classification;
     }
 

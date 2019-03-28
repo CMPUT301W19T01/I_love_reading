@@ -36,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -73,7 +74,9 @@ public class AllFragment extends Fragment {
                 ItemView.putExtra("status", currentBook.getStatus());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
-                ItemView.putExtra("ClassificationArray", currentBook.getClassification());
+                ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
+                        .asList(currentBook.getClassification().split("/")));
+                ItemView.putExtra("ClassificationArray", ClassificationArray);
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
@@ -94,8 +97,7 @@ public class AllFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         SearchView searchView = getActivity().findViewById(R.id.searchView2);
 
-        AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
-
+        AlldatabaseBook = FirebaseDatabase.getInstance().getReference("Tbooks");
         FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
 
 
@@ -108,21 +110,11 @@ public class AllFragment extends Fragment {
                 arrayAllbooks.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     for(DataSnapshot newds : ds.getChildren()) {
-                        Log.d(TAG,"ALL BOOK TAG newwd is :     -------" +newds.toString());
                         Book book = newds.getValue(Book.class);
-                        Log.d(TAG,"ALL Book name" + book.getBookName());
-
-                        ArrayList<String> Classification = new ArrayList<String>();
-
-                        book.setClassification(Classification);
-
                         arrayAllbooks.add(book);
                     }
                 }
 
-                //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayAllbooks);
-                //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayAllbooks);
-                //all_book_lv.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
 
@@ -184,7 +176,7 @@ public class AllFragment extends Fragment {
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
-                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         arrayAllbooks.add(currentBook);
                     }
@@ -198,7 +190,7 @@ public class AllFragment extends Fragment {
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
-                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                         currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         currentBook.setAuthorName(order);
                     }

@@ -65,7 +65,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         viewHolder.time.setText(comment.getTime());
         viewHolder.content.setText(comment.getContent());
         Uri photo = Uri.parse(comment.getUser_photo());
-        Picasso.with(this.myContext).load(photo).into(viewHolder.usericon);
+        Picasso.with(getContext()).load(photo).into(viewHolder.usericon);
         viewHolder.ratingbar.setRating((float) comment.getRating());
 
         return convertView;

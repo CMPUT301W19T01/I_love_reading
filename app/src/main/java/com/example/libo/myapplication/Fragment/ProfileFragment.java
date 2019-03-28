@@ -52,9 +52,10 @@ public class ProfileFragment extends Fragment {
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
         userId.setText("id: "+user.getUid());
-        Log.d("USER PFORILE" ,""+ user.getPhotoUrl().toString());
-        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
-
+        if (user.getPhotoUrl() != null){
+            Log.d("USER PFORILE" ,""+ user.getPhotoUrl().toString());
+            Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+        }
 
 
         btn_edit = getActivity().findViewById(R.id.btn_editProfile);

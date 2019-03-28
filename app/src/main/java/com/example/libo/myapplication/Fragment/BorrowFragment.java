@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BorrowFragment extends Fragment {
 
@@ -59,7 +60,6 @@ public class BorrowFragment extends Fragment {
         Userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
         adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
-        //adapter = new ArrayAdapter<Book>(getContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
         borrow_book_lv.setAdapter(adapter);
 
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,7 +76,9 @@ public class BorrowFragment extends Fragment {
                 ItemView.putExtra("status", currentBook.getStatus());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
-                ItemView.putExtra("ClassificationArray", currentBook.getClassification());
+                ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
+                        .asList(currentBook.getClassification().split("/")));
+                ItemView.putExtra("ClassificationArray", ClassificationArray);
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
@@ -111,11 +113,6 @@ public class BorrowFragment extends Fragment {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Book book = ds.getValue(Book.class);
                     Log.d(TAG,"ALL Book name" + book.getBookName());
-                    ArrayList<String> Classification = new ArrayList<String>();
-
-                    book.setClassification(Classification);
-
-                    Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
                     arrayBorrowbooks.add(book);
                 }
                 adapter.notifyDataSetChanged();

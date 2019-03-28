@@ -43,6 +43,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OwnFragment extends Fragment {
 
@@ -72,7 +73,7 @@ public class OwnFragment extends Fragment {
         userID = user.getUid();
 
         storageRef = FirebaseStorage.getInstance().getReference("bookcover");
-        databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
+        databaseBook = FirebaseDatabase.getInstance().getReference("Tbooks").child(userID);
 
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
@@ -82,8 +83,8 @@ public class OwnFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplication(), ItemViewActivity.class);
-                ArrayList<String> Classification = new ArrayList<String>();
-                currentBook = new Book("", "", "", false,"", Classification,"");
+
+                currentBook = new Book("", "", "", false,"", "","");
                 intent.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 intent.putExtra("AuthorName", currentBook.getAuthorName());
                 intent.putExtra("ID", currentBook.getID());
@@ -91,7 +92,8 @@ public class OwnFragment extends Fragment {
                 intent.putExtra("edit",true);
                 intent.putExtra("Description", currentBook.getDescription());
                 intent.putExtra("BookCover", currentBook.getBookCover());
-                intent.putExtra("ClassificationArray", currentBook.getClassification());
+                ArrayList<String> ClassificationArray = new ArrayList<>();
+                intent.putExtra("ClassificationArray", ClassificationArray);
 
                 startActivityForResult(intent, 1); // request code 1 means we are allowing the user to edit the book
 
@@ -109,7 +111,9 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("status", currentBook.getStatus());
                 ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", currentBook.getDescription());
-                ItemView.putExtra("ClassificationArray", currentBook.getClassification());
+                ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
+                        .asList(currentBook.getClassification().split("/")));
+                ItemView.putExtra("ClassificationArray", ClassificationArray);
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
@@ -140,14 +144,6 @@ public class OwnFragment extends Fragment {
                 Log.d(TAG,"Deading database successfully" + arrayOwnedbooks.toString());
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Book book = ds.getValue(Book.class);
-                    Log.d(TAG,"BOOK TAG" +ds.toString());
-                    Log.d(TAG,"Book name" + book.getBookName());
-
-                    ArrayList<String> Classification = new ArrayList<String>();
-
-                    book.setClassification(Classification);
-
-                    Bitmap bitmap = Bitmap.createBitmap(5,5,Bitmap.Config.ARGB_8888);
                     arrayOwnedbooks.add(book);
 
                 }
@@ -196,12 +192,12 @@ public class OwnFragment extends Fragment {
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
-                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                         //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        Log.d("CURRENT BOOK: +++++++++",currentBook.getClassification());
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
-                        //arrayOwnedbooks.add(currentBook);
                         uploadFile(temp,currentBook.getID(),currentBook);
                     }
                 }
@@ -211,31 +207,15 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-                        /*
+
                         currentBook = arrayOwnedbooks.get(current_index);
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
-                        currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
+                        currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
-
-                        //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
-
-                        String book_id = databaseBook.push().getKey();
-                        currentBook.setID(book_id);
-                        /*
-                        /*make a new book item and upload to fireabse by using chid(userid).chid(bookid)
-                         */
-                       // Book data_book = new Book();
-                       // data_book.setID(book_id);
-                       // data_book.setBookName(currentBook.getBookName());
-                        //data_book.setStatus(currentBook.getStatus());
-                       // data_book.setAuthorName(currentBook.getAuthorName());
-                       // data_book.setDescription(currentBook.getDescription());
-                      //  data_book.setOwnerId(userID);
-                       // ArrayList<String> Classification = new ArrayList<String>();
-                        //uploadFile(temp,currentBook.getID(),currentBook);
-                       // databaseBook.child(book_id).setValue(data_book);
+                        String bookID = currentBook.getID();
+                        uploadFile(temp,currentBook.getID(),currentBook);
                     }
                 }
             }
