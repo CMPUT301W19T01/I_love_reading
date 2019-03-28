@@ -85,7 +85,7 @@ public class ItemViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
         final Intent result = getIntent();
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
         /*
