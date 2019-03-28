@@ -207,7 +207,7 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
-
+                        /*
                         currentBook = arrayOwnedbooks.get(current_index);
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
@@ -216,6 +216,7 @@ public class OwnFragment extends Fragment {
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String bookID = currentBook.getID();
                         uploadFile(temp,currentBook.getID(),currentBook);
+                        */
                     }
                 }
             }
