@@ -9,8 +9,19 @@ public class Comment implements Serializable {
     private String username;
     private String time;
     private String content;
-
     private Integer favor_number = 0;
+
+
+    public String getUser_photo() {
+        return user_photo;
+    }
+
+    public void setUser_photo(String user_photo) {
+        this.user_photo = user_photo;
+    }
+
+    private String user_photo;
+
     public Comment(){
 
     }

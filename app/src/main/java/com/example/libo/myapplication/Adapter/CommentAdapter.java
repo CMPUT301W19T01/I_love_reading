@@ -2,6 +2,7 @@ package com.example.libo.myapplication.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.libo.myapplication.Model.Comment;
-import com.example.libo.myapplication.R;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
+
+import com.example.libo.myapplication.Model.Comment;
+import com.example.libo.myapplication.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -64,7 +67,8 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         viewHolder.username.setText(comment.getUsername()); // show the text in the text view
         viewHolder.time.setText(comment.getTime());
         viewHolder.content.setText(comment.getContent());
-        //viewHolder.usericon.setImageBitmap(comment.get);
+        Uri photo = Uri.parse(comment.getUser_photo());
+        Picasso.with(this.myContext).load(photo).into(viewHolder.usericon);
         viewHolder.ratingbar.setRating((float) comment.getRating());
         viewHolder.favorNum.setText(comment.getFavor_number().toString());
         viewHolder.favorButton.setEventListener(new SparkEventListener(){

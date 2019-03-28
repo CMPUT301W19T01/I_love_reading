@@ -110,7 +110,8 @@ public class OwnFragment extends Fragment {
                 ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ItemView.putExtra("ClassificationArray", currentBook.getClassification());
-                ItemView.putExtra("BookCover", currentBook.getBookCover());
+                Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
+                ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
@@ -196,8 +197,12 @@ public class OwnFragment extends Fragment {
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
-                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
-                        arrayOwnedbooks.add(currentBook);
+                        //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
+                        Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
+                        String book_id = databaseBook.push().getKey();
+                        currentBook.setID(book_id);
+                        //arrayOwnedbooks.add(currentBook);
+                        uploadFile(temp,currentBook.getID(),currentBook);
                     }
                 }
             }
@@ -206,17 +211,19 @@ public class OwnFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {
+                        /*
                         currentBook = arrayOwnedbooks.get(current_index);
                         currentBook.setBookName(data.getStringExtra("BookName"));
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringArrayListExtra("ClassificationArray"));
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
+
                         //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
 
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
-
+                        /*
                         /*make a new book item and upload to fireabse by using chid(userid).chid(bookid)
                          */
                        // Book data_book = new Book();
@@ -265,7 +272,7 @@ public class OwnFragment extends Fragment {
                         if (task.isSuccessful()){
                             Uri downloadUri = task.getResult();
                             Log.i("seeThisUri", downloadUri.toString());
-                            data_book.setBookcoverUri(downloadUri);
+                            data_book.setBookcoverUri(downloadUri.toString());
                             Log.d(TAG,"==============================================");
                             databaseBook.child(id).setValue(data_book);
                         }

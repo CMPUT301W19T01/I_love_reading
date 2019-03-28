@@ -14,15 +14,15 @@ public class Book {
     private String Description;
     private ArrayList<String> Classification;
 
-    public Uri getBookcoverUri() {
+    public String getBookcoverUri() {
         return bookcoverUri;
     }
 
-    public void setBookcoverUri(Uri bookcoverUri) {
+    public void setBookcoverUri(String bookcoverUri) {
         this.bookcoverUri = bookcoverUri;
     }
 
-    private Uri bookcoverUri;
+    private String bookcoverUri;
     private Float rating;
     private Bitmap BookCover;
 
