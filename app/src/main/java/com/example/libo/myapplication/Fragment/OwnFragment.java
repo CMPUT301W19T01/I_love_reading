@@ -73,7 +73,7 @@ public class OwnFragment extends Fragment {
         userID = user.getUid();
 
         storageRef = FirebaseStorage.getInstance().getReference("bookcover");
-        databaseBook = FirebaseDatabase.getInstance().getReference("Tbooks").child(userID);
+        databaseBook = FirebaseDatabase.getInstance().getReference("books").child(userID);
 
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
