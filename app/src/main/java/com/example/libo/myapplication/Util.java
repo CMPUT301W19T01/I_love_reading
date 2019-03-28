@@ -1,5 +1,6 @@
 package com.example.libo.myapplication;
 
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -12,7 +13,7 @@ import java.util.Date;
 public class Util {
     private static DatabaseReference FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
 
-    public static void SendRequset(String bookOwner, String Bookid, Boolean isBorrowed) {
+    public static void SendRequset(String bookOwner, Book book, Boolean isBorrowed) {
 
         Request request = new Request();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -27,7 +28,8 @@ public class Util {
         request.setSender(sender);
         request.setSenderEmail(sender_email);
         request.setSenderId(senderId);
-        request.setBookId(Bookid);
+        request.setBookId(book.getID());
+        request.setBookName(book.getBookName());
         request.setBorrowed(isBorrowed);
         FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
     }
