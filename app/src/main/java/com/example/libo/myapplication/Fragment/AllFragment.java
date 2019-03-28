@@ -64,20 +64,25 @@ public class AllFragment extends Fragment {
     private ListView allsearchresesult;
 
 
-
-
     @Nullable
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
-        view.findViewById(R.id.all_search_button).setOnClickListener((View.OnClickListener) this);
+
+        /*
+            Fix the error, please add the code here when clicking the search button
+         */
+        view.findViewById(R.id.all_search_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
         allbooksearch = (EditText)view.findViewById(R.id.all_search_text);
         allbooksearchbutton = (ImageButton) view.findViewById(R.id.all_search_button);
-
-
 
 
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -112,7 +117,6 @@ public class AllFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
         FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
@@ -140,7 +144,15 @@ public class AllFragment extends Fragment {
             }
         });
 
+        /*
+            Commented the code below since there are no SearchView with id searchView2 in the layout of all_page.
 
+            If you want to use search view to implement some features of searching,
+            please add a search view in the layout that named "all_page".
+        */
+
+        /*
+        SearchView searchView = getActivity().findViewById(R.id.searchView2);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -154,6 +166,7 @@ public class AllFragment extends Fragment {
                 return false;
             }
         });
+        */
     }
 
     @Override
