@@ -297,12 +297,12 @@ public class ItemViewActivity extends AppCompatActivity {
                     Toast.makeText(ItemViewActivity.this, "Sorry this is not your comment", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent CommentIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
-                    CommentIntent.putExtra("update",true);
-                    CommentIntent.putExtra("rate", current_comment.getRating());
-                    CommentIntent.putExtra("comment",current_comment.getContent());
+                    Intent CommentUpdateIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
+                    CommentUpdateIntent.putExtra("update",true);
+                    CommentUpdateIntent.putExtra("rate", current_comment.getRating());
+                    CommentUpdateIntent.putExtra("comment", current_comment.getContent());
                     current_comment_position = position;
-                    startActivityForResult(CommentIntent,UPDATE_COMMENT);
+                    startActivityForResult(CommentUpdateIntent,UPDATE_COMMENT);
                     ((Activity) ItemViewActivity.this).overridePendingTransition(R.layout.animate_slide_up_enter, R.layout.animate_slide_up_exit);
                 }
                 return true;
@@ -348,25 +348,34 @@ public class ItemViewActivity extends AppCompatActivity {
                 CommentTime = CurrentDate + ' ' + CurrentTime;
                 Comment newComment = new Comment(Rate, UserName, CommentTime, CommentText);
                 String commentId =  commentsRef.push().getKey();
+                newComment.setCommentId(commentId);
                 newComment.setUser_photo(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                 commentsRef.child(commentId).setValue(newComment);
             }
         }
         if (requestCode == UPDATE_COMMENT && resultCode == Activity.RESULT_OK){
-            float Rate = resultIntent.getFloatExtra("rate", '0');
-            String CommentText = resultIntent.getStringExtra("Comment");
-            String CommentTime;
-            Calendar cal = Calendar.getInstance();
-            Date time = cal.getTime();
-            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            String CurrentTime = timeFormat.format(time);
-            String CurrentDate = dateFormat.format(time);
-            CommentTime = CurrentDate + ' ' + CurrentTime;
-            Comment temp_comment = comments.get(current_comment_position);
-            temp_comment.setContent(CommentText);
-            temp_comment.setRating(Rate);
-            temp_comment.setTime(CommentTime);
+            Intent resultIntent = data;
+            Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
+            if (!resultCommand) {
+                float Rate = resultIntent.getFloatExtra("rate", '0');
+                String CommentText = resultIntent.getStringExtra("Comment");
+                String UserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName(); //To be done later
+                String CommentTime;
+                Calendar cal = Calendar.getInstance();
+                Date time = cal.getTime();
+                DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                String CurrentTime = timeFormat.format(time);
+                String CurrentDate = dateFormat.format(time);
+                CommentTime = CurrentDate + ' ' + CurrentTime;
+                Comment temp_comment = comments.get(current_comment_position);
+                temp_comment.setContent(CommentText);
+                temp_comment.setRating(Rate);
+                temp_comment.setTime(CommentTime);
+                comments.set(current_comment_position,temp_comment);
+                commentsRef.child(temp_comment.getCommentId()).setValue(temp_comment);
+                adapter.notifyDataSetChanged();
+            }
             // Wait for update comment
             //
             //

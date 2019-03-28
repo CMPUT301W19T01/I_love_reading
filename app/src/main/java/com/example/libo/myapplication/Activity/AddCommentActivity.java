@@ -35,7 +35,7 @@ public class AddCommentActivity extends AppCompatActivity {
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
         ImageButton CloseButton = (ImageButton) findViewById(R.id.CommentCloseButton);
         final TextView ratingDisplayTextView = (TextView) findViewById(R.id.EnterCommentTextView);
-        Intent data = getIntent();
+        final Intent data = getIntent();
         Boolean update = data.getBooleanExtra("update",false); // If we want to update the comment instead of edit
         if (update){
             float rate = data.getFloatExtra("rate",0);
