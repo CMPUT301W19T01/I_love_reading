@@ -9,6 +9,8 @@ public class Comment implements Serializable {
     private String username;
     private String time;
     private String content;
+    private Integer favor_number = 0;
+
 
     public String getUser_photo() {
         return user_photo;
@@ -69,6 +71,14 @@ public class Comment implements Serializable {
 
     public void setBookId(String bookId) {
         BookId = bookId;
+    }
+
+    public Integer getFavor_number() {
+        return favor_number;
+    }
+
+    public void setFavor_number(Integer favor_number) {
+        this.favor_number = favor_number;
     }
 
 

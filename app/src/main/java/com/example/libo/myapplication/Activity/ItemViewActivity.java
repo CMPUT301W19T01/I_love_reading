@@ -29,6 +29,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import com.example.libo.myapplication.Adapter.CommentAdapter;
 import com.example.libo.myapplication.Model.Comment;
@@ -40,8 +42,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,6 +52,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * The Item view activity.
+ * This Activity shows the detail information of a book
+ */
 public class ItemViewActivity extends AppCompatActivity {
 
     private EditText EditTextBookName;
@@ -64,29 +68,37 @@ public class ItemViewActivity extends AppCompatActivity {
     private Button WatchListButton;
     private ImageButton AddCommentButton;
     private Intent temp;
-    private ListView ListViewComment;
+    private ListView ListViewComment; // The list View of the comment
     private String[] ItemSet = {"Science Fiction", "Philosophy", "Comedy", "Horror Fiction", "History"}; // Possible selection in classification
     private boolean[] SelectedItemSet;
     private ArrayList<Integer> myUserItems = new ArrayList<>(); //Selected items in terms of binary
     private ArrayList<String> resultClassification= new ArrayList<>(); //Selected items in terms of String
     private ArrayList<Comment> comments;
-    private Intent resultIntent = new Intent();
-    private CommentAdapter adapter;
-    final int GET_FROM_GALLERY = 2;
-    final int GET_FROM_COMMENT = 3;
+    private Intent resultIntent = new Intent(); //Initialization of result Intent
+    private CommentAdapter adapter; // Adapter for Comment list view
+
+    final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
+
+    final int GET_FROM_COMMENT = 3; // result code for getting new comment
     private DatabaseReference commentsRef;
     private Uri BookCoverUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
+        getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
         final Intent result = getIntent();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
+        /*
+        Design of Tool Bar
+        */
         setContentView(R.layout.activity_item_view);
         getSupportActionBar().setTitle("Details View");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /*
+        Initialization of Text view and button.
+         */
         EditTextBookName = findViewById(R.id.EditTextBookName);
         EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
         EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
@@ -97,6 +109,9 @@ public class ItemViewActivity extends AppCompatActivity {
         WatchListButton = findViewById(R.id.ButtonWatchList);
         AddCommentButton = findViewById(R.id.ButtonAddComment);
         ListViewComment = findViewById(R.id.ListViewComments);
+        /*
+        Get Information of the book from the intent
+         */
         String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
@@ -106,14 +121,16 @@ public class ItemViewActivity extends AppCompatActivity {
         Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
+
         if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
             resultIntent.putExtra("watchlist", "false");
             checkStatus(Status); // check if the book can be borrowed
         }
-        checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover);
 
-        comments = new ArrayList<>();
+        checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover); // show the information of the Book
+
+        comments = new ArrayList<>(); // Initialization of comment array
         //Get Comments from Firebase
         commentsRef = FirebaseDatabase.getInstance().getReference("commentsTEST").child(BookId);
         commentsRef.addValueEventListener(new ValueEventListener() {
@@ -123,10 +140,11 @@ public class ItemViewActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     Comment comment = ds.getValue(Comment.class);
                     comments.add(comment);
-                    adapter = new CommentAdapter(getApplicationContext(), comments);
-                    ListViewComment.setAdapter(adapter);
-                    setListViewHeightBasedOnChildren(ListViewComment);
                 }
+
+                adapter = new CommentAdapter(getApplicationContext(), comments);
+                ListViewComment.setAdapter(adapter);
+                setListViewHeightBasedOnChildren(ListViewComment);
 
             }
 
@@ -135,7 +153,6 @@ public class ItemViewActivity extends AppCompatActivity {
 
             }
         });
-
 
 
 
@@ -156,9 +173,10 @@ public class ItemViewActivity extends AppCompatActivity {
             });
         }
 
+
+        // Onclick listener for borrow button
         BorrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            // Onclick listener for borrow button
             public void onClick(View v) {
                 if (!Status){ //If available
                     resultIntent.putExtra("borrow","true");
@@ -169,8 +187,8 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
+        // Onclick listener for Watchlist button
         WatchListButton.setOnClickListener(new View.OnClickListener() {
-            // Onclick listener for Watchlist button
             @Override
             public void onClick(View v) {
                 resultIntent.putExtra("watchlist","true");
@@ -180,6 +198,7 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
+        // OnClick listener for BookCover
         ImageViewBookCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +207,7 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
-
+        // Onclick listener for selecting Classification of the Book
         TextViewClassification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -241,6 +260,7 @@ public class ItemViewActivity extends AppCompatActivity {
             }
         });
 
+        // Onclick Listener for Add comment button
         AddCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +274,8 @@ public class ItemViewActivity extends AppCompatActivity {
 
     }
 
+
+    // Get result from other activities
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -294,11 +316,14 @@ public class ItemViewActivity extends AppCompatActivity {
                 commentsRef.child(commentId).setValue(newComment);
             }
         }
-
-
     }
 
 
+    /**
+     * Check if the Book is available
+     *
+     * @param Status the status
+     */
     public void checkStatus(Boolean Status){
         // This function checks if the Book is available.
         // If the Book is not available, it Borrow Button will show Unavailable
@@ -308,6 +333,16 @@ public class ItemViewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Display the information of the Book
+     *
+     * @param Edit                 if we can edit
+     * @param BookName            the book name
+     * @param AuthorName          the author name
+     * @param Description         the description
+     * @param ClassificationArray the classification array
+     * @param BookCover           the book cover
+     */
     public void checkEdit(Boolean Edit, String BookName, String AuthorName, String Description, ArrayList<String> ClassificationArray, Uri BookCover){
         // This function checks if the Book is editable
         // If it's editable, text view will be able to edit
@@ -402,6 +437,12 @@ public class ItemViewActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * Combine string list string.
+     *
+     * @param my_list the my list
+     * @return the string
+     */
     public String CombineStringList(ArrayList<String> my_list){
         // The function converts a string arraylist to a string
         String new_string = "";
@@ -415,6 +456,11 @@ public class ItemViewActivity extends AppCompatActivity {
             return "";
     }
 
+    /**
+     * Sets list view height based on children.
+     *
+     * @param listView the list view
+     */
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
