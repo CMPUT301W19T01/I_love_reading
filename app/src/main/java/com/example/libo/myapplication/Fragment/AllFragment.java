@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,8 +100,6 @@ public class AllFragment extends Fragment {
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
         FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
-
-        //Query query = FirebaseDatabase.getInstance().getReference("books").orderByChild().
 
 
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
