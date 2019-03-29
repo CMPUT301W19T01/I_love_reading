@@ -30,6 +30,7 @@ public class AddCommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_comment);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.add_comment_title_bar);
+        getSupportActionBar().setHideOnContentScrollEnabled(false);
         getSupportActionBar().setElevation(2);
         final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CreateCommentRatingBar);
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
@@ -51,7 +52,14 @@ public class AddCommentActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("close",false); //It's not closing comment
                 resultIntent.putExtra("rate",ratingRatingBar.getRating());
-                resultIntent.putExtra("Comment",ratingDisplayTextView.getText().toString());
+                if (ratingDisplayTextView.getText().toString().length() == 0){
+                    resultIntent.putExtra("Comment","The user left a empty comment...");
+
+                }
+                else{
+                    resultIntent.putExtra("Comment",ratingDisplayTextView.getText().toString());
+                }
+
                 setResult(Activity.RESULT_OK,resultIntent);
                 finish();
             }

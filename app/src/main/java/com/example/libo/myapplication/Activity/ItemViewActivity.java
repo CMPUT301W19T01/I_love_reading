@@ -319,7 +319,22 @@ public class ItemViewActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-                Toast.makeText(ItemViewActivity.this, "Long Click to edit", Toast.LENGTH_SHORT).show();
+                String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                Comment current_comment = (Comment) ListViewComment.getItemAtPosition(position);
+                Boolean check = (username.equals(current_comment.getUsername()));
+                if (!check){
+                    Toast.makeText(ItemViewActivity.this, "Single Click on Your Comment to Edit", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    update_comment_firebase();
+                    Intent CommentUpdateIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
+                    CommentUpdateIntent.putExtra("update",true);
+                    CommentUpdateIntent.putExtra("rate", current_comment.getRating());
+                    CommentUpdateIntent.putExtra("comment", current_comment.getContent());
+                    current_comment_position = position;
+                    startActivityForResult(CommentUpdateIntent,UPDATE_COMMENT);
+                    ((Activity) ItemViewActivity.this).overridePendingTransition(R.layout.animate_slide_up_enter, R.layout.animate_slide_up_exit);
+                }
             }
         });
 
@@ -330,19 +345,33 @@ public class ItemViewActivity extends AppCompatActivity {
                                     int position, long id) {
                 // TODO Auto-generated method stub
                 String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                Comment current_comment = (Comment) ListViewComment.getItemAtPosition(position);
+                final Comment current_comment = (Comment) ListViewComment.getItemAtPosition(position);
                 Boolean check = (username.equals(current_comment.getUsername()));
                 if (!check){
-                    Toast.makeText(ItemViewActivity.this, "Sorry this is not your comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ItemViewActivity.this, "Long Click on Your Comment to Delete", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent CommentUpdateIntent= new Intent(ItemViewActivity.this, AddCommentActivity.class);
-                    CommentUpdateIntent.putExtra("update",true);
-                    CommentUpdateIntent.putExtra("rate", current_comment.getRating());
-                    CommentUpdateIntent.putExtra("comment", current_comment.getContent());
-                    current_comment_position = position;
-                    startActivityForResult(CommentUpdateIntent,UPDATE_COMMENT);
-                    ((Activity) ItemViewActivity.this).overridePendingTransition(R.layout.animate_slide_up_enter, R.layout.animate_slide_up_exit);
+                    update_comment_firebase();
+                    AlertDialog alertDialog = new AlertDialog.Builder(ItemViewActivity.this).create();
+                    alertDialog.setTitle("Note: ");
+                    alertDialog.setMessage("Do you want to delete this comment?");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    comments.remove(current_comment);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                    alertDialog.show();
+
+
                 }
                 return true;
             }
@@ -491,7 +520,7 @@ public class ItemViewActivity extends AppCompatActivity {
             commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
             adapter.notifyDataSetChanged();
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             // do something on back.
             Boolean Edit = temp.getBooleanExtra("edit",false);
             if (Edit){
@@ -501,20 +530,25 @@ public class ItemViewActivity extends AppCompatActivity {
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                resultIntent.putExtra("do","edit");
-                                ImageViewBookCover.buildDrawingCache(); // send the image back
-                                Bitmap image= ImageViewBookCover.getDrawingCache();
-                                resultIntent.putExtra("BookCover",image);
-                                String BookName = EditTextBookName.getText().toString();
-                                String AuthorName = EditTextAuthorName.getText().toString();
-                                String Description = EditTextDescription.getText().toString();
-                                resultIntent.putExtra("BookName",BookName);
-                                resultIntent.putExtra("AuthorName", AuthorName);
-                                resultIntent.putExtra("Description", Description);
-                                resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+                                if (!check_finish()){
+                                    dialog.dismiss();
+                                }
+                                else {
+                                    resultIntent.putExtra("do", "edit");
+                                    ImageViewBookCover.buildDrawingCache(); // send the image back
+                                    Bitmap image = ImageViewBookCover.getDrawingCache();
+                                    resultIntent.putExtra("BookCover", image);
+                                    String BookName = EditTextBookName.getText().toString();
+                                    String AuthorName = EditTextAuthorName.getText().toString();
+                                    String Description = EditTextDescription.getText().toString();
+                                    resultIntent.putExtra("BookName", BookName);
+                                    resultIntent.putExtra("AuthorName", AuthorName);
+                                    resultIntent.putExtra("Description", Description);
+                                    resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
 
-                                setResult(Activity.RESULT_OK,resultIntent);
-                                finish();
+                                    setResult(Activity.RESULT_OK, resultIntent);
+                                    finish();
+                                }
                             }
                         });
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay",
@@ -594,33 +628,35 @@ public class ItemViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) // Press Back Icon
         {
-            for (Comment item_comment : comments) {
-                commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
-                adapter.notifyDataSetChanged();
-            }
+            update_comment_firebase();
                 // do something on back.
-                Boolean Edit = temp.getBooleanExtra("edit",false);
-                if (Edit){
+                Boolean Edit = temp.getBooleanExtra("edit", false);
+                if (Edit) {
                     AlertDialog alertDialog = new AlertDialog.Builder(ItemViewActivity.this).create();
                     alertDialog.setTitle("Note: ");
                     alertDialog.setMessage("You are quitting the edit view, do you want to save?");
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    resultIntent.putExtra("do","edit");
-                                    ImageViewBookCover.buildDrawingCache(); // send the image back
-                                    Bitmap image= ImageViewBookCover.getDrawingCache();
-                                    resultIntent.putExtra("BookCover",image);
-                                    String BookName = EditTextBookName.getText().toString();
-                                    String AuthorName = EditTextAuthorName.getText().toString();
-                                    String Description = EditTextDescription.getText().toString();
-                                    resultIntent.putExtra("BookName",BookName);
-                                    resultIntent.putExtra("AuthorName", AuthorName);
-                                    resultIntent.putExtra("Description", Description);
-                                    resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+                                    if (!check_finish()){
+                                        dialog.dismiss();
+                                    }
+                                    else {
+                                        resultIntent.putExtra("do", "edit");
+                                        ImageViewBookCover.buildDrawingCache(); // send the image back
+                                        Bitmap image = ImageViewBookCover.getDrawingCache();
+                                        resultIntent.putExtra("BookCover", image);
+                                        String BookName = EditTextBookName.getText().toString();
+                                        String AuthorName = EditTextAuthorName.getText().toString();
+                                        String Description = EditTextDescription.getText().toString();
+                                        resultIntent.putExtra("BookName", BookName);
+                                        resultIntent.putExtra("AuthorName", AuthorName);
+                                        resultIntent.putExtra("Description", Description);
+                                        resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
 
-                                    setResult(Activity.RESULT_OK,resultIntent);
-                                    finish();
+                                        setResult(Activity.RESULT_OK, resultIntent);
+                                        finish();
+                                    }
                                 }
                             });
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay",
@@ -632,20 +668,18 @@ public class ItemViewActivity extends AppCompatActivity {
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Don't save",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent resultIntent= new Intent();
-                                    resultIntent.putExtra("do","donotedit");
-                                    setResult(Activity.RESULT_OK,resultIntent);
+                                    Intent resultIntent = new Intent();
+                                    resultIntent.putExtra("do", "donotedit");
+                                    setResult(Activity.RESULT_OK, resultIntent);
                                     finish();
                                 }
                             });
 
                     alertDialog.show();
-
-                }
-                else{
-                    resultIntent.putExtra("do","test");
-                    resultIntent.putExtra("Comment",comments);
-                    setResult(Activity.RESULT_OK,resultIntent);
+                } else {
+                    resultIntent.putExtra("do", "test");
+                    resultIntent.putExtra("Comment", comments);
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }
             }
@@ -654,5 +688,30 @@ public class ItemViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void update_comment_firebase(){
+        for (Comment item_comment : comments) {
+            commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public boolean check_finish(){
+        boolean result = true;
+        if (EditTextBookName.getText().length() == 0){
+            result = false;
+            EditTextBookName.setError("Book name is required");
+        }
+        if (EditTextAuthorName.getText().length() == 0)
+        {
+            result = false;
+            EditTextAuthorName.setError("Book name is required");
+        }
+        if (EditTextDescription.getText().length() == 0)
+        {
+            result = false;
+            EditTextDescription.setError("Book name is required");
+        }
+        return result;
+    }
 
 }
