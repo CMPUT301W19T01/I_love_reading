@@ -21,6 +21,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import com.example.libo.myapplication.Model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class RequestDetailActivity extends AppCompatActivity {
+
+    private DatabaseReference requestDatabseRef;
+    private DatabaseReference borrowedRef;
+    private DatabaseReference AllbooksRef;
 
     private Button accept;
     private Button deny;
@@ -46,6 +51,9 @@ public class RequestDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_detail);
+
+        requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
 
         accept = findViewById(R.id.button_accept);
         deny = findViewById(R.id.button_deny);
@@ -171,9 +179,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     }
 
     public void deny(View view){
-        Intent intent = new Intent();
-        intent.putExtra("result", "deny");
-        setResult(RESULT_OK, intent);
+        requestDatabseRef.child(request.getRequestId()).removeValue();
         Toast.makeText(this, "Deny the request.", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -195,20 +201,69 @@ public class RequestDetailActivity extends AppCompatActivity {
                 Place place = PlacePicker.getPlace(data, this);
                 Log.d("BYF", place.getAddress().toString());
                 LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-                Intent intent = new Intent();
-                intent.putExtra("result", "accept");
-                double latitude = latLng.getLatitude();
-                double longitude = latLng.getLongitude();
-                Log.d("byf", String.valueOf(latitude));
-                Log.d("byf", String.valueOf(longitude));
-                intent.putExtra("latitude", latitude);
-                intent.putExtra("longitude", longitude);
-                setResult(RESULT_OK, intent);
+
+                request.setAccepted(true);
+                String borrowerId = request.getSenderId();
+                String bookID = request.getBookId();
+                request.setBorrowed(true);
+
+                request.setLatLng(latLng);
+                uploadBorrowed(borrowerId,bookID,request.getReceiver());
+                uploadRequest(bookID, request);
+
                 Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
+    //After accepting the request, update the borrow and all lists
+    private void uploadBorrowed(final String borrowerId, final String bookID, final String receiver) {
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
+        AllbooksRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Book book = ds.getValue(Book.class);
 
+                    if (book.getID().equals(bookID)) {
+                        borrowedRef.child(borrowerId).child(bookID).setValue(book);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void uploadRequest(final String bookID, final Request request) {
+        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests").child(request.getReceiver());
+        requestRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Request requestTemp = ds.getValue(Request.class);
+
+                    if (requestTemp.getBookId().equals(bookID)){
+                        Log.d("byf", ds.getKey());
+                        requestRef.child(ds.getKey()).setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("byf", "Successful!");
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }
