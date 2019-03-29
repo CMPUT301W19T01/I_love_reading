@@ -51,12 +51,10 @@
     <string name="BorrowCancelToast">Borrow Request Canceled</string>
     <string name="check_remember">Remember me</string>
     
-    <string name="check_remember">Remember me</string>
     <string name="edit">Edit</string>
     <string name="photos">Photos</string>
     <string name="log_out">Log out</string>
     <string name="todo">TODO</string>
-    <string name="username">Username</string>
     <string name="userid">UserID</string>
     <string name="useremail">UserEmail</string>
     <string name="refresh">refresh</string>

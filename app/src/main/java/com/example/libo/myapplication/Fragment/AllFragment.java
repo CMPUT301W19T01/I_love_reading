@@ -66,12 +66,12 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
             Fix the error, please add the code here when clicking the search button
          */
 
-       // view.findViewById(R.id.all_search_button).setOnClickListener(new View.OnClickListener() {
-         //   @Override
-           // public void onClick(View view) {
+        view.findViewById(R.id.all_book_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            //}
-        //});
+            }
+        });
      //   SearchView searchbooks = (SearchView)view.findViewById(R.id.all_book_search);
       //  searchbooks.setQueryHint("Search for a book");
        // searchbooks.setIconifiedByDefault(false);
