@@ -1,6 +1,7 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.libo.myapplication.Activity.BasicActivity;
 import com.example.libo.myapplication.Activity.profileEditActivity;
@@ -43,6 +45,8 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+
         super.onActivityCreated(savedInstanceState);
         userNameView = getActivity().findViewById(R.id.profileUserName);
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
