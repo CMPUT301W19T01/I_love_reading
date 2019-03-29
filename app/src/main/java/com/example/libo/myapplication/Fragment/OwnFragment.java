@@ -22,10 +22,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
-import com.example.libo.myapplication.Activity.MainActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
-import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -158,7 +156,7 @@ public class OwnFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
+        SearchView searchView = getActivity().findViewById(R.id.all_book_search);
 
         databaseBook.addValueEventListener(new ValueEventListener() {
             @Override

@@ -137,11 +137,9 @@ public class BorrowFragment extends Fragment {
                     if (data.getStringExtra("borrow").equals("true")) {
                         this.currentBook.setStatus(true);
                         // The book is now borrowed, update your information
-
                     }
                     if (data.getStringExtra("watchlist").equals("true")){
                         // The Book is now added to watchlist, update your information
-
                     }
                     */
 
