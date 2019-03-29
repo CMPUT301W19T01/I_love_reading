@@ -46,8 +46,8 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private int current_index = 0;
     private Book currentBook;
 
-  //  RecyclerView resultsListView  ;
-   // String prevQuery = "" ;
+    //  RecyclerView resultsListView  ;
+    // String prevQuery = "" ;
     //ArrayList<Book>  resultbook;
     //ArrayAdapter<Book> resultsAdapter;
 
@@ -73,10 +73,10 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
 
             }
         });
-     //   SearchView searchbooks = (SearchView)view.findViewById(R.id.all_book_search);
-      //  searchbooks.setQueryHint("Search for a book");
-       // searchbooks.setIconifiedByDefault(false);
-        //searchbooks.setOnQueryTextListener(this);
+        /*   SearchView searchbooks = (SearchView)view.findViewById(R.id.all_book_search);
+          searchbooks.setQueryHint("Search for a book");
+         searchbooks.setIconifiedByDefault(false);
+        searchbooks.setOnQueryTextListener(this);*/
 
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
 
@@ -112,17 +112,17 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
 
         return view;
     }
-  //  @Override
-  //  public void onStart(){
-    //    super.onStart();
+    /*  @Override
+      public void onStart(){
+        super.onStart();
 
-      //  resultbook.clear();
-       // resultbook.addAll(arrayAllbooks);
-       // resultsAdapter = new bookListViewAdapter(this.getContext().getApplicationContext(),resultbook);
-       // resultsListView.setAdapter(adapter);
+      resultbook.clear();
+     resultbook.addAll(arrayAllbooks);
+     resultsAdapter = new bookListViewAdapter(this.getContext().getApplicationContext(),resultbook);
+     resultsListView.setAdapter(adapter);
 
 
- //   }
+       }*/
 
 
 
@@ -164,18 +164,18 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
         */
 
 
-      //  SearchView searchView = getActivity().findViewById(R.id.all_book_search);
-       // searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        //    @Override
-         //   public boolean onQueryTextSubmit(String query) {
-           //     return false;
-           // }
-            //@Override
-           // public boolean onQueryTextChange(String newText) {
-             //   adapter.getFilter().filter(newText);
-               // return false;
-          //  }
-       // });
+        /*  SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+           public boolean onQueryTextSubmit(String query) {
+             return false;
+         }
+        @Override
+         public boolean onQueryTextChange(String newText) {
+           adapter.getFilter().filter(newText);
+         return false;
+          }
+         });*/
 
     }
 
@@ -244,45 +244,45 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     }
 
 
- //   @Override
-  //  public boolean onQueryTextSubmit(String query) {
+    /*   @Override
+      public boolean onQueryTextSubmit(String query) {
 
-    //    return false;
-    //}
+        return false;
+    }
 
-   // @Override
-   // public boolean onQueryTextChange(String newText) {
-     //   String query = newText.toLowerCase();
-      //  ArrayList<Book> tempList = new ArrayList<>();
-       // if (prevQuery.length()>query.length()){
-         //   resultbook.clear();
-           // resultbook.addAll(arrayAllbooks);
-
-
-  //      }
-    //    for (int i=0; i<resultbook.size();i++){
-      //      Book book = resultbook.get(i);
-        //    String bookname = book.getBookName().toLowerCase();
-          //  String bookdescription = book.getDescription().toLowerCase();
-            //if (bookname.contains(query)|| bookdescription.contains(query)){
-              //  tempList.add(book);
-           // }
+     @Override
+     public boolean onQueryTextChange(String newText) {
+       String query = newText.toLowerCase();
+      ArrayList<Book> tempList = new ArrayList<>();
+     if (prevQuery.length()>query.length()){
+       resultbook.clear();
+     resultbook.addAll(arrayAllbooks);
 
 
-        //}
-       // resultbook.clear();
-        //if (query.length()==0){
-          //  resultbook.addAll(arrayAllbooks);
-        //}else {
-          //  resultbook.addAll(tempList);
-       // }
-        //resultsAdapter.notifyDataSetChanged();
-        //prevQuery=query;
+          }
+        for (int i=0; i<resultbook.size();i++){
+          Book book = resultbook.get(i);
+        String bookname = book.getBookName().toLowerCase();
+      String bookdescription = book.getDescription().toLowerCase();
+    if (bookname.contains(query)|| bookdescription.contains(query)){
+      tempList.add(book);
+     }
 
 
+    }
+     resultbook.clear();
+    if (query.length()==0){
+      resultbook.addAll(arrayAllbooks);
+    }else {
+      resultbook.addAll(tempList);
+     }
+    resultsAdapter.notifyDataSetChanged();
+    prevQuery=query;
 
 
 
-        //return false;
-   // }
+
+
+    return false;
+     }*/
 }
