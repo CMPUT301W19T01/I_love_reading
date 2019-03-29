@@ -102,6 +102,10 @@ public class AllFragment extends Fragment {
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
+                if (currentBook.getOwnerId().equals(FirebaseAuth.getInstance().getUid())){
+                    ItemView.putExtra("edit",true);
+                }
+
                 startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
             }
         });
@@ -119,7 +123,6 @@ public class AllFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
-        FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
 
 
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
@@ -172,14 +175,17 @@ public class AllFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"THIS IS CASE ============================"+data.getStringExtra("borrow"));
 
-        if (resultCode == Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK && data.getStringExtra("borrow")!= null){
             if (data.getStringExtra("borrow").equals("true")) {
                 Log.d(TAG,"The current book des is " + currentBook.getDescription());
 
                 this.currentBook.setStatus(true);
                 Util.SendRequset(currentBook.getOwnerId(),currentBook, true);
             }
+
+
         }
 
         switch (requestCode) {
@@ -220,8 +226,10 @@ public class AllFragment extends Fragment {
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringExtra("ClassificationArray"));
-                        currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
-                        currentBook.setAuthorName(order);
+                        Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
+                        String bookID = currentBook.getID();
+                        Util.uploadFile(temp, currentBook.getID(), currentBook
+                                ,FirebaseAuth.getInstance().getUid());
                     }
                 }
             }

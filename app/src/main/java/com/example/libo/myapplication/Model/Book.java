@@ -14,6 +14,9 @@ public class Book {
     private String Description;
     private String Classification;
 
+
+    private String new_status;
+
     public String getBookcoverUri() {
         return bookcoverUri;
     }
@@ -37,6 +40,14 @@ public class Book {
         this.setDescription(Description);
         this.setClassification(Classification);
         this.OwnerId = ownerId;
+    }
+
+    public String getNew_status() {
+        return new_status;
+    }
+
+    public void setNew_status(String new_status) {
+        this.new_status = new_status;
     }
 
     public String getDescription() {

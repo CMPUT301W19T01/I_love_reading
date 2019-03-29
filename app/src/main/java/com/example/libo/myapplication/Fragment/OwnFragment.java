@@ -22,11 +22,10 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
-import com.example.libo.myapplication.Activity.MainActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
-import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -226,7 +225,7 @@ public class OwnFragment extends Fragment {
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
-                        uploadFile(temp,currentBook.getID(),currentBook);
+                        Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
                     }
                 }
             }
@@ -242,8 +241,7 @@ public class OwnFragment extends Fragment {
                             currentBook.setDescription(data.getStringExtra("Description"));
                             currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                             Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
-                            String bookID = currentBook.getID();
-                            uploadFile(temp, currentBook.getID(), currentBook);
+                            Util.uploadFile(temp, currentBook.getID(), currentBook, userID);
                         }
                     }
                 }
@@ -251,7 +249,7 @@ public class OwnFragment extends Fragment {
 
     }
 
-    private void uploadFile(Bitmap bookCover, final String id, final Book data_book){
+    private void uploadFile(Bitmap bookCover, final String id, final Book data_book, String userID){
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference storageReference = storage.getReference("book_photo").child("image/"+id+".jpg");

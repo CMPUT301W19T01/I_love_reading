@@ -45,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private ImageView photo;
     private Uri uriProfileImage;
     private DatabaseReference usernameRef;
+    private int repeated = 0;
 
 
 
@@ -105,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             editTextUsername.setError("Username is required");
 
             editTextUsername.requestFocus();
+            return;
 
         }
 
@@ -113,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             editTextPassword.setError("Password is required");
 
             editTextPassword.requestFocus();
+            return;
 
         }
 
@@ -122,10 +125,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
             editTextEmail.requestFocus();
 
+            return;
+
         }
         if(uriProfileImage == null){
             editTextEmail.setError("Photo is required");
             photo.requestFocus();
+            return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
@@ -149,21 +155,22 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()){
-
                     usernameRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(!dataSnapshot.hasChild(username)){
+                            if(dataSnapshot.hasChild(username) && repeated == 0){
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(),"Username already registered",Toast.LENGTH_SHORT).show();
+                            }
+                            else if(!dataSnapshot.hasChild(username)){
                                 usernameRef.child(username).setValue(email);
-                                undateUserinfo(username, uriProfileImage,mAuth.getCurrentUser());
+                                FirebaseUser current_user = mAuth.getCurrentUser();
+                                undateUserinfo(username, uriProfileImage,current_user);
                                 progressBar.setVisibility(View.GONE);
                                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
-                            }
-                            else {
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(getApplicationContext(),"Username already registered",Toast.LENGTH_SHORT).show();
+                                repeated = 1;
                             }
                         }
 
@@ -210,7 +217,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 .setDisplayName(username)
                                 .setPhotoUri(uri)
                                 .build();
-
+                        Adduser(currentUser.getUid(),username,uri.toString(),currentUser.getEmail());
                         currentUser.updateProfile(profileupdate).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -226,6 +233,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 });
             }
         });
+    }
+
+    private void Adduser(String uid, String username, String photo_uri, String email) {
+        Users user = new Users(email,username,uid);
+        user.setPhoto(photo_uri);
+        databaseUser.child(uid).setValue(user);
     }
 
     @Override
