@@ -161,6 +161,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                             }
+                            else {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(),"Username already registered",Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -168,9 +172,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                         }
                     });
-                    Log.d("SIGN UP ========" , usernameRef.child(username).getKey());
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(),"Username already registered",Toast.LENGTH_SHORT).show();
 
                 } else {
 
