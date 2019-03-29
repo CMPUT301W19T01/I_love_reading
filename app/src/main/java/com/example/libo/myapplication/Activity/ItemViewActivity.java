@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -67,6 +68,7 @@ public class ItemViewActivity extends AppCompatActivity {
     private EditText EditTextDescription;
     private TextView TextViewClassification;
     private ImageView ImageViewBookCover;
+    private CardView CardViewComment;
     private Button BorrowButton;
     private Button ReturnButton;
     private Button WatchListButton;
@@ -116,6 +118,8 @@ public class ItemViewActivity extends AppCompatActivity {
         WatchListButton = findViewById(R.id.ButtonWatchList);
         AddCommentButton = findViewById(R.id.ButtonAddComment);
         ListViewComment = findViewById(R.id.ListViewComments);
+        CardViewComment = findViewById(R.id.card_view_adapter);
+
         /*
         Get Information of the book from the intent
          */
@@ -359,7 +363,9 @@ public class ItemViewActivity extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     comments.remove(current_comment);
+                                    setListViewHeightBasedOnChildren(ListViewComment);
                                     adapter.notifyDataSetChanged();
+
                                 }
                             });
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -525,7 +531,7 @@ public class ItemViewActivity extends AppCompatActivity {
             Boolean Edit = temp.getBooleanExtra("edit",false);
             if (Edit){
                 AlertDialog alertDialog = new AlertDialog.Builder(ItemViewActivity.this).create();
-                alertDialog.setTitle("Note: ");
+                alertDialog.setTitle("Warning:");
                 alertDialog.setMessage("You are quitting the edit view, do you want to save?");
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
                         new DialogInterface.OnClickListener() {

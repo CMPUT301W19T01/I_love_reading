@@ -30,8 +30,8 @@ public class AddCommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_comment);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.add_comment_title_bar);
-        getSupportActionBar().setHideOnContentScrollEnabled(false);
         getSupportActionBar().setElevation(2);
+        getSupportActionBar().setHideOnContentScrollEnabled(false);
         final RatingBar ratingRatingBar = (RatingBar) findViewById(R.id.CreateCommentRatingBar);
         Button submitButton = (Button) findViewById(R.id.CommentConfirmButton);
         ImageButton CloseButton = (ImageButton) findViewById(R.id.CommentCloseButton);
