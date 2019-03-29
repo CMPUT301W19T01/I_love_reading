@@ -6,6 +6,16 @@ public class Users {
     private String username;
     private String uid;
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    private String photo;
+
     public Users(){
 
     }
