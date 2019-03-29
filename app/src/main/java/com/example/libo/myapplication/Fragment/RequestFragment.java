@@ -43,9 +43,6 @@ public class RequestFragment extends Fragment {
     private ArrayList<Request> requests;
     private RequestAdapter requestAdapter;
 
-    private DatabaseReference requestDatabseRef;
-    private DatabaseReference borrowedRef;
-    private DatabaseReference AllbooksRef;
     private String userid;
 
     @Nullable
@@ -54,8 +51,7 @@ public class RequestFragment extends Fragment {
         View view=inflater.inflate(R.layout.request_page,container,false);
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(userid);
-        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
+
         requests = new ArrayList<>();
         return view;
     }
@@ -116,7 +112,7 @@ public class RequestFragment extends Fragment {
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //requests.clear();
+                requests.clear();
                 for(DataSnapshot owner : dataSnapshot.getChildren()){
                     for(DataSnapshot request : owner.getChildren()){
                         Request requestClass = request.getValue(Request.class);
@@ -137,6 +133,7 @@ public class RequestFragment extends Fragment {
 
     }
 
+    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -166,57 +163,5 @@ public class RequestFragment extends Fragment {
             }
         }
     }
-
-    //After accepting the request, update the borrow and all lists
-    private void uploadBorrowed(final String borrowerId, final String bookID, final String receiver) {
-        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
-        AllbooksRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Book book = ds.getValue(Book.class);
-                    Log.d(TAG, "borrwed ====================" + book.getBookName() + bookID);
-
-                    if (book.getID().equals(bookID)) {
-                        Log.d(TAG, "borrwed ====================" + book.getBookName());
-                        borrowedRef.child(borrowerId).child(bookID).setValue(book);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void uploadRequest(final String bookID, final Request request) {
-        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests").child(request.getReceiver());
-        requestRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Request requestTemp = ds.getValue(Request.class);
-                    Log.d(TAG,"byf" + requestTemp.getBookId());
-                    Log.d(TAG,"byf" + bookID);
-                    if (requestTemp.getBookId().equals(bookID)){
-                        Log.d("byf", ds.getKey());
-                        requestRef.child(ds.getKey()).setValue(request).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("byf", "Successful!");
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
+    */
 }
