@@ -49,6 +49,19 @@
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="BorrowCancelToast">Borrow Request Canceled</string>
-    <string name="check_remember">Remember me</string>
+
+    <string name="edit">Edit</string>
+    <string name="photos">Photos</string>
+    <string name="log_out">Log out</string>
+    <string name="todo">TODO</string>
+    <string name="userid">UserID</string>
+    <string name="useremail">UserEmail</string>
+    <string name="refresh">refresh</string>
+    <string name="userBirthday">UserBirthday</string>
+    <string name="_125">125</string>
+    <string name="followers">Followers</string>
+    <string name="_1205">1205</string>
+    <string name="following">Following</string>
+    <string name="_360">360</string>
 
 </resources>

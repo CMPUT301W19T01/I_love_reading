@@ -157,7 +157,7 @@ public class OwnFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
+        SearchView searchView = getActivity().findViewById(R.id.all_book_search);
 
         databaseBook.addValueEventListener(new ValueEventListener() {
             @Override

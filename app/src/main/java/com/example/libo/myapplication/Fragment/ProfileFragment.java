@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+                // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
                 userNameView.setText("name: "+ user.getDisplayName());
                 userEmailView.setText("email: " + user.getEmail());
                 Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
