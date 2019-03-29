@@ -243,7 +243,7 @@ public class OwnFragment extends Fragment {
                             currentBook.setClassification(data.getStringExtra("ClassificationArray"));
                             Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                             String bookID = currentBook.getID();
-                            //uploadFile(temp, currentBook.getID(), currentBook);
+                            uploadFile(temp, currentBook.getID(), currentBook);
                         }
                     }
                 }

@@ -119,13 +119,13 @@ public class ItemViewActivity extends AppCompatActivity {
         /*
         Get Information of the book from the intent
          */
-        String BookName = result.getStringExtra("BookName"); // Get information from the Intent
+        final String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
         //Get the book iD
         BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
-        Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
+        final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
 
@@ -144,9 +144,11 @@ public class ItemViewActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 comments.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Comment comment = ds.getValue(Comment.class);
-                    comments.add(comment);
+                if (BookName.length() != 0) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Comment comment = ds.getValue(Comment.class);
+                        comments.add(comment);
+                    }
                 }
 
                 adapter = new CommentAdapter(getApplicationContext(), comments);
@@ -200,10 +202,19 @@ public class ItemViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!Status){ //If available
-                    resultIntent.putExtra("borrow","true");
-                    BorrowButton.setClickable(false);
-                    Toast.makeText(getBaseContext(), R.string.BorrowToast,
-                            Toast.LENGTH_LONG).show();
+                    if (BorrowButton.getText() == "Borrow") {
+                        BorrowButton.setText("Requested");
+                        resultIntent.putExtra("borrow", "true");
+                        Toast.makeText(getBaseContext(), R.string.BorrowToast,
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        BorrowButton.setText("Borrow");
+                        resultIntent.putExtra("borrow","false");
+                        Toast.makeText(getBaseContext(), R.string.BorrowCancelToast,
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -212,10 +223,19 @@ public class ItemViewActivity extends AppCompatActivity {
         WatchListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resultIntent.putExtra("watchlist","true");
-                WatchListButton.setClickable(false);
-                Toast.makeText(getBaseContext(), R.string.WatchListToast,
-                        Toast.LENGTH_LONG).show();
+                if (WatchListButton.getText() == "Watch List") {
+                    WatchListButton.setText("Added");
+                    resultIntent.putExtra("watchlist", "true");
+                    Toast.makeText(getBaseContext(), R.string.WatchListToast,
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    WatchListButton.setText("Watch List");
+                    resultIntent.putExtra("watchlist", "true");
+                    Toast.makeText(getBaseContext(), R.string.WatchListCancelToast,
+                            Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 
@@ -465,6 +485,10 @@ public class ItemViewActivity extends AppCompatActivity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         // When the return button is pressed. Automatically transfer the required information back
+        for (Comment item_comment : comments) {
+            commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
+            adapter.notifyDataSetChanged();
+        }
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             // do something on back.
             Boolean Edit = temp.getBooleanExtra("edit",false);
@@ -486,6 +510,7 @@ public class ItemViewActivity extends AppCompatActivity {
                                 resultIntent.putExtra("AuthorName", AuthorName);
                                 resultIntent.putExtra("Description", Description);
                                 resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+
                                 setResult(Activity.RESULT_OK,resultIntent);
                                 finish();
                             }
@@ -567,8 +592,62 @@ public class ItemViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) // Press Back Icon
         {
-            finish();
-        }
+            for (Comment item_comment : comments) {
+                commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
+                adapter.notifyDataSetChanged();
+            }
+                // do something on back.
+                Boolean Edit = temp.getBooleanExtra("edit",false);
+                if (Edit){
+                    AlertDialog alertDialog = new AlertDialog.Builder(ItemViewActivity.this).create();
+                    alertDialog.setTitle("Note: ");
+                    alertDialog.setMessage("You are quitting the edit view, do you want to save?");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    resultIntent.putExtra("do","edit");
+                                    ImageViewBookCover.buildDrawingCache(); // send the image back
+                                    Bitmap image= ImageViewBookCover.getDrawingCache();
+                                    resultIntent.putExtra("BookCover",image);
+                                    String BookName = EditTextBookName.getText().toString();
+                                    String AuthorName = EditTextAuthorName.getText().toString();
+                                    String Description = EditTextDescription.getText().toString();
+                                    resultIntent.putExtra("BookName",BookName);
+                                    resultIntent.putExtra("AuthorName", AuthorName);
+                                    resultIntent.putExtra("Description", Description);
+                                    resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+
+                                    setResult(Activity.RESULT_OK,resultIntent);
+                                    finish();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stay",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Don't save",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent resultIntent= new Intent();
+                                    resultIntent.putExtra("do","donotedit");
+                                    setResult(Activity.RESULT_OK,resultIntent);
+                                    finish();
+                                }
+                            });
+
+                    alertDialog.show();
+
+                }
+                else{
+                    resultIntent.putExtra("do","test");
+                    resultIntent.putExtra("Comment",comments);
+                    setResult(Activity.RESULT_OK,resultIntent);
+                    finish();
+                }
+            }
+
 
         return super.onOptionsItemSelected(item);
     }

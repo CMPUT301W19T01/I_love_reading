@@ -33,6 +33,7 @@
     <string name="Classification">Classification</string>
     <string name="BorrowToast">Borrow request has been sent</string>
     <string name="WatchListToast">The Book has been added to the WatchList</string>
+    <string name="WatchListCancelToast">Undo WatchList</string>
     <string name="SelectionTile">"Select the possible classes"</string>
     <string name="CommentTile">"Default Comment Title"</string>
     <string name="UserName">Default User Name</string>
@@ -47,6 +48,7 @@
     <string name="ClickRate">Click to select the rate</string>
     <string name="title_activity_main2">Main2Activity</string>
 
+    <string name="BorrowCancelToast">Borrow Request Canceled</string>
     <string name="check_remember">Remember me</string>
 
 </resources>
