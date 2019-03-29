@@ -65,7 +65,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mCheckBoxRemember = (CheckBox) findViewById(R.id.CheckBoxRememberMe);
         getPreferencesData();
 
-        if (mPrefs.getString("pref_name","").length() != 0){
+        Intent testIntent = getIntent();
+        if (mPrefs.getString("pref_name","").length() != 0 && testIntent == null){
             SharedPreferences temp = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             String result_username = temp.getString("pref_name","not found");
             Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
@@ -161,8 +162,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     startActivity(intent);
 
-                    editTextEmail.getText().clear();
-                    editTextPassword.getText().clear();
+                    //editTextEmail.getText().clear();
+                    //editTextPassword.getText().clear();
 
 
                 }else {

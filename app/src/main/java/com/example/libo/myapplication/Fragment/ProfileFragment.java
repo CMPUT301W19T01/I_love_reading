@@ -6,6 +6,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.libo.myapplication.Activity.BasicActivity;
+import com.example.libo.myapplication.Activity.LoginActivity;
 import com.example.libo.myapplication.Activity.profileEditActivity;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private TextView userEmailView;
     private TextView userId;
     private ImageView userImage;
+    private Button ButtonLogOut;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
@@ -52,6 +55,7 @@ public class ProfileFragment extends Fragment {
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
+        ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
 
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
@@ -81,6 +85,15 @@ public class ProfileFragment extends Fragment {
                 userNameView.setText("name: "+ user.getDisplayName());
                 userEmailView.setText("email: " + user.getEmail());
                 Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+            }
+        });
+
+        ButtonLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(getActivity().getApplication(), LoginActivity.class);
+                newIntent.putExtra("test","test");
+                startActivity(newIntent);
             }
         });
 
