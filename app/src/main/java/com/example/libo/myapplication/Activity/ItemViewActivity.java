@@ -135,6 +135,8 @@ public class ItemViewActivity extends AppCompatActivity {
             checkStatus(Status); // check if the book can be borrowed
         }
 
+        BorrowButton.setText("Borrow");
+        WatchListButton.setText("Watch List");
         checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover); // show the information of the Book
 
         comments = new ArrayList<>(); // Initialization of comment array
