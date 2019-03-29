@@ -7,15 +7,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
@@ -32,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class AllFragment extends Fragment {
+public class AllFragment extends Fragment /*implements SearchView.OnQueryTextListener*/{
     private static final String TAG = "AllBookDatabase";
 
     private DatabaseReference AlldatabaseBook;
@@ -45,9 +45,15 @@ public class AllFragment extends Fragment {
     private int current_index = 0;
     private Book currentBook;
 
-    private EditText allbooksearch;
-    private ImageButton allbooksearchbutton;
-    private ListView allsearchresesult;
+  //  RecyclerView resultsListView  ;
+   // String prevQuery = "" ;
+    //ArrayList<Book>  resultbook;
+    //ArrayAdapter<Book> resultsAdapter;
+
+
+
+
+
 
 
     @Nullable
@@ -59,16 +65,20 @@ public class AllFragment extends Fragment {
         /*
             Fix the error, please add the code here when clicking the search button
          */
-        view.findViewById(R.id.all_search_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
+       // view.findViewById(R.id.all_search_button).setOnClickListener(new View.OnClickListener() {
+         //   @Override
+           // public void onClick(View view) {
+
+            //}
+        //});
+     //   SearchView searchbooks = (SearchView)view.findViewById(R.id.all_book_search);
+      //  searchbooks.setQueryHint("Search for a book");
+       // searchbooks.setIconifiedByDefault(false);
+        //searchbooks.setOnQueryTextListener(this);
 
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
-        allbooksearch = (EditText)view.findViewById(R.id.borrow_search_text);
-        allbooksearchbutton = (ImageButton) view.findViewById(R.id.all_search_button);
+
 
 
         all_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,8 +103,21 @@ public class AllFragment extends Fragment {
         });
         adapter = new bookListViewAdapter(this.getContext().getApplicationContext(), arrayAllbooks);
         all_book_lv.setAdapter(adapter);
+
+
         return view;
     }
+  //  @Override
+  //  public void onStart(){
+    //    super.onStart();
+
+      //  resultbook.clear();
+       // resultbook.addAll(arrayAllbooks);
+       // resultsAdapter = new bookListViewAdapter(this.getContext().getApplicationContext(),resultbook);
+       // resultsListView.setAdapter(adapter);
+
+
+ //   }
 
 
 
@@ -136,20 +159,20 @@ public class AllFragment extends Fragment {
             please add a search view in the layout that named "all_page".
         */
 
-        /*
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-        */
+
+      //  SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+       // searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        //    @Override
+         //   public boolean onQueryTextSubmit(String query) {
+           //     return false;
+           // }
+            //@Override
+           // public boolean onQueryTextChange(String newText) {
+             //   adapter.getFilter().filter(newText);
+               // return false;
+          //  }
+       // });
+
     }
 
     @Override
@@ -212,19 +235,45 @@ public class AllFragment extends Fragment {
     }
 
 
+ //   @Override
+  //  public boolean onQueryTextSubmit(String query) {
+
+    //    return false;
+    //}
+
+   // @Override
+   // public boolean onQueryTextChange(String newText) {
+     //   String query = newText.toLowerCase();
+      //  ArrayList<Book> tempList = new ArrayList<>();
+       // if (prevQuery.length()>query.length()){
+         //   resultbook.clear();
+           // resultbook.addAll(arrayAllbooks);
+
+
+  //      }
+    //    for (int i=0; i<resultbook.size();i++){
+      //      Book book = resultbook.get(i);
+        //    String bookname = book.getBookName().toLowerCase();
+          //  String bookdescription = book.getDescription().toLowerCase();
+            //if (bookname.contains(query)|| bookdescription.contains(query)){
+              //  tempList.add(book);
+           // }
+
+
+        //}
+       // resultbook.clear();
+        //if (query.length()==0){
+          //  resultbook.addAll(arrayAllbooks);
+        //}else {
+          //  resultbook.addAll(tempList);
+       // }
+        //resultsAdapter.notifyDataSetChanged();
+        //prevQuery=query;
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+        //return false;
+   // }
 }

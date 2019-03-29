@@ -5,11 +5,14 @@ import java.io.Serializable;
 
 public class Comment implements Serializable {
     private String BookId;
-    private double rating;
+    private float rating;
     private String username;
     private String time;
     private String content;
     private Integer favor_number = 0;
+
+
+    private String CommentId;
 
 
     public String getUser_photo() {
@@ -26,18 +29,18 @@ public class Comment implements Serializable {
 
     }
 
-    public Comment(double rating, String username, String time, String content){
+    public Comment(float rating, String username, String time, String content){
         this.rating = rating;
         this.username = username;
         this.time = time;
         this.content = content;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -79,6 +82,14 @@ public class Comment implements Serializable {
 
     public void setFavor_number(Integer favor_number) {
         this.favor_number = favor_number;
+    }
+
+    public String getCommentId() {
+        return CommentId;
+    }
+
+    public void setCommentId(String commentId) {
+        CommentId = commentId;
     }
 
 

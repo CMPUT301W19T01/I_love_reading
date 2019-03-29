@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -23,8 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -40,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth mAuth;
     private ImageView photo;
     private Uri uriProfileImage;
+    private DatabaseReference usernameRef;
 
 
 
@@ -62,7 +67,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
-
+        usernameRef = FirebaseDatabase.getInstance().getReference("username");
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
 
         findViewById(R.id.buttonCancel).setOnClickListener(this);
@@ -118,6 +123,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             editTextEmail.requestFocus();
 
         }
+        if(uriProfileImage == null){
+            editTextEmail.setError("Photo is required");
+            photo.requestFocus();
+        }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
 
@@ -140,13 +149,28 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()){
-                    undateUserinfo(username, uriProfileImage,mAuth.getCurrentUser());
+
+                    usernameRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.hasChild(username)){
+                                usernameRef.child(username).setValue(email);
+                                undateUserinfo(username, uriProfileImage,mAuth.getCurrentUser());
+                                progressBar.setVisibility(View.GONE);
+                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    Log.d("SIGN UP ========" , usernameRef.child(username).getKey());
                     progressBar.setVisibility(View.GONE);
-                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(),"Username already registered",Toast.LENGTH_SHORT).show();
 
                 } else {
 
