@@ -1,8 +1,11 @@
 package com.example.libo.myapplication.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,9 +20,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
+import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,137 +33,153 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BorrowFragment extends Fragment {
 
-    private Button button;
-
-    private TextView userNameTextView;
-
-    ListView borrow_book_lv;
-
+    private static final int BORROW_REQUEST_CODE = 0;
     private static final String TAG = "BorrowedBookDatabase";
-
+    private Button borrow_button;
+    private Button request_button;
+    private TextView userNameTextView;
+    ListView borrow_book_lv;
     ArrayAdapter<Book> adapter;
-    private ArrayList<Book> arrayBorrowbooks;
+    private int current_index = 0;
+    private Book currentBook;
+    final ArrayList<Book> arrayBorrowbooks = new ArrayList<>();
     private String Userid;
     private DatabaseReference borrowedRef;
-    private int current_index = 0;
+    private DatabaseReference requestRef;
+
+
+
     @Nullable
 
     @Override
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         View view=inflater.inflate(R.layout.borrow_page,container,false);
-
-
         borrow_book_lv = (ListView)view.findViewById(R.id.borrow_book);
-
         Userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        arrayBorrowbooks = new ArrayList<Book>();
-
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
-
+        requestRef = FirebaseDatabase.getInstance().getReference("requestBook").child(Userid);
+        adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
+        borrow_button = (Button) view.findViewById(R.id.borrow_botton);
+        request_button = (Button) view.findViewById(R.id.request_button);
+        borrow_book_lv.setAdapter(adapter);
+        Log.d(TAG,"BORROW   +++++++++++++++++++++++++++++++"+ arrayBorrowbooks.toString());
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent ItemView = new Intent(getActivity().getApplication(), ItemViewActivity.class); // set the intent to start next activity
-                Book currentBook = arrayBorrowbooks.get(i);
-                //imageUri = Book.getBookCover();
-                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri)
-                //ItemView.putExtra("BookCover", BookCover);
+                currentBook = arrayBorrowbooks.get(i);
+                Log.d(TAG,"current book ========================="+ currentBook.getBookName());
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
+
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
                 ItemView.putExtra("status", currentBook.getStatus());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
-                ItemView.putExtra("ClassificationArray", currentBook.getClassification());
-                ItemView.putExtra("BookCover", currentBook.getBookCover());
-                ItemView.putExtra("CommentArray",currentBook.getComments());
+                //ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
+                 //       .asList(currentBook.getClassification().split("/")));
+                ArrayList<String > empty =  new ArrayList<String> ();
+                ItemView.putExtra("ClassificationArray", empty);
+                Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
+                ItemView.putExtra("BookCover", bookcover);
                 current_index = i;
-                startActivityForResult(ItemView, 2); // request code 2 means we are updating info of a book
+                ItemView.putExtra("ButtonCode", 0);
+                startActivityForResult(ItemView, BORROW_REQUEST_CODE); // request code 0 means it is from borrow fragement
             }
         });
-
         return view;
-
     }
 
-
-
     @Override
-
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
         super.onActivityCreated(savedInstanceState);
         SearchView searchView = getActivity().findViewById(R.id.searchView2);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
-
             public boolean onQueryTextSubmit(String query) {
-
                 return false;
-
             }
 
             @Override
-
             public boolean onQueryTextChange(String newText) {
-
                 adapter.getFilter().filter(newText);
-
                 return false;
-
             }
-
         });
 
-       //Log.d(TAG,"the arraylist is " + borrowedbok.isEmpty());
 
-
-        borrowedRef.addValueEventListener(new ValueEventListener() {
+        borrow_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                arrayBorrowbooks.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-
-
-                        Book book = ds.getValue(Book.class);
-                        Log.d(TAG,"ALL Book name" + book.getBookName());
-
-
-
-
-
-                        ArrayList<String> Classification = new ArrayList<String>();
-
-                        book.setClassification(Classification);
-
-                        Bitmap bitmap = Bitmap.createBitmap(5, 5, Bitmap.Config.ARGB_8888);
-                        Comment comment_4 = new Comment(2.5, "海南蹦迪王", "2018/9/9", "I hate 301！！！！！！！！！！！！！！！！！！");
-
-                        book.addComments(comment_4);
-
-                        arrayBorrowbooks.add(book);
-
-                }
-                adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayBorrowbooks);
-                borrow_book_lv.setAdapter(adapter);
-
+            public void onClick(View v) {
+                borrowedRef.addValueEventListener(valueEventListener);
             }
+        });
 
+        request_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onClick(View v) {
+                requestRef.addValueEventListener(valueEventListener);
 
             }
         });
+
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case (BORROW_REQUEST_CODE): { // In the case that we are looking for if the user is trying to borrow book
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+                    /*
+                    if (data.getStringExtra("borrow").equals("true")) {
+                        this.currentBook.setStatus(true);
+                        // The book is now borrowed, update your information
+
+                    }
+                    if (data.getStringExtra("watchlist").equals("true")){
+                        // The Book is now added to watchlist, update your information
+
+                    }
+                    */
+
+                    if (data.getBooleanExtra("return", false)){
+                        Util.SendRequset(currentBook.getOwnerId(), currentBook,false);
+                    }
+
+                }
+            }
+        }
+    }
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrayBorrowbooks.clear();
+            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                Book book = ds.getValue(Book.class);
+                arrayBorrowbooks.add(book);
+            }
+            adapter.notifyDataSetChanged();
+        }
+
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+
+    };
+
 
 
 }
