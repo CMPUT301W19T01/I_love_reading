@@ -35,7 +35,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
                 android:visibility="visible"
-                tools:srcCompat="@tools:sample/avatars[9]"
+                tools:srcCompat="@mipmap/ic_launcher"
                 android:contentDescription="@string/todo" />
 
             <TextView
@@ -148,7 +148,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_email_black_24dp"/>
+                android:src="@drawable/ic_mailNew"/>
             <TextView
                 android:id="@+id/profileUserEmail"
                 android:textStyle="bold"
@@ -174,7 +174,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/lock"
+                android:src="@drawable/icon_userid"
                 android:contentDescription="@string/todo" />
             <TextView
                 android:id="@+id/profileEditUserID"
@@ -201,7 +201,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/thumb_on"
+                android:src="@drawable/icon_birthday"
                 android:contentDescription="@string/todo" />
             <TextView
                 android:textStyle="bold"
