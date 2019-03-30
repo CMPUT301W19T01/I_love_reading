@@ -425,6 +425,9 @@ public class ItemViewActivity extends AppCompatActivity {
                 newComment.setCommentId(commentId);
                 newComment.setUser_photo(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                 commentsRef.child(commentId).setValue(newComment);
+                comments.add(newComment);
+                adapter.notifyDataSetChanged();
+                update_comment_firebase();
             }
         }
         if (requestCode == UPDATE_COMMENT && resultCode == Activity.RESULT_OK){
@@ -449,6 +452,8 @@ public class ItemViewActivity extends AppCompatActivity {
                 comments.set(current_comment_position,temp_comment);
                 commentsRef.child(temp_comment.getCommentId()).setValue(temp_comment);
                 adapter.notifyDataSetChanged();
+                update_comment_firebase();
+
             }
             // Wait for update comment
             //

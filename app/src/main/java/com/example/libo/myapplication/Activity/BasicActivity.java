@@ -178,7 +178,6 @@ public class BasicActivity extends AppCompatActivity {
             }, 2000);
         } else {
             super.onBackPressed();
-            this.finish();
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -213,6 +212,7 @@ public class BasicActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListener);
 
     }
+
 
     @Override
     protected void onStop() {
