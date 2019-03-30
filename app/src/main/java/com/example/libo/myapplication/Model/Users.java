@@ -75,10 +75,7 @@ public class Users {
         storageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Book book = ds.getValue(Book.class);
-                    ownbooknum = ownbooknum +1;
-                }
+                ownbooknum = (int) dataSnapshot.getChildrenCount();
             }
 
             @Override
@@ -124,10 +121,7 @@ public class Users {
         borrowedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        Book book = ds.getValue(Book.class);
-                        borrowbooknum = borrowbooknum +1;
-                    }
+                borrowbooknum = (int) dataSnapshot.getChildrenCount();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
