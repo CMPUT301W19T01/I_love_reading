@@ -362,7 +362,7 @@ public class ItemViewActivity extends AppCompatActivity {
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    comments.remove(current_comment);
+                                    commentsRef.child(current_comment.getCommentId()).removeValue();
                                     setListViewHeightBasedOnChildren(ListViewComment);
                                     adapter.notifyDataSetChanged();
 
