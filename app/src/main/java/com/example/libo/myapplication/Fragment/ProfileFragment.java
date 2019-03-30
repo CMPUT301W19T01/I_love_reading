@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
 
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
-        userId.setText("Birth day");
+        userId.setText("ID  "+ user.getUid());
         UpdateNum();
 
         if (user.getPhotoUrl() != null){
