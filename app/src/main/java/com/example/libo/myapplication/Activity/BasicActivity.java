@@ -155,7 +155,7 @@ public class BasicActivity extends AppCompatActivity {
         // Hide the action bar
         getSupportActionBar().hide();
         // Set full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initFragment();
     }
@@ -189,6 +189,7 @@ public class BasicActivity extends AppCompatActivity {
         }
     }
 
+    
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             Users uInfo = new Users();
