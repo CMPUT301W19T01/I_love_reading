@@ -33,7 +33,8 @@ import com.google.firebase.database.ValueEventListener;
 public class RequestDetailActivity extends AppCompatActivity {
 
     private DatabaseReference requestDatabseRef;
-    private DatabaseReference borrowedRef;
+    private DatabaseReference acceptedRef;
+    private DatabaseReference requestdRef;
     private DatabaseReference AllbooksRef;
 
     private Button accept;
@@ -53,7 +54,8 @@ public class RequestDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request_detail);
 
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks");
+        requestdRef = FirebaseDatabase.getInstance().getReference("requestBook");
+        acceptedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
 
         accept = findViewById(R.id.button_accept);
         deny = findViewById(R.id.button_deny);
@@ -227,7 +229,9 @@ public class RequestDetailActivity extends AppCompatActivity {
                     Book book = ds.getValue(Book.class);
 
                     if (book.getID().equals(bookID)) {
-                        borrowedRef.child(borrowerId).child(bookID).setValue(book);
+                        acceptedRef.child(borrowerId).child(bookID).setValue(book);
+                        requestdRef.child(borrowerId).child(bookID).removeValue();
+                        Log.d("ACCEPTED STATUS:",borrowerId+"SUCCESSFUL +++++++"+bookID);
                     }
                 }
             }

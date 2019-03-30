@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -47,7 +48,11 @@ public class BorrowFragment extends Fragment {
     final ArrayList<Book> arrayBorrowbooks = new ArrayList<>();
     private String Userid;
     private DatabaseReference borrowedRef;
-
+    private DatabaseReference requestRef;
+    private DatabaseReference acceptRef;
+    private Button borrow_button;
+    private Button accept_button;
+    private Button request_button;
 
     @Nullable
 
@@ -61,6 +66,13 @@ public class BorrowFragment extends Fragment {
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
         adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
         borrow_book_lv.setAdapter(adapter);
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
+        requestRef = FirebaseDatabase.getInstance().getReference("requestBook").child(Userid);
+        acceptRef = FirebaseDatabase.getInstance().getReference("acceptedBook").child(Userid);
+        accept_button = (Button) view.findViewById(R.id.accept_button);
+        borrow_button = (Button) view.findViewById(R.id.borrow_botton);
+        request_button = (Button) view.findViewById(R.id.request_button);
+
 
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,6 +98,8 @@ public class BorrowFragment extends Fragment {
                 startActivityForResult(ItemView, BORROW_REQUEST_CODE); // request code 0 means it is from borrow fragement
             }
         });
+
+
         return view;
     }
 
@@ -106,21 +120,26 @@ public class BorrowFragment extends Fragment {
             }
         });
 
-        borrowedRef.addValueEventListener(new ValueEventListener() {
+        borrow_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                arrayBorrowbooks.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Book book = ds.getValue(Book.class);
-                    Log.d(TAG,"ALL Book name" + book.getBookName());
-                    arrayBorrowbooks.add(book);
-                }
-                adapter.notifyDataSetChanged();
+            public void onClick(View v) {
+                borrowedRef.addValueEventListener(valueEventListener);
             }
+        });
 
+
+        request_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onClick(View v) {
+                requestRef.addValueEventListener(valueEventListener);
+            }
+        });
 
+
+        accept_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acceptRef.addValueEventListener(valueEventListener);
             }
         });
 
@@ -152,8 +171,24 @@ public class BorrowFragment extends Fragment {
         }
     }
 
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrayBorrowbooks.clear();
+            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                Book book = ds.getValue(Book.class);
+                arrayBorrowbooks.add(book);
+            }
+            adapter.notifyDataSetChanged();
+        }
 
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+
+    };
 
 
 }

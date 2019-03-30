@@ -42,7 +42,6 @@ public class RequestFragment extends Fragment {
     private int currentIndex;
     private ArrayList<Request> requests;
     private RequestAdapter requestAdapter;
-
     private String userid;
 
     @Nullable
@@ -51,7 +50,6 @@ public class RequestFragment extends Fragment {
         View view=inflater.inflate(R.layout.request_page,container,false);
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         requests = new ArrayList<>();
         return view;
     }
