@@ -61,6 +61,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private DatabaseReference borrowedRef;
     private Button available_button;
     private Button borrowed_button;
+    private Button all_button;
     //######################################//
 
 
@@ -80,6 +81,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
         borrowedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
         borrowed_button = (Button) view.findViewById(R.id.borrowedbtn);
         available_button= (Button) view.findViewById(R.id.availablebtn);
+        all_button = (Button) view.findViewById(R.id.allbtn);
         //########################//
 
 
@@ -204,6 +206,35 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
             });
             }
         });
+
+        all_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){allRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    arrayAllbooks.clear();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        for(DataSnapshot newds : ds.getChildren()) {
+                            Book book = newds.getValue(Book.class);
+                            arrayAllbooks.add(book);
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            }
+        });
+
+
+
 
         /*
             Commented the code below since there are no SearchView with id searchView2 in the layout of all_page.
