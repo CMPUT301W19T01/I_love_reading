@@ -805,12 +805,12 @@ public class ItemViewActivity extends AppCompatActivity {
         if (EditTextAuthorName.getText().length() == 0)
         {
             result = false;
-            EditTextAuthorName.setError("Book name is required");
+            EditTextAuthorName.setError("Author name is required");
         }
         if (EditTextDescription.getText().length() == 0)
         {
             result = false;
-            EditTextDescription.setError("Book name is required");
+            EditTextDescription.setError("Description is required");
         }
         return result;
     }
