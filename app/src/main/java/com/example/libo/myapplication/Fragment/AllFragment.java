@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -42,13 +44,6 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     ArrayList<Book> arrayAllbooks = new ArrayList<>();
     private Book currentBook;
     private int current_index = 0;
-
-
-
-
-
-
-    private StorageReference storageRef;
     private DatabaseReference AlldatabaseBook;
     private DatabaseReference requestbookRef;
     //bookListViewAdapter adapter;
@@ -58,6 +53,15 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     // String prevQuery = "" ;
     //ArrayList<Book>  resultbook;
     //ArrayAdapter<Book> resultsAdapter;
+
+//#######################################//
+    private static final int all_request_code = 0;
+    private DatabaseReference availableRef;
+    private DatabaseReference allRef;
+    private DatabaseReference borrowedRef;
+    private Button available_button;
+    private Button borrowed_button;
+    //######################################//
 
 
 
@@ -70,6 +74,15 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
+        all_book_lv = (ListView)view.findViewById(R.id.all_book);
+        //########################//
+        allRef = FirebaseDatabase.getInstance().getReference("books");
+        borrowedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
+        borrowed_button = (Button) view.findViewById(R.id.borrowedbtn);
+        available_button= (Button) view.findViewById(R.id.availablebtn);
+        //########################//
+
+
 
         /*
             Fix the error, please add the code here when clicking the search button
@@ -86,7 +99,6 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
          searchbooks.setIconifiedByDefault(false);
         searchbooks.setOnQueryTextListener(this);*/
 
-        all_book_lv = (ListView)view.findViewById(R.id.all_book);
 
 
 
@@ -141,6 +153,8 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
         super.onActivityCreated(savedInstanceState);
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
+        borrowedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
+
         requestbookRef = FirebaseDatabase.getInstance().getReference("requestBook");
         UID = FirebaseAuth.getInstance().getUid();
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
@@ -162,6 +176,32 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        borrowed_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){borrowedRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    arrayAllbooks.clear();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        for(DataSnapshot newds : ds.getChildren()) {
+                            Book book = newds.getValue(Book.class);
+                            arrayAllbooks.add(book);
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             }
         });
 
@@ -251,6 +291,22 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
             }
         }
     }
+    /*ValueEventListener valueEventListener=new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrayAllbooks.clear();
+            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                Book book = ds.getValue(Book.class);
+                arrayAllbooks.add(book);
+            }
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };*/
 
 
     /*   @Override
