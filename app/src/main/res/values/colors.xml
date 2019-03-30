@@ -9,4 +9,9 @@
     <color name="facebook_primary_color">#dfe3ee</color>
     <color name="twitter_primary_color">#667580</color>
     <color name="twitter_secondary_color">#CCD6DD</color>
+    <color name="profile_cream_color">#EAE7DC</color>
+    <color name="profile_creamYellow_color">#D8C3A5</color>
+    <color name="profile_gray_color">#8E8D8A</color>
+    <color name="profile_coral_color">#E98074</color>
+    <color name="profile_darkCoral_color">#E85A4F</color>
 </resources>
