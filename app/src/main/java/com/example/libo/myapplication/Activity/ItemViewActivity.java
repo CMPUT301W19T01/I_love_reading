@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.RequestPopup;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -56,6 +58,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static de.greenrobot.event.EventBus.TAG;
 
 /**
  * The Item view activity.
@@ -83,7 +87,10 @@ public class ItemViewActivity extends AppCompatActivity {
     private Intent resultIntent = new Intent(); //Initialization of result Intent
     private CommentAdapter adapter; // Adapter for Comment list view
     private String BookId;
-
+    private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+    private boolean test_counter_boolean = false;
+    private boolean test_counter_boolean2 = false;
+    private boolean temp_stop_update = false;
     final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
 
     final int GET_FROM_COMMENT = 3; // result code for getting new comment
@@ -150,7 +157,7 @@ public class ItemViewActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 comments.clear();
-                if (BookName.length() != 0) {
+                if (BookName.length() != 0 && !temp_stop_update) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Comment comment = ds.getValue(Comment.class);
                         comments.add(comment);
@@ -362,10 +369,27 @@ public class ItemViewActivity extends AppCompatActivity {
                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    test_counter_boolean2 = true;
                                     comments.remove(current_comment);
+                                    commentsRef.child(current_comment.getCommentId()).removeValue();
                                     setListViewHeightBasedOnChildren(ListViewComment);
                                     adapter.notifyDataSetChanged();
-
+                                    usersRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                Users currentUser = ds.getValue(Users.class);
+                                                if (currentUser.getUsername().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()) && test_counter_boolean2){
+                                                    currentUser.setCommentnum(currentUser.getCommentnum()-1);
+                                                    usersRef.child(currentUser.getUid()).setValue(currentUser);
+                                                    test_counter_boolean2 = false;
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        }
+                                    });
                                 }
                             });
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -374,9 +398,8 @@ public class ItemViewActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             });
-
+                    update_comment_firebase();
                     alertDialog.show();
-
 
                 }
                 return true;
@@ -409,6 +432,7 @@ public class ItemViewActivity extends AppCompatActivity {
             Intent resultIntent = data;
             Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
             if (!resultCommand) {
+                test_counter_boolean = true;
                 float Rate = resultIntent.getFloatExtra("rate", '0');
                 String CommentText = resultIntent.getStringExtra("Comment");
                 String UserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName(); //To be done later
@@ -427,6 +451,23 @@ public class ItemViewActivity extends AppCompatActivity {
                 commentsRef.child(commentId).setValue(newComment);
                 comments.add(newComment);
                 adapter.notifyDataSetChanged();
+                usersRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Users currentUser = ds.getValue(Users.class);
+                            if (currentUser.getUsername().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()) && test_counter_boolean){
+                                currentUser.setCommentnum(currentUser.getCommentnum()+1);
+                                usersRef.child(currentUser.getUid()).setValue(currentUser);
+                                test_counter_boolean = false;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
                 update_comment_firebase();
             }
         }
@@ -451,7 +492,6 @@ public class ItemViewActivity extends AppCompatActivity {
                 temp_comment.setTime(CommentTime);
                 comments.set(current_comment_position,temp_comment);
                 commentsRef.child(temp_comment.getCommentId()).setValue(temp_comment);
-                adapter.notifyDataSetChanged();
                 update_comment_firebase();
 
             }
@@ -704,6 +744,7 @@ public class ItemViewActivity extends AppCompatActivity {
             commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
             adapter.notifyDataSetChanged();
         }
+
     }
 
     public boolean check_finish(){

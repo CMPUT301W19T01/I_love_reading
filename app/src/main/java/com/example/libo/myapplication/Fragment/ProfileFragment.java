@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private TextView TextViewCommentBookNum;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     final DatabaseReference currentuser = FirebaseDatabase.getInstance().getReference("users");
-    private Users User_user;
+    static private Users User_user;
 
 
     @Nullable
@@ -77,26 +77,7 @@ public class ProfileFragment extends Fragment {
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: "+user.getEmail());
         userId.setText("Birth day");
-
-        currentuser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Users temp = ds.getValue(Users.class);
-                    if (temp.getUid().equals(user.getUid())){
-                        User_user = temp;
-                        break;
-                    }
-
-                }
-                UpdateNum();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        UpdateNum();
 
         if (user.getPhotoUrl() != null){
             Log.d("USER PFORILE" ,""+ user.getPhotoUrl().toString());
@@ -136,14 +117,59 @@ public class ProfileFragment extends Fragment {
 
 
 
-
-
     }
 
     public void UpdateNum(){
-        TextViewBorrowBookNum.setText(User_user.getBorrowbooknum());
-        TextViewOwnBookNum.setText(User_user.getOwnbooknum());
-        TextViewCommentBookNum.setText(User_user.getCommentnum());
+
+        final DatabaseReference currentuser = FirebaseDatabase.getInstance().getReference("users");
+
+        currentuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Users temp = ds.getValue(Users.class);
+                    if (temp.getUid().equals(user.getUid())){
+                        User_user = temp;
+                        TextViewCommentBookNum.setText(String.valueOf(User_user.getCommentnum()));
+                        Log.d(TAG, "current"+ User_user.getCommentnum());
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        DatabaseReference storageRef = FirebaseDatabase.getInstance().getReference("books").child(user.getUid());
+        storageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextViewOwnBookNum.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference storageRef2 = FirebaseDatabase.getInstance().getReference("acceptedBook").child(user.getUid());
+        storageRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextViewBorrowBookNum.setText(String.valueOf(dataSnapshot.getChildrenCount()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
     }
 
     @Override

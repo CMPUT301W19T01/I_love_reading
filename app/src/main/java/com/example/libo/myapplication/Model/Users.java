@@ -10,6 +10,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
+import static de.greenrobot.event.EventBus.TAG;
+
 public class Users {
 
     private String email;
@@ -26,9 +28,9 @@ public class Users {
 
     private String photo;
 
-    private Integer ownbooknum;
-    private Integer commentnum;
-    private Integer borrowbooknum;
+    private int ownbooknum;
+    private int commentnum;
+    private int borrowbooknum = 0;
 
     public Users(){
 
@@ -69,13 +71,13 @@ public class Users {
         this.uid = uid;
     }
 
-    public Integer getOwnbooknum() {
-        DatabaseReference storageRef = FirebaseDatabase.getInstance().getReference("bookcover").child(this.getUid());
-        ownbooknum = 0;
+    public int getOwnbooknum() {
+        DatabaseReference storageRef = FirebaseDatabase.getInstance().getReference("books").child(this.getUid());
         storageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ownbooknum = (int) dataSnapshot.getChildrenCount();
+                setOwnbooknum(ownbooknum);
             }
 
             @Override
@@ -83,40 +85,24 @@ public class Users {
 
             }
         });
-        return ownbooknum;
+        Log.d(TAG ,"Book num "+ this.ownbooknum);
+        return this.ownbooknum;
     }
 
-    public void setOwnbooknum(Integer ownbooknum) {
+    public void setOwnbooknum(int ownbooknum) {
         this.ownbooknum = ownbooknum;
     }
 
-    public Integer getCommentnum() {
-        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("commentsTEST");
-        commentnum =0;
-        commentsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Comment comment = ds.getValue(Comment.class);
-                    if (comment.getUsername().equals(getUsername())){
-                        borrowbooknum = borrowbooknum +1;
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return commentnum;
+    public int getCommentnum() {
+        return this.commentnum;
     }
 
-    public void setCommentnum(Integer commentnum) {
+    public void setCommentnum(int commentnum) {
         this.commentnum = commentnum;
     }
 
-    public Integer getBorrowbooknum() {
-        DatabaseReference borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(this.getUid());
+    public int getBorrowbooknum() {
+        DatabaseReference borrowedRef = FirebaseDatabase.getInstance().getReference("acceptedBook").child(this.getUid());
         borrowbooknum = 0;
         borrowedRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,7 +117,7 @@ public class Users {
         return borrowbooknum;
     }
 
-    public void setBorrowbooknum(Integer borrowbooknum) {
+    public void setBorrowbooknum(int borrowbooknum) {
         this.borrowbooknum = borrowbooknum;
     }
 }
