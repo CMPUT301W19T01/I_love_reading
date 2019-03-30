@@ -17,6 +17,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -91,11 +93,12 @@ public class ItemViewActivity extends AppCompatActivity {
     private boolean test_counter_boolean = false;
     private boolean test_counter_boolean2 = false;
     private boolean temp_stop_update = false;
-    final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
 
+    final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
     final int GET_FROM_COMMENT = 3; // result code for getting new comment
     final int UPDATE_COMMENT = 4; // update the information in comment
     private int current_comment_position = -1;
+    MenuItem toolBarAddButton;
     private DatabaseReference commentsRef;
     private Uri BookCoverUri;
     @Override
@@ -139,6 +142,7 @@ public class ItemViewActivity extends AppCompatActivity {
         final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         final Boolean Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
+        
 
         if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
@@ -565,6 +569,17 @@ public class ItemViewActivity extends AppCompatActivity {
     }
 
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item_view_menu, menu);
+        toolBarAddButton = menu.findItem(R.id.toolbar_add_book);
+        Intent temp_intent = getIntent();
+        Boolean temp_edit = temp_intent.getBooleanExtra("edit",false);
+        if (!temp_edit){
+            toolBarAddButton.setVisible(false);
+        }
+        return true;
+    }
+
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         // When the return button is pressed. Automatically transfer the required information back
         for (Comment item_comment : comments) {
@@ -734,6 +749,23 @@ public class ItemViewActivity extends AppCompatActivity {
                     finish();
                 }
             }
+            if (item.getItemId() == R.id.toolbar_add_book){
+                if (check_finish()){
+                    resultIntent.putExtra("do", "edit");
+                    ImageViewBookCover.buildDrawingCache(); // send the image back
+                    Bitmap image = ImageViewBookCover.getDrawingCache();
+                    resultIntent.putExtra("BookCover", image);
+                    String BookName = EditTextBookName.getText().toString();
+                    String AuthorName = EditTextAuthorName.getText().toString();
+                    String Description = EditTextDescription.getText().toString();
+                    resultIntent.putExtra("BookName", BookName);
+                    resultIntent.putExtra("AuthorName", AuthorName);
+                    resultIntent.putExtra("Description", Description);
+                    resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
+        }
 
 
         return super.onOptionsItemSelected(item);
