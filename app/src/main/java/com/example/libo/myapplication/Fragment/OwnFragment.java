@@ -251,44 +251,5 @@ public class OwnFragment extends Fragment {
 
     }
 
-    private void uploadFile(Bitmap bookCover, final String id, final Book data_book, String userID){
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference storageReference = storage.getReference("book_photo").child("image/"+id+".jpg");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bookCover.compress(Bitmap.CompressFormat.JPEG,20,baos);
-        byte[] data = baos.toByteArray();
-        final UploadTask uploadTask = storageReference.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i("Upload image fail",e.toString());
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task)  {
-                        if (!task.isSuccessful()){
-                            Log.i("problem", task.getException().toString());
-                        }
-                        return storageReference.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()){
-                            Uri downloadUri = task.getResult();
-                            Log.i("seeThisUri", downloadUri.toString());
-                            data_book.setBookcoverUri(downloadUri.toString());
-                            Log.d(TAG,"==============================================");
-                            databaseBook.child(id).setValue(data_book);
-                        }
-                    }
-                });
-            }
-        });
-    }
 
 }

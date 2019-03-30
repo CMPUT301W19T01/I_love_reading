@@ -37,7 +37,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private static final String TAG = "AllBookDatabase";
 
     private DatabaseReference AlldatabaseBook;
-    private DatabaseReference FirebaseRequests;
+    private DatabaseReference requestbookRef;
     private TextView userNameTextView;
     ListView all_book_lv;
     ArrayAdapter<Book> adapter;
@@ -46,6 +46,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private int current_index = 0;
     private Book currentBook;
 
+    private String UID;
     //  RecyclerView resultsListView  ;
     // String prevQuery = "" ;
     //ArrayList<Book>  resultbook;
@@ -133,8 +134,8 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
         super.onActivityCreated(savedInstanceState);
 
         AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
-
-
+        requestbookRef = FirebaseDatabase.getInstance().getReference("requestBook");
+        UID = FirebaseAuth.getInstance().getUid();
         AlldatabaseBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -190,6 +191,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
 
                 this.currentBook.setStatus(true);
                 Util.SendRequset(currentBook.getOwnerId(),currentBook, true);
+                requestbookRef.child(UID).child(currentBook.getID()).setValue(currentBook);
             }
 
 
