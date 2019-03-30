@@ -29,22 +29,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AllFragment extends Fragment /*implements SearchView.OnQueryTextListener*/{
     private static final String TAG = "AllBookDatabase";
-
-    private DatabaseReference AlldatabaseBook;
-    private DatabaseReference requestbookRef;
     private TextView userNameTextView;
     ListView all_book_lv;
     ArrayAdapter<Book> adapter;
-    //bookListViewAdapter adapter;
     ArrayList<Book> arrayAllbooks = new ArrayList<>();
-    private int current_index = 0;
     private Book currentBook;
+    private int current_index = 0;
+
+
+
+
+
+
+    private StorageReference storageRef;
+    private DatabaseReference AlldatabaseBook;
+    private DatabaseReference requestbookRef;
+    //bookListViewAdapter adapter;
 
     private String UID;
     //  RecyclerView resultsListView  ;
