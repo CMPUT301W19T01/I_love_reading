@@ -93,19 +93,24 @@ public class ItemViewActivity extends AppCompatActivity {
     private boolean test_counter_boolean = false;
     private boolean test_counter_boolean2 = false;
     private boolean temp_stop_update = false;
+    boolean Edit;
+
+    private Intent result;
 
     final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
     final int GET_FROM_COMMENT = 3; // result code for getting new comment
     final int UPDATE_COMMENT = 4; // update the information in comment
     private int current_comment_position = -1;
+
     MenuItem toolBarAddButton;
+
     private DatabaseReference commentsRef;
     private Uri BookCoverUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
-        final Intent result = getIntent();
+        result = getIntent();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];
         temp = result;
@@ -116,43 +121,18 @@ public class ItemViewActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Details View");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         /*
-        Initialization of Text view and button.
-         */
-        EditTextBookName = findViewById(R.id.EditTextBookName);
-        EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
-        EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
-        TextViewClassification = findViewById(R.id.TextViewClassificationSelect);
-        ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
-        BorrowButton = findViewById(R.id.ButtonRentBook);
-        ReturnButton = findViewById(R.id.button_return);
-        WatchListButton = findViewById(R.id.ButtonWatchList);
-        AddCommentButton = findViewById(R.id.ButtonAddComment);
-        ListViewComment = findViewById(R.id.ListViewComments);
-        CardViewComment = findViewById(R.id.card_view_adapter);
-
-        /*
         Get Information of the book from the intent
          */
-        final String BookName = result.getStringExtra("BookName"); // Get information from the Intent
-        String AuthorName = result.getStringExtra("AuthorName");
-        String Description = result.getStringExtra("Description");
+
         //Get the book iD
         BookId = result.getStringExtra("ID");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
-        final Boolean Edit = result.getBooleanExtra("edit",false);
+        Edit = result.getBooleanExtra("edit",false);
         final Boolean Status = result.getBooleanExtra("status",false);
-        
 
-        if (!Edit){ // If we are viewing the info instead of borrowing
-            resultIntent.putExtra("borrow","false"); //default setting
-            resultIntent.putExtra("watchlist", "false");
-            checkStatus(Status); // check if the book can be borrowed
-        }
-
-        BorrowButton.setText("Borrow");
-        WatchListButton.setText("Watch List");
-        checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover); // show the information of the Book
+        intializeVaraibles();
+        initializeStatus();
 
         comments = new ArrayList<>(); // Initialization of comment array
         //Get Comments from Firebase
@@ -161,6 +141,7 @@ public class ItemViewActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 comments.clear();
+                final String BookName = result.getStringExtra("BookName"); // Get information from the Intent
                 if (BookName.length() != 0 && !temp_stop_update) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Comment comment = ds.getValue(Comment.class);
@@ -179,40 +160,6 @@ public class ItemViewActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-        int buttonCode = result.getIntExtra("ButtonCode", -1);
-        if( buttonCode == 0){
-            BorrowButton.setVisibility(View.INVISIBLE);
-            WatchListButton.setVisibility(View.INVISIBLE);
-            ReturnButton.setVisibility(View.VISIBLE);
-
-            ReturnButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.putExtra("return", true);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-        }
-        else if(buttonCode == 1){
-            BorrowButton.setVisibility(View.INVISIBLE);
-            WatchListButton.setVisibility(View.INVISIBLE);
-            ReturnButton.setVisibility(View.VISIBLE);
-            ReturnButton.setText("View Requests");
-
-            ReturnButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RequestPopup requestPopup = new RequestPopup(ItemViewActivity.this,BookId);
-                    requestPopup.showRequests();
-                }
-            });
-        }
-
 
         // Onclick listener for borrow button
         BorrowButton.setOnClickListener(new View.OnClickListener() {
@@ -269,52 +216,7 @@ public class ItemViewActivity extends AppCompatActivity {
         TextViewClassification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Edit){
-                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
-                    mBuilder.setTitle(R.string.SelectionTile);
-                    mBuilder.setMultiChoiceItems(ItemSet, SelectedItemSet, new DialogInterface.OnMultiChoiceClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            if (isChecked) {
-                                myUserItems.add(which); }
-                            else {
-                                myUserItems.remove((Integer.valueOf(which))); } }
-                    });
-                    mBuilder.setCancelable(false);
-                    mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            ArrayList<String> item = new ArrayList<>();
-                            for (int i = 0; i < myUserItems.size(); i++) {
-                                item.add(ItemSet[myUserItems.get(i)]); }
-                            resultClassification = item;
-                            TextViewClassification.setText(CombineStringList(item)); }
-                    });
-
-                    mBuilder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-
-                    mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int which) {
-                            for (int i = 0; i < SelectedItemSet.length; i++) {
-                                SelectedItemSet[i] = false;
-                                myUserItems.clear();
-                                resultClassification = new ArrayList<String>();
-                                TextViewClassification.setText("");
-                            }
-                        }
-                    });
-                    AlertDialog mDialog = mBuilder.create();
-                    mDialog.show();
-                }
-                else{
-                    TextViewClassification.setClickable(false);
-                }
+                classificationPopup(view);
             }
         });
 
@@ -507,6 +409,121 @@ public class ItemViewActivity extends AppCompatActivity {
     }
 
 
+    public void classificationPopup(View view){
+        if (Edit){
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
+            mBuilder.setTitle(R.string.SelectionTile);
+            mBuilder.setMultiChoiceItems(ItemSet, SelectedItemSet, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                    if (isChecked) {
+                        myUserItems.add(which); }
+                    else {
+                        myUserItems.remove((Integer.valueOf(which))); } }
+            });
+            mBuilder.setCancelable(false);
+            mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    ArrayList<String> item = new ArrayList<>();
+                    for (int i = 0; i < myUserItems.size(); i++) {
+                        item.add(ItemSet[myUserItems.get(i)]); }
+                    resultClassification = item;
+                    TextViewClassification.setText(CombineStringList(item)); }
+            });
+
+            mBuilder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            mBuilder.setNeutralButton("Clear", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    for (int i = 0; i < SelectedItemSet.length; i++) {
+                        SelectedItemSet[i] = false;
+                        myUserItems.clear();
+                        resultClassification = new ArrayList<String>();
+                        TextViewClassification.setText("");
+                    }
+                }
+            });
+            AlertDialog mDialog = mBuilder.create();
+            mDialog.show();
+        }
+        else{
+            TextViewClassification.setClickable(false);
+        }
+    }
+
+    public void intializeVaraibles(){
+               /*
+        Initialization of Text view and button.
+         */
+        EditTextBookName = findViewById(R.id.EditTextBookName);
+        EditTextAuthorName = findViewById(R.id.EditTextBookDetail);
+        EditTextDescription = findViewById(R.id.EditTextDescriptionContent);
+        TextViewClassification = findViewById(R.id.TextViewClassificationSelect);
+        ImageViewBookCover = findViewById(R.id.ImageViewBookCover);
+        BorrowButton = findViewById(R.id.ButtonRentBook);
+        ReturnButton = findViewById(R.id.button_return);
+        WatchListButton = findViewById(R.id.ButtonWatchList);
+        AddCommentButton = findViewById(R.id.ButtonAddComment);
+        ListViewComment = findViewById(R.id.ListViewComments);
+        CardViewComment = findViewById(R.id.card_view_adapter);
+    }
+
+    public void initializeStatus(){
+        ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
+        final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
+        Edit = result.getBooleanExtra("edit",false);
+        final Boolean Status = result.getBooleanExtra("status",false);
+        if (!Edit){ // If we are viewing the info instead of borrowing
+            resultIntent.putExtra("borrow","false"); //default setting
+            resultIntent.putExtra("watchlist", "false");
+            checkStatus(Status); // check if the book can be borrowed
+        }
+
+        BorrowButton.setText("Borrow");
+        WatchListButton.setText("Watch List");
+        final String BookName = result.getStringExtra("BookName"); // Get information from the Intent
+        String AuthorName = result.getStringExtra("AuthorName");
+        String Description = result.getStringExtra("Description");
+        checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover); // show the information of the Book
+
+        int buttonCode = result.getIntExtra("ButtonCode", -1);
+        if( buttonCode == 0){
+            BorrowButton.setVisibility(View.INVISIBLE);
+            WatchListButton.setVisibility(View.INVISIBLE);
+            ReturnButton.setVisibility(View.VISIBLE);
+
+            ReturnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.putExtra("return", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
+        else if(buttonCode == 1){
+            BorrowButton.setVisibility(View.INVISIBLE);
+            WatchListButton.setVisibility(View.INVISIBLE);
+            ReturnButton.setVisibility(View.VISIBLE);
+            ReturnButton.setText("View Requests");
+
+            ReturnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RequestPopup requestPopup = new RequestPopup(ItemViewActivity.this,BookId);
+                    requestPopup.showRequests();
+                }
+            });
+        }
+    }
     /**
      * Check if the Book is available
      *
