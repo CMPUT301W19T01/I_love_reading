@@ -205,6 +205,7 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     public void deny(View view){
         requestDatabseRef.child(request.getRequestId()).removeValue();
+        requestdRef.child(request.getSenderId()).child(request.getBookId()).removeValue();
         Toast.makeText(this, "Deny the request.", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -292,19 +293,17 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     //After owner and borrower confirm that the book has been exchanged successfully, update the firebase accept
     private void updateBorrowed(final String borrowerId, final String bookID, final String receiver) {
-        AllbooksRef = FirebaseDatabase.getInstance().getReference("books").child(receiver);
         acceptedRef.child(borrowerId).child(bookID).setValue(book);
         requestdRef.child(borrowerId).child(bookID).removeValue();
 
-        /*
-        AllbooksRef.addValueEventListener(new ValueEventListener() {
+        //Delete all user have request the book and send them message
+        requestdRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for(DataSnapshot ds : da)
                     Book book = ds.getValue(Book.class);
-
                     if (book.getID().equals(bookID)) {
-                        acceptedRef.child(borrowerId).child(bookID).setValue(book);
                         requestdRef.child(borrowerId).child(bookID).removeValue();
                         Log.d("ACCEPTED STATUS:",borrowerId+"SUCCESSFUL +++++++"+bookID);
                     }
@@ -316,7 +315,7 @@ public class RequestDetailActivity extends AppCompatActivity {
 
             }
         });
-        */
+
     }
 
     //After accepting the request, update the borrow and all lists
