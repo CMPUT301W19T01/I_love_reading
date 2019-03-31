@@ -291,7 +291,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
-                        currentBook.setOwnerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
+                        currentBook.setOwnerName(mAuth.getCurrentUser().getDisplayName());
                         Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
                     }
                 }
