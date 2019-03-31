@@ -112,7 +112,7 @@ public class profileEditActivity extends AppCompatActivity {
 
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent,1);
+        startActivityForResult(galleryIntent,2);
     }
 
     @Override
