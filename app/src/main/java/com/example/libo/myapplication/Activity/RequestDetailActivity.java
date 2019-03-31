@@ -301,11 +301,12 @@ public class RequestDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    for(DataSnapshot ds : da)
-                    Book book = ds.getValue(Book.class);
+                    for(DataSnapshot wds : ds.getChildren()){
+                    Book book = wds.getValue(Book.class);
                     if (book.getID().equals(bookID)) {
                         requestdRef.child(borrowerId).child(bookID).removeValue();
-                        Log.d("ACCEPTED STATUS:",borrowerId+"SUCCESSFUL +++++++"+bookID);
+                        Log.d("ACCEPTED STATUS:", borrowerId + "SUCCESSFUL +++++++" + bookID);
+                    }
                     }
                 }
             }
