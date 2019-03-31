@@ -4,9 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/profile_cream_color">
+    android:background="@color/profile_cream_color"
+    android:orientation="vertical">
 
+
+    <ImageButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/default_circle_failed" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,17 +21,16 @@
         android:background="@color/profile_coral_color"
 
 
-
-
-       />
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="280dp">
+
         <LinearLayout
-            android:background="@color/profile_coral_color"
             android:layout_width="match_parent"
             android:layout_height="260dp"
+            android:background="@color/profile_coral_color"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -34,20 +39,20 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
+                android:contentDescription="@string/todo"
                 android:visibility="visible"
-                tools:srcCompat="@mipmap/ic_launcher"
-                android:contentDescription="@string/todo" />
+                tools:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/profileUserName"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
                 android:text="@string/username"
                 android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="21sp"/>
+                android:textSize="21sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <android.support.v7.widget.CardView
@@ -55,79 +60,86 @@
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="170dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:weightSum="3"
-                android:baselineAligned="false">
+                android:weightSum="3">
+
                 <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Owns"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
+
                     <TextView
-                        android:id = "@+id/TextViewOwnBook"
+                        android:id="@+id/TextViewOwnBook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/_125"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
                         android:paddingTop="10dp"
-                        android:textColor="@color/profile_darkCoral_color"/>
+                        android:text="@string/_125"
+                        android:textColor="@color/profile_darkCoral_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Borrows"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
+
                     <TextView
-                        android:id = "@+id/TextViewBorrowBook"
+                        android:id="@+id/TextViewBorrowBook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/_1205"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
                         android:paddingTop="10dp"
-                        android:textColor="@color/profile_darkCoral_color"/>
+                        android:text="@string/_1205"
+                        android:textColor="@color/profile_darkCoral_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <LinearLayout
-                    android:gravity="center"
-                    android:orientation="vertical"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Comments"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
+
                     <TextView
-                        android:id = "@+id/TextViewCommentNum"
+                        android:id="@+id/TextViewCommentNum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/_360"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
                         android:paddingTop="10dp"
-                        android:textColor="@color/profile_darkCoral_color"/>
+                        android:text="@string/_360"
+                        android:textColor="@color/profile_darkCoral_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -138,84 +150,91 @@
     <LinearLayout
         android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingStart="25dp"
+            android:paddingLeft="25dp"
             android:paddingRight="25dp">
+
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/icon_email"/>
+                android:src="@drawable/icon_email" />
+
             <TextView
                 android:id="@+id/profileUserEmail"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="@string/useremail"
+                android:layout_gravity="center_vertical"
                 android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="25dp"
                 android:paddingRight="25dp"
-                android:paddingEnd="25dp"/>
+                android:text="@string/useremail"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
             android:paddingStart="25dp"
-            android:paddingRight="25dp"
-            android:paddingEnd="25dp">
+            android:paddingLeft="25dp"
+            android:paddingEnd="25dp"
+            android:paddingRight="25dp">
+
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/icon_userid"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                android:src="@drawable/icon_userid" />
+
             <TextView
                 android:id="@+id/profileEditUserID"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="@string/userid"
+                android:layout_gravity="center_vertical"
                 android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="25dp"
                 android:paddingRight="25dp"
-                android:paddingEnd="25dp"/>
+                android:text="@string/userid"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
             android:paddingStart="25dp"
-            android:paddingRight="25dp"
-            android:paddingEnd="25dp">
+            android:paddingLeft="25dp"
+            android:paddingEnd="25dp"
+            android:paddingRight="25dp">
+
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/icon_birthday"
-                android:contentDescription="@string/todo" />
+                android:contentDescription="@string/todo"
+                android:src="@drawable/icon_birthday" />
+
             <TextView
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="@string/userBirthday"
+                android:layout_gravity="center_vertical"
                 android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="25dp"
                 android:paddingRight="25dp"
-                android:paddingEnd="25dp"/>
+                android:text="@string/userBirthday"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
@@ -225,10 +244,10 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:layout_marginStart="10dp">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_editProfile"
