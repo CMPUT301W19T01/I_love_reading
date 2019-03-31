@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
+import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
@@ -235,7 +236,14 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 for(DataSnapshot newds : ds.getChildren()) {
                                     Book book = newds.getValue(Book.class);
-                                    arrayAllbooks.add(book);
+                                    BookStatus ssstatus = book.getNew_status();
+
+                                    Log.d(TAG, "====================current item is " + ssstatus);
+                                    if ((ssstatus.toString().equals("borrowed"))||(ssstatus.toString().equals("accepted"))){
+                                        Log.d("byf===================",book.getID());
+
+                                        arrayAllbooks.add(book);
+                                    }
                                 }
                             }
 
@@ -250,6 +258,34 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if (item.equals("Available")){
+                    AlldatabaseBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayAllbooks.clear();
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                for(DataSnapshot newds : ds.getChildren()) {
+                                    Book book = newds.getValue(Book.class);
+                                    BookStatus ssstatus = book.getNew_status();
+
+                                    Log.d(TAG, "====================current item is " + ssstatus);
+                                    if ((ssstatus.toString().equals("available"))||(ssstatus.toString().equals("requested"))){
+                                        Log.d("byf===================",book.getID());
+
+                                        arrayAllbooks.add(book);
+                                    }
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
 
