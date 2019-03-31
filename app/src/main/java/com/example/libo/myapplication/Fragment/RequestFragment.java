@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RequestFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class RequestFragment extends Fragment implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "RequestDatabase";
     private TextView userNameTextView;
     private ListView requestList;
@@ -44,9 +44,6 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
     private ArrayList<Request> requests;
     private RequestAdapter requestAdapter;
     private String userid;
-    private DatabaseReference borrowedRef;
-    private DatabaseReference requestRef;
-    private DatabaseReference acceptRef;
     private Spinner spinner;
 
 
@@ -58,13 +55,11 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requests = new ArrayList<>();
 
-        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(userid);
-        requestRef = FirebaseDatabase.getInstance().getReference("requestBook").child(userid);
-        acceptRef = FirebaseDatabase.getInstance().getReference("acceptedBook").child(userid);
         spinner = view.findViewById(R.id.request_filter);
-        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.borrowedfilter,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.requestfilter,android.R.layout.simple_spinner_item);
         filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(filteradapter);
+        spinner.setOnItemSelectedListener(this);
         return view;
     }
 
@@ -74,13 +69,10 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         requestList = getActivity().findViewById(R.id.request_listview);
 
         requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
         requestList.setAdapter(requestAdapter);
-
-
 
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,44 +82,6 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                 Intent intent = new Intent(getContext(), RequestDetailActivity.class);
                 intent.putExtra("request", request);
                 startActivityForResult(intent, 0);
-            }
-        });
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String item = parent.getItemAtPosition(position).toString();
-                Object iitem = parent.getItemAtPosition(position);
-
-                Toast.makeText(getContext(), iitem.toString(),
-                        Toast.LENGTH_SHORT).show();
-                if (item.equals("All")){
-
-
-
-
-                }
-                if(item.equals("Request")){
-                    requestRef.addValueEventListener(valueEventListener);
-
-                }
-                if (item.equals("Accepted")){
-                    acceptRef.addValueEventListener(valueEventListener);
-
-                }
-                if (item.equals("Borrowing")){
-                    borrowedRef.addValueEventListener(valueEventListener);
-
-
-                }
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -159,9 +113,105 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                 return true;
             }
         });
+        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+
+                if (item.equals("All")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                }
+                if (item.equals("My Request")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getSenderId().equals(userid) ){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+                if(item.equals("Other Request")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getReceiver().equals(userid) ){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+            }
+
+
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Update request from database
-        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -188,6 +238,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
 
     }
 

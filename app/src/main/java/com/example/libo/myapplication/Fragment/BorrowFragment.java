@@ -132,12 +132,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
 
                 Toast.makeText(getContext(), iitem.toString(),
                         Toast.LENGTH_SHORT).show();
-                if (item.equals("All")){
 
-
-
-
-                }
                 if(item.equals("Request")){
                     requestRef.addValueEventListener(valueEventListener);
 
