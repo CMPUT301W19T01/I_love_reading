@@ -1,11 +1,8 @@
 package com.example.libo.myapplication.Model;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import com.example.libo.myapplication.BookStatus;
-
-import java.util.ArrayList;
 
 public class Book {
     private String OwnerId;
@@ -25,6 +22,16 @@ public class Book {
     private String bookcoverUri;
     private Float rating;
     private Bitmap BookCover;
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    private String ownerName;
 
     public Book(){
         isBorrowerConfirmed = false;

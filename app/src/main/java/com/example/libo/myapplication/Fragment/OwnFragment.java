@@ -293,6 +293,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
                         currentBook.setNew_status(BookStatus.available);
+                        Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
+                        currentBook.setOwnerName(mAuth.getCurrentUser().getDisplayName());
                         Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
                     }
                 }
