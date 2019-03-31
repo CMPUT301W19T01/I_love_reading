@@ -314,7 +314,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
 
-/*
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -327,7 +327,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 adapter.getFilter().filter(newText);
                 return false;
             }
-        });*/
+        });
 
     }
 
