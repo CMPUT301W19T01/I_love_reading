@@ -3,6 +3,8 @@ package com.example.libo.myapplication.Model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import com.example.libo.myapplication.BookStatus;
+
 import java.util.ArrayList;
 
 public class Book {
@@ -14,22 +16,19 @@ public class Book {
     private String Description;
     private String Classification;
 
+    private Boolean isOwnerConfirmed;
 
-    private String new_status;
+    private Boolean isBorrowerConfirmed;
 
-    public String getBookcoverUri() {
-        return bookcoverUri;
-    }
-
-    public void setBookcoverUri(String bookcoverUri) {
-        this.bookcoverUri = bookcoverUri;
-    }
+    private BookStatus new_status;
 
     private String bookcoverUri;
     private Float rating;
     private Bitmap BookCover;
 
     public Book(){
+        isBorrowerConfirmed = false;
+        isOwnerConfirmed = false;
     }
 
     public Book(String BookName, String AuthorName, String ID, Boolean status, String Description, String Classification,String ownerId){
@@ -42,11 +41,35 @@ public class Book {
         this.OwnerId = ownerId;
     }
 
-    public String getNew_status() {
+    public String getBookcoverUri() {
+        return bookcoverUri;
+    }
+
+    public void setBookcoverUri(String bookcoverUri) {
+        this.bookcoverUri = bookcoverUri;
+    }
+
+    public Boolean getOwnerConfirmed() {
+        return isOwnerConfirmed;
+    }
+
+    public void setOwnerConfirmed(Boolean ownerConfirmed) {
+        isOwnerConfirmed = ownerConfirmed;
+    }
+
+    public Boolean getBorrowerConfirmed() {
+        return isBorrowerConfirmed;
+    }
+
+    public void setBorrowerConfirmed(Boolean borrowerConfirmed) {
+        isBorrowerConfirmed = borrowerConfirmed;
+    }
+
+    public BookStatus getNew_status() {
         return new_status;
     }
 
-    public void setNew_status(String new_status) {
+    public void setNew_status(BookStatus new_status) {
         this.new_status = new_status;
     }
 

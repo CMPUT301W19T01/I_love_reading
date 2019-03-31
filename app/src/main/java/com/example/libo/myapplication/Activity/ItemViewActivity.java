@@ -522,6 +522,11 @@ public class ItemViewActivity extends AppCompatActivity {
                 }
             });
         }
+        else if(buttonCode == 2){
+            BorrowButton.setVisibility(View.INVISIBLE);
+            WatchListButton.setVisibility(View.INVISIBLE);
+            AddCommentButton.setVisibility(View.INVISIBLE);
+        }
     }
     /**
      * Check if the Book is available
