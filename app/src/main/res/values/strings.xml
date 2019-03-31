@@ -63,5 +63,11 @@
     <string name="_1205">1205</string>
     <string name="following">Following</string>
     <string name="_360">360</string>
+    <string-array name="allfragmentfilter">
+        <item>All</item>
+        <item>Available</item>
+        <item>Borrowed</item>
+
+    </string-array>
 
 </resources>

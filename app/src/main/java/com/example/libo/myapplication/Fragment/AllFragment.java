@@ -1,6 +1,7 @@
 package com.example.libo.myapplication.Fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,12 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
@@ -36,7 +40,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class AllFragment extends Fragment /*implements SearchView.OnQueryTextListener*/{
+public class AllFragment extends Fragment implements AdapterView.OnItemSelectedListener /*implements SearchView.OnQueryTextListener*/{
     private static final String TAG = "AllBookDatabase";
     private TextView userNameTextView;
     ListView all_book_lv;
@@ -46,6 +50,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private int current_index = 0;
     private DatabaseReference AlldatabaseBook;
     private DatabaseReference requestbookRef;
+    private DatabaseReference availablebook;
     //bookListViewAdapter adapter;
 
     private String UID;
@@ -54,7 +59,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     //ArrayList<Book>  resultbook;
     //ArrayAdapter<Book> resultsAdapter;
 
-//#######################################//
+
     private static final int all_request_code = 0;
     private DatabaseReference availableRef;
     private DatabaseReference allRef;
@@ -62,7 +67,7 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     private Button available_button;
     private Button borrowed_button;
     private Button all_button;
-    //######################################//
+    private Spinner spinner;
 
 
 
@@ -76,13 +81,17 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.all_page,container,false);
         all_book_lv = (ListView)view.findViewById(R.id.all_book);
-        //########################//
         allRef = FirebaseDatabase.getInstance().getReference("books");
         borrowedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
-        borrowed_button = (Button) view.findViewById(R.id.borrowedbtn);
-        available_button= (Button) view.findViewById(R.id.availablebtn);
-        all_button = (Button) view.findViewById(R.id.allbtn);
-        //########################//
+
+        AlldatabaseBook = FirebaseDatabase.getInstance().getReference("books");
+
+
+        spinner = view.findViewById(R.id.allfilter);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.allfragmentfilter,android.R.layout.simple_spinner_item);
+        filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filteradapter);
+
 
 
 
@@ -181,55 +190,79 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
             }
         });
 
-        borrowed_button.setOnClickListener(new View.OnClickListener(){
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v){borrowedRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    arrayAllbooks.clear();
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        for(DataSnapshot newds : ds.getChildren()) {
-                            Book book = newds.getValue(Book.class);
-                            arrayAllbooks.add(book);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+                if (item.equals("All")){
+
+
+                    AlldatabaseBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayAllbooks.clear();
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                for(DataSnapshot newds : ds.getChildren()) {
+                                    Book book = newds.getValue(Book.class);
+                                    arrayAllbooks.add(book);
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
                         }
-                    }
 
-                    adapter.notifyDataSetChanged();
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+                if (item.equals("Borrowed")){
+                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayAllbooks.clear();
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                for(DataSnapshot newds : ds.getChildren()) {
+                                    Book book = newds.getValue(Book.class);
+                                    arrayAllbooks.add(book);
+                                }
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+                if (item.equals("Available")){
+
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
             }
-        });
 
-        all_button.setOnClickListener(new View.OnClickListener(){
+
+
+
             @Override
-            public void onClick(View v){allRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // This method is called once with the initial value and again
-                    // whenever data at this location is updated.
-                    arrayAllbooks.clear();
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        for(DataSnapshot newds : ds.getChildren()) {
-                            Book book = newds.getValue(Book.class);
-                            arrayAllbooks.add(book);
-                        }
-                    }
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                    adapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
             }
         });
 
@@ -321,6 +354,14 @@ public class AllFragment extends Fragment /*implements SearchView.OnQueryTextLis
                 }
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
     /*ValueEventListener valueEventListener=new ValueEventListener() {
         @Override
