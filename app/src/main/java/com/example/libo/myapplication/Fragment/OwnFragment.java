@@ -21,7 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
@@ -48,7 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class OwnFragment extends Fragment {
+public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private static final String TAG = "BorrowedBookDatabase";
     private TextView userNameTextView;
@@ -61,6 +63,7 @@ public class OwnFragment extends Fragment {
     private DatabaseReference databaseBook;
     private StorageReference storageRef;
 
+    private Spinner spinner;
 
 
     private FirebaseAuth mAuth;
@@ -82,6 +85,12 @@ public class OwnFragment extends Fragment {
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
         arrayOwnedbooks = new ArrayList<>();
         Button add_button = (Button) view.findViewById(R.id.AddButton);
+
+        spinner = view.findViewById(R.id.ownfilter);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.ownfilter,android.R.layout.simple_spinner_item);
+        filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filteradapter);
+
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,8 +196,61 @@ public class OwnFragment extends Fragment {
         });
 
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+                if (item.equals("All")){
+                    databaseBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayOwnedbooks.clear();
+
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                Book book = ds.getValue(Book.class);
+                                arrayOwnedbooks.add(book);
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+                            own_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
+                }
+                if(item.equals("Available")){
+
+                }
+                if (item.equals("Borrowed")){
+
+                }
+
+
+                }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+/*
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -201,9 +263,10 @@ public class OwnFragment extends Fragment {
                 adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
 
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -252,4 +315,13 @@ public class OwnFragment extends Fragment {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
