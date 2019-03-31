@@ -64,9 +64,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
     private DatabaseReference availableRef;
     private DatabaseReference allRef;
     private DatabaseReference borrowedRef;
-    private Button available_button;
-    private Button borrowed_button;
-    private Button all_button;
+
     private Spinner spinner;
 
 

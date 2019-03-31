@@ -17,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
@@ -35,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class BorrowFragment extends Fragment {
+public class BorrowFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private static final int BORROW_REQUEST_CODE = 0;
     private static final String TAG = "BorrowedBookDatabase";
@@ -53,6 +55,7 @@ public class BorrowFragment extends Fragment {
     private Button borrow_button;
     private Button accept_button;
     private Button request_button;
+    private Spinner spinner;
 
     @Nullable
 
@@ -69,10 +72,11 @@ public class BorrowFragment extends Fragment {
         borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(Userid);
         requestRef = FirebaseDatabase.getInstance().getReference("requestBook").child(Userid);
         acceptRef = FirebaseDatabase.getInstance().getReference("acceptedBook").child(Userid);
-        accept_button = (Button) view.findViewById(R.id.accept_button);
-        borrow_button = (Button) view.findViewById(R.id.borrow_botton);
-        request_button = (Button) view.findViewById(R.id.request_button);
 
+        spinner = view.findViewById(R.id.borrowfilter);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.borrowedfilter,android.R.layout.simple_spinner_item);
+        filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filteradapter);
 
         borrow_book_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,6 +124,45 @@ public class BorrowFragment extends Fragment {
             }
         });
 
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+                if (item.equals("All")){
+
+
+
+
+                }
+                if(item.equals("Request")){
+                    requestRef.addValueEventListener(valueEventListener);
+
+                }
+                if (item.equals("Accepted")){
+                    acceptRef.addValueEventListener(valueEventListener);
+
+                }
+                if (item.equals("Borrowing")){
+                    borrowedRef.addValueEventListener(valueEventListener);
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+/*
         borrow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,7 +184,7 @@ public class BorrowFragment extends Fragment {
             public void onClick(View v) {
                 acceptRef.addValueEventListener(valueEventListener);
             }
-        });
+        });*/
 
     }
 
@@ -191,4 +234,13 @@ public class BorrowFragment extends Fragment {
     };
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

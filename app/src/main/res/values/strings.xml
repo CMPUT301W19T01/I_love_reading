@@ -70,4 +70,23 @@
 
     </string-array>
 
+    <string-array name="borrowedfilter">
+        <item>All</item>
+        <item>Request</item>
+        <item>Accepted</item>
+        <item>Borrowing</item>
+
+    </string-array>
+
+    <string-array name="ownfilter">
+        <item>All</item>
+        <item>Available</item>
+        <item>Borrowed</item>
+
+    </string-array>
+
+
+
+
+
 </resources>
