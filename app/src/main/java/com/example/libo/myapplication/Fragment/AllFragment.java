@@ -310,7 +310,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
         */
 
 
-        /*  SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+         SearchView searchView = getActivity().findViewById(R.id.all_book_search);
          searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
            public boolean onQueryTextSubmit(String query) {
@@ -321,7 +321,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
            adapter.getFilter().filter(newText);
          return false;
           }
-         });*/
+         });
 
     }
 

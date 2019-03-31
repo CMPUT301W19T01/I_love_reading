@@ -150,6 +150,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
 
             }
 
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
