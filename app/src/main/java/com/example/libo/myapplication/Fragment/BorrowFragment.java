@@ -52,9 +52,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
     private DatabaseReference borrowedRef;
     private DatabaseReference requestRef;
     private DatabaseReference acceptRef;
-    private Button borrow_button;
-    private Button accept_button;
-    private Button request_button;
+
     private Spinner spinner;
 
     @Nullable

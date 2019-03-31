@@ -85,6 +85,14 @@
 
     </string-array>
 
+    <string-array name="requestfilter">
+        <item>All</item>
+        <item>Request</item>
+        <item>Accepted</item>
+        <item>Borrowing</item>
+
+    </string-array>
+
 
 
 

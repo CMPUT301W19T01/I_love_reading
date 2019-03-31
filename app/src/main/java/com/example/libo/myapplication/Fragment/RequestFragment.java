@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RequestFragment extends Fragment {
+public class RequestFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "RequestDatabase";
     private TextView userNameTextView;
     private ListView requestList;
@@ -43,6 +44,11 @@ public class RequestFragment extends Fragment {
     private ArrayList<Request> requests;
     private RequestAdapter requestAdapter;
     private String userid;
+    private DatabaseReference borrowedRef;
+    private DatabaseReference requestRef;
+    private DatabaseReference acceptRef;
+    private Spinner spinner;
+
 
     @Nullable
     @Override
@@ -51,6 +57,14 @@ public class RequestFragment extends Fragment {
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requests = new ArrayList<>();
+
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBooks").child(userid);
+        requestRef = FirebaseDatabase.getInstance().getReference("requestBook").child(userid);
+        acceptRef = FirebaseDatabase.getInstance().getReference("acceptedBook").child(userid);
+        spinner = view.findViewById(R.id.request_filter);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.borrowedfilter,android.R.layout.simple_spinner_item);
+        filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filteradapter);
         return view;
     }
 
@@ -60,10 +74,13 @@ public class RequestFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         requestList = getActivity().findViewById(R.id.request_listview);
 
         requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
         requestList.setAdapter(requestAdapter);
+
+
 
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -73,6 +90,44 @@ public class RequestFragment extends Fragment {
                 Intent intent = new Intent(getContext(), RequestDetailActivity.class);
                 intent.putExtra("request", request);
                 startActivityForResult(intent, 0);
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+                if (item.equals("All")){
+
+
+
+
+                }
+                if(item.equals("Request")){
+                    requestRef.addValueEventListener(valueEventListener);
+
+                }
+                if (item.equals("Accepted")){
+                    acceptRef.addValueEventListener(valueEventListener);
+
+                }
+                if (item.equals("Borrowing")){
+                    borrowedRef.addValueEventListener(valueEventListener);
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -128,6 +183,16 @@ public class RequestFragment extends Fragment {
 
             }
         });
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
