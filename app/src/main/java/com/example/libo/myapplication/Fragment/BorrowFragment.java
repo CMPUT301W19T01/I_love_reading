@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
+import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.R;
@@ -134,16 +135,100 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                         Toast.LENGTH_SHORT).show();
 
                 if(item.equals("Request")){
-                    requestRef.addValueEventListener(valueEventListener);
+                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayBorrowbooks.clear();
 
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Book book = ds.getValue(Book.class);
+                                BookStatus ssstatus = book.getNew_status();
+                                if ((ssstatus.toString().equals("requested"))) {
+                                    Log.d("byf===================", book.getID());
+
+                                    arrayBorrowbooks.add(book);
+                                }
+
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+
+                            borrow_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 if (item.equals("Accepted")){
-                    acceptRef.addValueEventListener(valueEventListener);
+                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayBorrowbooks.clear();
 
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Book book = ds.getValue(Book.class);
+                                BookStatus ssstatus = book.getNew_status();
+                                if ((ssstatus.toString().equals("accepted"))) {
+                                    Log.d("byf===================", book.getID());
+
+                                    arrayBorrowbooks.add(book);
+                                }
+
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+
+                            borrow_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-                if (item.equals("Borrowing")){
-                    borrowedRef.addValueEventListener(valueEventListener);
+                if (item.equals("Borrowing")) {
+                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayBorrowbooks.clear();
 
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Book book = ds.getValue(Book.class);
+                                BookStatus ssstatus = book.getNew_status();
+                                if ((ssstatus.toString().equals("borrowed"))) {
+                                    Log.d("byf===================", book.getID());
+
+                                    arrayBorrowbooks.add(book);
+                                }
+
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayBorrowbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+
+                            borrow_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
 
