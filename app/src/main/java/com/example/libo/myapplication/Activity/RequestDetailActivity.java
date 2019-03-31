@@ -1,6 +1,8 @@
 package com.example.libo.myapplication.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Fragment.RequestFragment;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -45,6 +49,7 @@ public class RequestDetailActivity extends AppCompatActivity {
     private int ScanResultCode = 4;
     private String ISBNCode;
     private Book book;
+    private Boolean isOwner = false;
 
     private LatLng latLng;
 
@@ -69,6 +74,8 @@ public class RequestDetailActivity extends AppCompatActivity {
         //If current user is owner and not accept request, show accept and deny button. Otherwise, hide them.
         TextView type = findViewById(R.id.request_type);
         if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver())){
+            isOwner = true;
+
             if (request.isBorrowed()){
                 type.setText("I want to borrow your book.");
             }
@@ -78,6 +85,7 @@ public class RequestDetailActivity extends AppCompatActivity {
             if (!request.isAccepted()){
                 accept.setVisibility(View.VISIBLE);
                 deny.setVisibility(View.VISIBLE);
+                scan.setVisibility(View.INVISIBLE);
             }
         }else{
             if (request.isBorrowed()){
@@ -186,16 +194,41 @@ public class RequestDetailActivity extends AppCompatActivity {
         finish();
     }
 
+    private void confirmBookStatus(final String bookStatus){
+        AlertDialog.Builder a_builder = new AlertDialog.Builder(RequestDetailActivity.this);
+        a_builder.setMessage("Are you sure to denote the book as borrowed?")
+                .setCancelable(false)
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        book.setNew_status(bookStatus);
+                        updateBook(book);
+                        Toast.makeText(RequestDetailActivity.this, "Denoted the book as " + bookStatus + "!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+        AlertDialog alert = a_builder.create();
+        alert.show();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ScanResultCode && resultCode == Activity.RESULT_OK){
             ISBNCode = data.getStringExtra("code"); // This is the result Text
-            /*
-            Do Whatever you want with the result
+            if(ISBNCode.equals(book.getID())){
+                if(isOwner){
+                    confirmBookStatus("borrowed");
+                } else {
+                    confirmBookStatus("available");
+                }
 
+            }
 
-             */
         }
         // when owner user select location on the map and pass latLng to previous activity
         if(requestCode == 1){
@@ -233,6 +266,32 @@ public class RequestDetailActivity extends AppCompatActivity {
                         requestdRef.child(borrowerId).child(bookID).removeValue();
                         Log.d("ACCEPTED STATUS:",borrowerId+"SUCCESSFUL +++++++"+bookID);
                     }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //After accepting the request, update the borrow and all lists
+    private void updateBook(final Book newBook) {
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books");
+        AllbooksRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    for(DataSnapshot book : user.getChildren()){
+                        Book currentBook = book.getValue(Book.class);
+                        if (currentBook.getID().equals(newBook.getID())) {
+                            AllbooksRef.child(currentBook.getOwnerId()).child(currentBook.getID()).setValue(newBook);
+                        }
+                    }
+
+
+
                 }
             }
 
