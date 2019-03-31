@@ -64,14 +64,12 @@ public class profileEditActivity extends AppCompatActivity {
         userIdEditView.setText("ID(unmodifiable): " + user.getUid());
         userNameEditView.setText(user.getDisplayName());
         userContactEditView.setText(user.getEmail());
-        userEditImage.setImageURI(user.getPhotoUrl());
 
 
         userEditImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gallery_intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery_intent, GET_FROM_GALLERY);
+                opeangalley();
             }
         });
 
@@ -108,6 +106,13 @@ public class profileEditActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void opeangalley() {
+
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent,1);
     }
 
     @Override

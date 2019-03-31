@@ -476,6 +476,8 @@ public class ItemViewActivity extends AppCompatActivity {
     }
 
     public void initializeStatus(){
+        BorrowButton.setText("Borrow");
+        WatchListButton.setText("Watch List");
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         Edit = result.getBooleanExtra("edit",false);
@@ -485,9 +487,6 @@ public class ItemViewActivity extends AppCompatActivity {
             resultIntent.putExtra("watchlist", "false");
             checkStatus(Status); // check if the book can be borrowed
         }
-
-        BorrowButton.setText("Borrow");
-        WatchListButton.setText("Watch List");
         final String BookName = result.getStringExtra("BookName"); // Get information from the Intent
         String AuthorName = result.getStringExtra("AuthorName");
         String Description = result.getStringExtra("Description");
