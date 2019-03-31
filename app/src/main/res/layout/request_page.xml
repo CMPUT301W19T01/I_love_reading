@@ -46,11 +46,11 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/request_listview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/requestfilter"
+        app:layout_constraintStart_toEndOf="@+id/request_filter"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/requestfilter"
+        android:id="@+id/request_filter"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"

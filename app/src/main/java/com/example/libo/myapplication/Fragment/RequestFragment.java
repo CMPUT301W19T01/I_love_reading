@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RequestFragment extends Fragment {
+public class RequestFragment extends Fragment implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "RequestDatabase";
     private TextView userNameTextView;
     private ListView requestList;
@@ -43,6 +44,8 @@ public class RequestFragment extends Fragment {
     private ArrayList<Request> requests;
     private RequestAdapter requestAdapter;
     private String userid;
+    private Spinner spinner;
+
 
     @Nullable
     @Override
@@ -51,6 +54,12 @@ public class RequestFragment extends Fragment {
 
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         requests = new ArrayList<>();
+
+        spinner = view.findViewById(R.id.request_filter);
+        ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.requestfilter,android.R.layout.simple_spinner_item);
+        filteradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(filteradapter);
+        spinner.setOnItemSelectedListener(this);
         return view;
     }
 
@@ -104,9 +113,105 @@ public class RequestFragment extends Fragment {
                 return true;
             }
         });
+        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = parent.getItemAtPosition(position).toString();
+                Object iitem = parent.getItemAtPosition(position);
+
+                Toast.makeText(getContext(), iitem.toString(),
+                        Toast.LENGTH_SHORT).show();
+
+                if (item.equals("All")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                }
+                if (item.equals("My Request")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getSenderId().equals(userid) ){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+                if(item.equals("Other Request")){
+                    requestRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            requests.clear();
+                            for(DataSnapshot owner : dataSnapshot.getChildren()){
+                                for(DataSnapshot request : owner.getChildren()){
+                                    Request requestClass = request.getValue(Request.class);
+                                    if (requestClass.getReceiver().equals(userid) ){
+
+                                        requests.add(requestClass);
+                                    }
+                                }
+                            }
+                            requestAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+            }
+
+
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Update request from database
-        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -128,6 +233,17 @@ public class RequestFragment extends Fragment {
 
             }
         });
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 

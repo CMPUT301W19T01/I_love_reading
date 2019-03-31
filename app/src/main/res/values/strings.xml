@@ -71,10 +71,10 @@
     </string-array>
 
     <string-array name="borrowedfilter">
-        <item>All</item>
+        <item>Borrowing</item>
+
         <item>Request</item>
         <item>Accepted</item>
-        <item>Borrowing</item>
 
     </string-array>
 
@@ -82,6 +82,13 @@
         <item>All</item>
         <item>Available</item>
         <item>Borrowed</item>
+
+    </string-array>
+
+    <string-array name="requestfilter">
+        <item>All</item>
+        <item>My Request</item>
+        <item>Other Request</item>
 
     </string-array>
 
