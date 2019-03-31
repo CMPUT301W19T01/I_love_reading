@@ -1,7 +1,10 @@
 package com.example.libo.myapplication.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteBlobTooBigException;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,13 +16,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.libo.myapplication.Activity.BasicActivity;
+import com.example.libo.myapplication.Activity.CodeScanner;
+import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Activity.LoginActivity;
 import com.example.libo.myapplication.Activity.profileEditActivity;
+import com.example.libo.myapplication.BookStatus;
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
@@ -33,6 +41,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.liferay.mobile.screens.context.User;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static de.greenrobot.event.EventBus.TAG;
 
 public class ProfileFragment extends Fragment {
@@ -43,6 +54,7 @@ public class ProfileFragment extends Fragment {
     private TextView userId;
     private ImageView userImage;
     private Button ButtonLogOut;
+    private  ImageButton scanButton;
     private TextView TextViewOwnBookNum;
     private TextView TextViewBorrowBookNum;
     private TextView TextViewCommentBookNum;
@@ -70,6 +82,7 @@ public class ProfileFragment extends Fragment {
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
+        scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
         TextViewBorrowBookNum = (TextView) getActivity().findViewById(R.id.TextViewBorrowBook);
         TextViewOwnBookNum = (TextView) getActivity().findViewById(R.id.TextViewOwnBook);
         TextViewCommentBookNum = (TextView) getActivity().findViewById(R.id.TextViewCommentNum);
@@ -115,11 +128,62 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
+                startActivityForResult(scanIntent,1);
+
+            }
+        });
 
 
     }
 
-    public void UpdateNum(){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final DatabaseReference allBook = FirebaseDatabase.getInstance().getReference("books");
+        final Context context = getActivity();
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            final String ISBNCode = data.getStringExtra("code"); // This is the result Text
+            allBook.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot user:dataSnapshot.getChildren()){
+                        for(DataSnapshot book: user.getChildren()){
+                            Book thisBook = book.getValue(Book.class);
+                            if (ISBNCode.equals(thisBook.getID())){
+                                Intent ItemView = new Intent(context, ItemViewActivity.class); // set the intent to start next activity
+                                ItemView.putExtra("BookName", thisBook.getBookName()); // Put the info of the book to next activity
+                                ItemView.putExtra("AuthorName", thisBook.getAuthorName());
+                                ItemView.putExtra("ID", thisBook.getID());
+                                ItemView.putExtra("status", thisBook.getStatus());
+                                ItemView.putExtra("edit",false);
+                                ItemView.putExtra("Description", thisBook.getDescription());
+                                ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
+                                        .asList(thisBook.getClassification().split("/")));
+                                ItemView.putExtra("ClassificationArray", ClassificationArray);
+                                Uri bookcover = Uri.parse(thisBook.getBookcoverUri());
+                                ItemView.putExtra("BookCover", bookcover);
+
+                                ItemView.putExtra("ButtonCode", 2);
+                                startActivity(ItemView); // request code 0 means it is from borrow fragement
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+    }
+
+                public void UpdateNum(){
 
         final DatabaseReference currentuser = FirebaseDatabase.getInstance().getReference("users");
 

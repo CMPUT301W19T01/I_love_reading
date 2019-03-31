@@ -169,7 +169,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         super.onActivityCreated(savedInstanceState);
         SearchView searchView = getActivity().findViewById(R.id.all_book_search);
-
+        adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
         databaseBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -183,9 +183,10 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                     arrayOwnedbooks.add(book);
 
                 }
-                adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                adapter.notifyDataSetChanged();
+                //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
                 //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-                own_book_lv.setAdapter(adapter);
+                //own_book_lv.setAdapter(adapter);
 
             }
 

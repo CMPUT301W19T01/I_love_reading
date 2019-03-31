@@ -49,6 +49,8 @@ public class Util {
         request.setBorrowed(isBorrowed);
         request.setRequestId(requestid);
         FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
+        book.setNew_status(BookStatus.requested);
+        databaseReference.child(book.getOwnerId()).child(book.getID()).setValue(book);
     }
 
 
