@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
+import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
@@ -291,6 +292,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
+                        currentBook.setNew_status(BookStatus.available);
                         Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
                         currentBook.setOwnerName(mAuth.getCurrentUser().getDisplayName());
                         Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
