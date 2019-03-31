@@ -235,9 +235,71 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if(item.equals("Available")){
+                    databaseBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayOwnedbooks.clear();
+
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                Book book = ds.getValue(Book.class);
+                                BookStatus ssstatus = book.getNew_status();
+                                if ((ssstatus.toString().equals("available"))||(ssstatus.toString().equals("requested"))){
+                                    Log.d("byf===================",book.getID());
+
+                                    arrayOwnedbooks.add(book);
+                                }
+
+
+
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+
+                            own_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
-                if (item.equals("Borrowed")){
+                if (item.equals("Borrowed")) {
+                    databaseBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            // whenever data at this location is updated.
+                            arrayOwnedbooks.clear();
+
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                Book book = ds.getValue(Book.class);
+                                BookStatus ssstatus = book.getNew_status();
+                                if ((ssstatus.toString().equals("accepted")) || (ssstatus.toString().equals("borrowed"))) {
+                                    Log.d("byf===================", book.getID());
+
+                                    arrayOwnedbooks.add(book);
+                                }
+
+
+                            }
+                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
+
+                            own_book_lv.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
 
