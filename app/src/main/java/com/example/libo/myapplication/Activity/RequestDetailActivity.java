@@ -155,6 +155,11 @@ public class RequestDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    if(book==null){
+                        Toast.makeText(RequestDetailActivity.this, "The book has been deleted!", Toast.LENGTH_SHORT).show();
+                        RequestDetailActivity.this.finish();
+                        break;
+                    }
                     if (user.getKey().equals(book.getOwnerId())) {
                         Users users = user.getValue(Users.class);
                         owner.setText(users.getUsername());
