@@ -291,10 +291,10 @@ public class BasicActivity extends AppCompatActivity {
     /**
      * Start service.
      */
-    public void startService() {
+    public void startService(Request request) {
 
         Intent serviceIntent = new Intent(this, ExampleService.class);
-        serviceIntent.putExtra("inputExtra", "aaaaaaa");
+        serviceIntent.putExtra("inputExtra", "New notification about: "+request.getBookName().toString());
 
         ContextCompat.startForegroundService(this, serviceIntent);
     }

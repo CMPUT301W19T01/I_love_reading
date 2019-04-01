@@ -139,7 +139,6 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
         final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
-        startService();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -188,7 +187,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     if (requestClass.getSenderId().equals(userid) ){
                                         requests.add(requestClass);
                                         if (requestClass.isAccepted()){
-                                            startService();
+                                            startService(requestClass);
                                             //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
                                              //       .setContentTitle("Example Service")
                                               //      .setContentText("test")
@@ -220,7 +219,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     Request requestClass = request.getValue(Request.class);
                                     if (requestClass.getReceiver().equals(userid) ){
                                         requests.add(requestClass);
-                                        startService();
+                                        startService(requestClass);
                                     }
                                 }
                             }
@@ -257,7 +256,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                         if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
 
                             requests.add(requestClass);
-                            startService();
+                            startService(requestClass);
 
                         }
                     }
@@ -318,10 +317,10 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
     */
-    public void startService() {
+    public void startService(Request request) {
 
         Intent serviceIntent = new Intent(getActivity(), ExampleService.class);
-        serviceIntent.putExtra("inputExtra", "I love reading: You have got a new notification");
+        serviceIntent.putExtra("inputExtra", "New notification about: "+request.getBookName().toString());
 
         ContextCompat.startForegroundService(getActivity(), serviceIntent);
     }
