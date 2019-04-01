@@ -65,6 +65,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
 
+        getSupportActionBar().setTitle("Sign up");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
@@ -275,6 +278,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 }
