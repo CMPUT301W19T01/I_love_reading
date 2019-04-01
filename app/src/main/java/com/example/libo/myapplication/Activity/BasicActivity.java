@@ -126,10 +126,7 @@ public class BasicActivity extends AppCompatActivity {
 
         Intent resultIntent = getIntent();
         Log.d("Relayyyyyy Importent", String.valueOf(resultIntent.getBooleanExtra("request",false)));
-        if (resultIntent.getBooleanExtra("request",false)){
-            switchFragment(requestFragment, fragments[lastFragment]);
 
-        }
         stopService();
 
 
@@ -185,6 +182,10 @@ public class BasicActivity extends AppCompatActivity {
 
         initFragment();
 
+        if (resultIntent.getBooleanExtra("request",false)){
+            switchFragment(requestFragment, fragments[lastFragment]);
+            lastFragment = 4;
+
         DatabaseReference temp_requestRef = FirebaseDatabase.getInstance().getReference("requests");
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,19 +193,31 @@ public class BasicActivity extends AppCompatActivity {
                 for (DataSnapshot owner : dataSnapshot.getChildren()) {
                     for (DataSnapshot request : owner.getChildren()) {
                         Request requestClass = request.getValue(Request.class);
+                        System.out.println("I reach here");
+                        Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getSenderId());
+
                         if (requestClass.getSenderId().equals(userid)) {
                             if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
                                 startService(requestClass, "borrower request");
                                 requestClass.setNotification_borrow(false);
-                                requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
-                                requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                                Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getSenderId());
+                                if (owner.getKey() == requestClass.getReceiver()){
+                                    requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
+                                }
+                                else{
+                                    requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                                }
                             }
                         }
                         if (requestClass.getReceiver().equals(userid) && requestClass.isNotification_own()){
                             startService(requestClass, "owner request");
                             requestClass.setNotification_own(false);
-                            requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
-                            requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                            if (owner.getKey() == requestClass.getReceiver()){
+                                requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
+                            }
+                            else{
+                                requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                            }
                         }
                     }
                 }
@@ -214,7 +227,11 @@ public class BasicActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
+
+
+        }
     }
 
     @Override
@@ -290,6 +307,7 @@ public class BasicActivity extends AppCompatActivity {
 
         fragments = new Fragment[]{profileFragment, ownFragment, borrowFragment, allFragment, requestFragment};
         lastFragment = 0;
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.basic_layout, profileFragment).show(profileFragment).commit();
 
