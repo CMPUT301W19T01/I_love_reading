@@ -19,6 +19,7 @@ import com.example.libo.myapplication.Fragment.AllFragment;
 import com.example.libo.myapplication.Fragment.BorrowFragment;
 import com.example.libo.myapplication.Fragment.OwnFragment;
 import com.example.libo.myapplication.Fragment.ProfileFragment;
+import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Fragment.RequestFragment;
@@ -174,12 +175,25 @@ public class BasicActivity extends AppCompatActivity {
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initFragment();
+
+        DatabaseReference temp_requestRef = FirebaseDatabase.getInstance().getReference("requests");
+        requestRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //startService();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
         //Checking for fragment count on backstack
-        startService();
+        //startService();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else if (!doubleBackToExitPressedOnce) {
@@ -220,7 +234,6 @@ public class BasicActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     @Override
