@@ -250,5 +250,9 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UpdateNum();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userNameView.setText("name: "+ user.getDisplayName());
+        userEmailView.setText("email: " + user.getEmail());
+        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
     }
 }
