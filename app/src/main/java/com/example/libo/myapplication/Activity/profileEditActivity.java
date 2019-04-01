@@ -153,7 +153,6 @@ public class profileEditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void undateUserinfo(final String username, final Uri uriProfileImage, final FirebaseUser currentUser) {

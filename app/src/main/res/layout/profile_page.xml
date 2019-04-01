@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
-                        android:text="@string/_125"
+                        android:text="0"
                         android:textColor="@color/profile_darkCoral_color"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -111,7 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
-                        android:text="@string/_1205"
+                        android:text="0"
                         android:textColor="@color/profile_darkCoral_color"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
-                        android:text="@string/_360"
+                        android:text="0"
                         android:textColor="@color/profile_darkCoral_color"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -241,12 +241,12 @@
 
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="164dp"
+        android:layout_height="43dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal">
 
         <Button
@@ -266,28 +266,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.215"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.808" />
-
-        <Button
-            android:id="@+id/btn_refresh"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/profile_creamYellow_color"
-            android:text="@string/refresh"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.777"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.808" />
