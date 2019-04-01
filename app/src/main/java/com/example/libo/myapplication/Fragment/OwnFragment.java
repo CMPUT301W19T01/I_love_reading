@@ -286,7 +286,6 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         currentBook.setAuthorName(data.getStringExtra("AuthorName"));
                         currentBook.setDescription(data.getStringExtra("Description"));
                         currentBook.setClassification(data.getStringExtra("ClassificationArray"));
-                        //currentBook.setBookCover((Bitmap) data.getParcelableExtra("BookCover"));
                         currentBook.setOwnerId(FirebaseAuth.getInstance().getUid());
                         Log.d("CURRENT BOOK: +++++++++",currentBook.getClassification());
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
@@ -300,7 +299,6 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 }
             }
             else if (requestCode == 2){// we are updating info of a book
-                Log.d(TAG,"THIS IS CASE TWo AND +++++++++++++++++++++++"+ requestCode);
                 if (resultCode == Activity.RESULT_OK) {
                     String order = data.getStringExtra("do");
                     if (order.equals("edit")) {

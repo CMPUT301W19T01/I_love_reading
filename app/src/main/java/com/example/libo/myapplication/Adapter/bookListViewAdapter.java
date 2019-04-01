@@ -45,7 +45,6 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
         viewHolder.bookNameView = (TextView)convertView.findViewById(R.id.BookListView1);
         viewHolder.authorNameView = (TextView)convertView.findViewById(R.id.BookListView2);
         viewHolder.idView = (TextView)convertView.findViewById(R.id.BookListView3);
-
         viewHolder.bookNameView.setText(bookName);
         return convertView;
 

@@ -35,6 +35,7 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     private DatabaseReference requestDatabseRef;
     private DatabaseReference acceptedRef;
+    private DatabaseReference borrowedRef;
     private DatabaseReference requestdRef;
     private DatabaseReference AllbooksRef;
 
@@ -58,7 +59,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         requestdRef = FirebaseDatabase.getInstance().getReference("requestBook");
         acceptedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
-
+        borrowedRef = FirebaseDatabase.getInstance().getReference("borrowedBook");
         accept = findViewById(R.id.button_accept);
         deny = findViewById(R.id.button_deny);
         scan = findViewById(R.id.button_scan);
@@ -227,7 +228,8 @@ public class RequestDetailActivity extends AppCompatActivity {
                         if(book.getBorrowerConfirmed() && book.getOwnerConfirmed()){
                             updateBorrowed(request.getSenderId(), book.getID(), request.getReceiver());
                         }
-                        updateBook(book);
+
+                        updateBook(book,request.getSenderId());
                         Toast.makeText(RequestDetailActivity.this, "Denoted the book as " + bookStatus + "!", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -284,29 +286,26 @@ public class RequestDetailActivity extends AppCompatActivity {
                 request.setLatLng(latLng);
                 //updateBorrowed(borrowerId,bookID,request.getReceiver());
                 uploadRequest(bookID, request);
-
+                updaterequestBook(request.getSenderId(),request.getBookId());
                 Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    //After owner and borrower confirm that the book has been exchanged successfully, update the firebase accept
-    private void updateBorrowed(final String borrowerId, final String bookID, final String receiver) {
-        acceptedRef.child(borrowerId).child(bookID).setValue(book);
-        requestdRef.child(borrowerId).child(bookID).removeValue();
-
+    private void updaterequestBook(final String senderId, final String bookId) {
+        requestdRef.child(senderId).child(bookId).removeValue();
+        acceptedRef.child(senderId).child(bookId).setValue(book);
         //Delete all user have request the book and send them message
         requestdRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     for(DataSnapshot wds : ds.getChildren()){
-                    Book book = wds.getValue(Book.class);
-                    if (book.getID().equals(bookID)) {
-                        requestdRef.child(borrowerId).child(bookID).removeValue();
-                        Log.d("ACCEPTED STATUS:", borrowerId + "SUCCESSFUL +++++++" + bookID);
-                    }
+                        Book ALL_book = wds.getValue(Book.class);
+                        if (ALL_book.getID().equals(book.getID())) {
+                            requestdRef.child(senderId).child(bookId).removeValue();
+                        }
                     }
                 }
             }
@@ -316,11 +315,17 @@ public class RequestDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //After owner and borrower confirm that the book has been exchanged successfully, update the firebase accept
+    private void updateBorrowed(final String borrowerId, final String bookID, final String receiver) {
+        borrowedRef.child(borrowerId).child(bookID).setValue(book);
+        acceptedRef.child(borrowerId).child(bookID).removeValue();
 
     }
 
     //After accepting the request, update the borrow and all lists
-    private void updateBook(final Book newBook) {
+    private void updateBook(final Book newBook, final String senderId) {
         AllbooksRef = FirebaseDatabase.getInstance().getReference("books");
         AllbooksRef.child(newBook.getOwnerId()).child(newBook.getID()).setValue(newBook);
         /*
