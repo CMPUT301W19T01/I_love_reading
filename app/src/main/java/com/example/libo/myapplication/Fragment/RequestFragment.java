@@ -162,6 +162,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     if (requestClass.getSenderId().equals(userid) ){
                                         requests.add(requestClass);
                                         if (requestClass.isAccepted()){
+                                            startService();
                                             //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
                                              //       .setContentTitle("Example Service")
                                               //      .setContentText("test")

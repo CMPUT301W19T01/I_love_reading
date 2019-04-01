@@ -82,10 +82,11 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         userNameView = getActivity().findViewById(R.id.profileUserName);
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
+        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
-        //scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
+        scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
         TextViewBorrowBookNum = (TextView) getActivity().findViewById(R.id.TextViewBorrowBook);
         TextViewOwnBookNum = (TextView) getActivity().findViewById(R.id.TextViewOwnBook);
         TextViewCommentBookNum = (TextView) getActivity().findViewById(R.id.TextViewCommentNum);
@@ -111,16 +112,16 @@ public class ProfileFragment extends Fragment {
 
         });
 
-        //btn_refresh = getActivity().findViewById(R.id.btn_refresh);
-        //btn_refresh.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View v) {
+        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
-        //        userNameView.setText("name: "+ user.getDisplayName());
-         //       userEmailView.setText("email: " + user.getEmail());
-        //        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
-        //    }
-       // });
+                userNameView.setText("name: "+ user.getDisplayName());
+                userEmailView.setText("email: " + user.getEmail());
+                Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+            }
+        });
 
         ButtonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,14 +132,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        //scanButton.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View view) {
-        //        Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
-        //        startActivityForResult(scanIntent,1);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
+                startActivityForResult(scanIntent,1);
 
-      //      }
-      //  });
+            }
+        });
 
 
     }
