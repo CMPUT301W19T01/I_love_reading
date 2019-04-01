@@ -4,6 +4,6 @@
     <item
         android:id="@+id/toolbar_add_book"
         android:orderInCategory="100"
-        android:title="Add"
+        android:title="Add  "
         app:showAsAction="always" />
 </menu>
