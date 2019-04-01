@@ -135,7 +135,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                         Toast.LENGTH_SHORT).show();
 
                 if(item.equals("Request")){
-                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                    requestRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // This method is called once with the initial value and again
@@ -147,6 +147,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                                 BookStatus ssstatus = book.getNew_status();
                                 if ((ssstatus.toString().equals("requested"))) {
                                     Log.d("byf===================", book.getID());
+                                    Log.d(TAG, "====================current item is " + ssstatus);
 
                                     arrayBorrowbooks.add(book);
                                 }
@@ -167,7 +168,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                     });
                 }
                 if (item.equals("Accepted")){
-                    borrowedRef.addValueEventListener(new ValueEventListener() {
+                    acceptRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             // This method is called once with the initial value and again
