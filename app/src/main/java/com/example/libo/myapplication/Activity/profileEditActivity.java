@@ -62,7 +62,7 @@ public class profileEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_edit);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameEditView = (EditText) findViewById(R.id.profileEditUserName);
-        userEmailEditView = findViewById(R.id.textView3);
+        userEmailEditView = findViewById(R.id.profileEditUserEmail);
         userIdEditView = findViewById(R.id.profileEditUserID);
         userContactEditView = (EditText) findViewById(R.id.profileEditUserContact);
         userEditImage = (ImageView) findViewById(R.id.profileEditUserImage);
