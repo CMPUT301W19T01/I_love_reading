@@ -179,6 +179,19 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
 
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
         adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
         databaseBook.addValueEventListener(new ValueEventListener() {
             @Override
