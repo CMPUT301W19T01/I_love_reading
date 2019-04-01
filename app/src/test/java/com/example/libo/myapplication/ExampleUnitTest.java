@@ -33,7 +33,7 @@ public class ExampleUnitTest {
         assertEquals(date, re.getDate());
 
 
-        Request re1 = new Request("user1", "user2", "user1@qq.com", false, date);
+        Request re1 = new Request("user1", "user2", "user1@qq.com", date);
         String sender, receiver, senderEmail;
         sender = re1.getSender();
         receiver = re1.getReceiver();
@@ -48,7 +48,7 @@ public class ExampleUnitTest {
     @Test
     public void comment_isCorrect(){
         Comment comment = new Comment();
-        comment.setRating(9.0);
+        comment.setRating(9.0f);
         comment.setContent("comment");
         comment.setTime("2019-3-4 10:10");
         comment.setUsername("user1");
@@ -92,7 +92,7 @@ public class ExampleUnitTest {
         test1.setID("IDD");
         test1.setStatus(true);
         test1.setDescription("Boring");
-        test1.setClassification(classficationList);
+        test1.setClassification(null);
         assertEquals("Harry potter", test1.getBookName());
         assertEquals("I don't know", test1.getAuthorName());
         assertEquals("IDD", test1.getID());
@@ -102,7 +102,7 @@ public class ExampleUnitTest {
 
 
 
-        Book test = new Book("Harry potter","I don't know","ID",false,"description",classficationList);
+        Book test = new Book("Harry potter","I don't know","ID",false,"description",null, null);
         assertEquals("Harry potter", test.getBookName());
         assertEquals("I don't know", test.getAuthorName());
         assertEquals("IDDDDD", test.getID());
