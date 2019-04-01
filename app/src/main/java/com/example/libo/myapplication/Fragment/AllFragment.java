@@ -371,6 +371,12 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     }
 
+    /**
+     *
+     * @param requestCode to detect which model
+     * @param resultCode to detect activity's status
+     * @param data data from current
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

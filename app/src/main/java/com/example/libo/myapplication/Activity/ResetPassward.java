@@ -14,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * The type Reset passward.
+ */
 public class ResetPassward extends AppCompatActivity {
     private EditText passwordEmail;
     private Button resetPassword;

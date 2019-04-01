@@ -12,11 +12,22 @@ import android.widget.TextView;
 import com.example.libo.myapplication.R;
 
 
-
+/**
+ * The type Test scan activity.
+ */
 public class TestScanActivity extends AppCompatActivity{
 
+    /**
+     * The Start button.
+     */
     Button startButton;
+    /**
+     * The Result text view.
+     */
     TextView resultTextView;
+    /**
+     * The Scam result code.
+     */
     Integer ScamResultCode = 4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

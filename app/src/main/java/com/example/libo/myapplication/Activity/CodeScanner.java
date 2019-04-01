@@ -61,7 +61,9 @@ public class CodeScanner extends AppCompatActivity implements ZXingScannerView.R
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
-
+    /**
+     * camera worked
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -80,13 +82,17 @@ public class CodeScanner extends AppCompatActivity implements ZXingScannerView.R
             }
         }
     }
-
+    /**
+     * stop the camera
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         scannerView.stopCamera();
     }
-
+    /**
+     * get the result of scanner
+     */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CAMERA:

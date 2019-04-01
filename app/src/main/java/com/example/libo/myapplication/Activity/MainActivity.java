@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.example.libo.myapplication.R;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT=4000;
     private String user_name;

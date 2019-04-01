@@ -18,12 +18,27 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * The type Login activity.
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
+    /**
+     * The M auth.
+     */
     FirebaseAuth mAuth;
 
-    EditText editTextEmail,editTextPassword;
+    /**
+     * The Edit text email.
+     */
+    EditText editTextEmail, /**
+     * The Edit text password.
+     */
+    editTextPassword;
 
+    /**
+     * The Progress bar.
+     */
     ProgressBar progressBar;
 
     private CheckBox mCheckBoxRemember;
@@ -94,7 +109,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
+    /**
+     * user Login
+     */
     private void Userlogin(){
 
         String password = editTextPassword.getText().toString().trim();
