@@ -21,6 +21,7 @@ import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
+import com.example.libo.myapplication.Util;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -267,22 +268,9 @@ public class RequestDetailActivity extends AppCompatActivity {
                     confirmBookStatus(BookStatus.borrowed);
                 else
                     confirmBookStatus(BookStatus.available);
-
-
-                /*
-                if(isOwner){
-                    if(request.isBorrowed())
-                        confirmBookStatus(BookStatus.borrowed);
-                    else
-                        confirmBookStatus(BookStatus.available);
-
-                } else {
-                    if(request.isBorrowed())
-                        confirmBookStatus(BookStatus.borrowed);
-                    else
-                        confirmBookStatus(BookStatus.available);
-                }
-                */
+            }
+            else{
+                Toast.makeText(RequestDetailActivity.this, "The ISBN code does not fit to the book!", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -371,7 +359,29 @@ public class RequestDetailActivity extends AppCompatActivity {
     }
 
     private void uploadRequest(final String bookID, final Request request) {
-        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests").child(request.getReceiver());
+        DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests").child(request.getReceiver());
+        requestRef.child(request.getRequestId()).setValue(request);
+
+        Util.FirebaseRequests.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+                    for(DataSnapshot requestDs : user.getChildren()){
+                        Request currentRequest = requestDs.getValue(Request.class);
+                        if(currentRequest.getBookId().equals(bookID) && !currentRequest.getRequestId().equals(request.getRequestId())){
+                            Util.FirebaseRequests.child(user.getKey()).child(requestDs.getKey()).removeValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -390,7 +400,7 @@ public class RequestDetailActivity extends AppCompatActivity {
 
             }
         });
-
+        */
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

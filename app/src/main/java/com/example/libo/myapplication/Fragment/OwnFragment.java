@@ -102,7 +102,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 intent.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 intent.putExtra("AuthorName", currentBook.getAuthorName());
                 intent.putExtra("ID", currentBook.getID());
-                intent.putExtra("status", currentBook.getStatus());
+                intent.putExtra("status", currentBook.getNew_status());
                 intent.putExtra("edit",true);
                 intent.putExtra("Description", currentBook.getDescription());
                 intent.putExtra("BookCover", currentBook.getBookCover());
@@ -122,9 +122,10 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
-                ItemView.putExtra("status", currentBook.getStatus());
+                ItemView.putExtra("status", currentBook.getNew_status());
                 ItemView.putExtra("edit",true);
                 ItemView.putExtra("Description", currentBook.getDescription());
+                ItemView.putExtra("ownerId", currentBook.getOwnerId());
                 ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
                         .asList(currentBook.getClassification().split("/")));
                 ItemView.putExtra("ClassificationArray", ClassificationArray);
@@ -288,10 +289,11 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
                             }
-                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                            adapter.notifyDataSetChanged();
+                            //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
                             //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
 
-                            own_book_lv.setAdapter(adapter);
+                            //own_book_lv.setAdapter(adapter);
 
                         }
 
@@ -328,10 +330,11 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
                             }
-                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
+                            adapter.notifyDataSetChanged();
+                            //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
                             //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
 
-                            own_book_lv.setAdapter(adapter);
+                            //own_book_lv.setAdapter(adapter);
 
                         }
 
@@ -394,7 +397,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         String book_id = databaseBook.push().getKey();
                         currentBook.setID(book_id);
                         currentBook.setNew_status(BookStatus.available);
-                        Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
+                        //Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
                         currentBook.setOwnerName(mAuth.getCurrentUser().getDisplayName());
                         Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
                     }

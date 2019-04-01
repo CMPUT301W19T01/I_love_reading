@@ -85,7 +85,7 @@ public class ProfileFragment extends Fragment {
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
-        //scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
+        scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
         TextViewBorrowBookNum = (TextView) getActivity().findViewById(R.id.TextViewBorrowBook);
         TextViewOwnBookNum = (TextView) getActivity().findViewById(R.id.TextViewOwnBook);
         TextViewCommentBookNum = (TextView) getActivity().findViewById(R.id.TextViewCommentNum);
@@ -131,15 +131,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        //scanButton.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View view) {
-        //        Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
-        //        startActivityForResult(scanIntent,1);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
+                startActivityForResult(scanIntent,1);
 
-      //      }
-      //  });
-
+            }
+        });
 
     }
 
@@ -160,7 +159,7 @@ public class ProfileFragment extends Fragment {
                                 ItemView.putExtra("BookName", thisBook.getBookName()); // Put the info of the book to next activity
                                 ItemView.putExtra("AuthorName", thisBook.getAuthorName());
                                 ItemView.putExtra("ID", thisBook.getID());
-                                ItemView.putExtra("status", thisBook.getStatus());
+                                ItemView.putExtra("status", thisBook.getNew_status());
                                 ItemView.putExtra("edit",false);
                                 ItemView.putExtra("Description", thisBook.getDescription());
                                 ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
@@ -168,7 +167,7 @@ public class ProfileFragment extends Fragment {
                                 ItemView.putExtra("ClassificationArray", ClassificationArray);
                                 Uri bookcover = Uri.parse(thisBook.getBookcoverUri());
                                 ItemView.putExtra("BookCover", bookcover);
-
+                                ItemView.putExtra("ownerId", thisBook.getOwnerId());
                                 ItemView.putExtra("ButtonCode", 2);
                                 startActivity(ItemView); // request code 0 means it is from borrow fragement
                                 break;
