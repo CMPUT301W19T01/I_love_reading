@@ -24,6 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Request popup.
+ */
 public class RequestPopup {
 
     // Initialize everything
@@ -31,6 +34,12 @@ public class RequestPopup {
     private Context context;
     private String bookId;
 
+    /**
+     * Instantiates a new Request popup.
+     *
+     * @param context the context of current activity
+     * @param bookId  the book id
+     */
     public RequestPopup(Context context, String bookId) {
         this.context = context;
         this.bookId = bookId;

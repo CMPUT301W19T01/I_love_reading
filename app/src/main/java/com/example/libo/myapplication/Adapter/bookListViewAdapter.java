@@ -22,12 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The type Book list view adapter.
+ */
 public class bookListViewAdapter extends ArrayAdapter<Book> {
 
     private ArrayList<Book> books;
     private Context myContext;
 
 
+    /**
+     * Instantiates a new Book list view adapter.
+     *
+     * @param context the context of this adapter
+     * @param books   user defined books class
+     */
     public bookListViewAdapter(Context context, ArrayList<Book> books) {
         super(context, R.layout.adapter_book_listview, books);
         this.books = books;
@@ -36,9 +45,21 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
     }
 
     private static class ViewHolder {
+        /**
+         * The Book name view.
+         */
         TextView bookNameView;
+        /**
+         * The Author name view.
+         */
         TextView authorNameView;
+        /**
+         * The BookID view.
+         */
         TextView idView;
+        /**
+         * The Book cover.
+         */
         ImageView bookCover;
 
     }
@@ -69,6 +90,11 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
 
     }
 
+    /**
+     * Get item count int.
+     *
+     * @return the int
+     */
     public int getItemCount(){
         return books.size();
     }

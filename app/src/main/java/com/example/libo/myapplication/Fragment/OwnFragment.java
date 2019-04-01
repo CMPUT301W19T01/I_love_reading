@@ -51,11 +51,20 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The type Own fragment.
+ */
 public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private static final String TAG = "BorrowedBookDatabase";
     private TextView userNameTextView;
+    /**
+     * The Own book lv contain books belong to current user.
+     */
     ListView own_book_lv;
+    /**
+     * The Adapter of book.
+     */
     ArrayAdapter<Book> adapter;
     private ArrayList<Book> arrayOwnedbooks;
     private Book currentBook;
@@ -65,6 +74,9 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
     private StorageReference storageRef;
 
     private Spinner spinner;
+    /**
+     * The Show.
+     */
     boolean show=false;
 
 
