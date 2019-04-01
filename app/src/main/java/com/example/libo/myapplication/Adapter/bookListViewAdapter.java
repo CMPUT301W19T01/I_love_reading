@@ -114,7 +114,7 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
             else{
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (Book item: books) {
-                    if (item.getDescription().toLowerCase().contains(filterPattern)) {
+                    if ((item.getDescription()+' '+item.getBookName()+' '+item.getAuthorName()+' '+item.getClassification()).toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }
