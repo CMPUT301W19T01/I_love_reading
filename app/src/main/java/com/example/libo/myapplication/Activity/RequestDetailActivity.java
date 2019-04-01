@@ -303,18 +303,18 @@ public class RequestDetailActivity extends AppCompatActivity {
                 request.setLatLng(latLng);
                 //updateBorrowed(borrowerId,bookID,request.getReceiver());
                 uploadRequest(bookID, request);
-                updaterequestBook(request.getSenderId(),request.getBookId());
+                updaterequestBook(request.getSenderId(),request.getBookId(),request.getReceiver());
                 Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    private void updaterequestBook(final String senderId, final String bookId) {
+    private void updaterequestBook(final String senderId, final String bookId, String receiver) {
         requestdRef.child(senderId).child(bookId).removeValue();
         book.setNew_status(BookStatus.accepted);
         acceptedRef.child(senderId).child(bookId).setValue(book);
-        AllbooksRef.child(senderId).child(bookId).setValue(book);
+        AllbooksRef.child(receiver).child(bookId).setValue(book);
 
         //Delete all user have request the book and send them message
         requestdRef.addValueEventListener(new ValueEventListener() {
