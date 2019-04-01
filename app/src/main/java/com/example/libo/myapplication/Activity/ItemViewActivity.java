@@ -94,15 +94,30 @@ public class ItemViewActivity extends AppCompatActivity {
     private boolean test_counter_boolean = false;
     private boolean test_counter_boolean2 = false;
     private boolean temp_stop_update = false;
+    /**
+     * The Edit.
+     */
     boolean Edit;
 
     private Intent result;
 
+    /**
+     * The Get from gallery.
+     */
     final int GET_FROM_GALLERY = 2; // result code for getting image from user gallery to set book cover
+    /**
+     * The Get from comment.
+     */
     final int GET_FROM_COMMENT = 3; // result code for getting new comment
+    /**
+     * The Update comment.
+     */
     final int UPDATE_COMMENT = 4; // update the information in comment
     private int current_comment_position = -1;
 
+    /**
+     * The Tool bar add button.
+     */
     MenuItem toolBarAddButton;
 
     private DatabaseReference commentsRef;
@@ -410,6 +425,11 @@ public class ItemViewActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Classification popup.
+     *
+     * @param view the view
+     */
     public void classificationPopup(View view){
         if (Edit){
             AlertDialog.Builder mBuilder = new AlertDialog.Builder(ItemViewActivity.this);
@@ -459,6 +479,9 @@ public class ItemViewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Intialize varaibles.
+     */
     public void intializeVaraibles(){
                /*
         Initialization of Text view and button.
@@ -476,6 +499,9 @@ public class ItemViewActivity extends AppCompatActivity {
         CardViewComment = findViewById(R.id.card_view_adapter);
     }
 
+    /**
+     * Initialize status.
+     */
     public void initializeStatus(){
         BorrowButton.setText("Borrow");
         WatchListButton.setText("Watch List");
@@ -529,6 +555,7 @@ public class ItemViewActivity extends AppCompatActivity {
             AddCommentButton.setVisibility(View.INVISIBLE);
         }
     }
+
     /**
      * Check if the Book is available
      *
@@ -574,7 +601,7 @@ public class ItemViewActivity extends AppCompatActivity {
     /**
      * Display the information of the Book
      *
-     * @param Edit                 if we can edit
+     * @param Edit                if we can edit
      * @param BookName            the book name
      * @param AuthorName          the author name
      * @param Description         the description
@@ -821,6 +848,9 @@ public class ItemViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Update comment firebase.
+     */
     public void update_comment_firebase(){
         for (Comment item_comment : comments) {
             commentsRef.child(item_comment.getCommentId()).setValue(item_comment);
@@ -829,6 +859,11 @@ public class ItemViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Check finish boolean.
+     *
+     * @return the boolean
+     */
     public boolean check_finish(){
         boolean result = true;
         if (EditTextBookName.getText().length() == 0){

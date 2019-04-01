@@ -15,6 +15,9 @@ import com.example.libo.myapplication.R;
 import static com.example.libo.myapplication.Activity.App.CHANNEL_ID;
 
 
+/**
+ * The type Example service.
+ */
 public class ExampleService extends Service {
 
     @Override

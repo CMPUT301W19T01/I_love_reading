@@ -37,6 +37,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * The type Profile edit activity.
+ */
 public class profileEditActivity extends AppCompatActivity {
     private Button btn_save;
     private EditText userNameEditView;
@@ -48,8 +51,14 @@ public class profileEditActivity extends AppCompatActivity {
     private String UserContact;
     private DatabaseReference mDatabase;
     private Uri UserEditImage;
+    /**
+     * The Get from gallery.
+     */
     final int GET_FROM_GALLERY = 2;
     private Uri selectedImage = null;
+    /**
+     * The Database user.
+     */
     DatabaseReference databaseUser;
     private FirebaseAuth mAuth;
 
@@ -131,7 +140,9 @@ public class profileEditActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * photo choose activity
+     */
     private void opeangalley() {
 
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -157,7 +168,9 @@ public class profileEditActivity extends AppCompatActivity {
             }
         }
     }
-
+    /**
+     * upload new info to firebase muAh
+     */
     private void undateUserinfo(final String username, final Uri uriProfileImage, final FirebaseUser currentUser) {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference("user_photo/"+currentUser.getUid()+"jpg");
         final StorageReference imageFilepath = mStorage.child(currentUser.getUid());
@@ -197,6 +210,9 @@ public class profileEditActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * upload user to real time database
+     */
     private void Adduser(String uid, String username, String photo_uri, String email) {
         Users user = new Users(email,username,uid);
         user.setPhoto(photo_uri);

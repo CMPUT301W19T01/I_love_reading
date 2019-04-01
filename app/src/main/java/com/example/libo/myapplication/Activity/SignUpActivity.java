@@ -33,13 +33,31 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+/**
+ * The type Sign up activity.
+ */
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
+    /**
+     * The Progress bar.
+     */
     ProgressBar progressBar;
 
     private static int REQUESCODE = 1;
 
-    EditText editTextUsername,editTextPassword,editTextEmail;
+    /**
+     * The Edit text username.
+     */
+    EditText editTextUsername, /**
+     * The Edit text password.
+     */
+    editTextPassword, /**
+     * The Edit text email.
+     */
+    editTextEmail;
+    /**
+     * The Database user.
+     */
     DatabaseReference databaseUser;
     private FirebaseAuth mAuth;
     private ImageView photo;
@@ -89,6 +107,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    /**
+     * open camera
+     */
     private void opeangalley() {
 
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -96,7 +117,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivityForResult(galleryIntent,REQUESCODE);
     }
 
-
+    /**
+     * register the user
+     */
     private void RegisterUser(){
         final String username = editTextUsername.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
@@ -205,6 +228,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    /**
+     *
+     * @param username user name
+     * @param uriProfileImage   user photo
+     * @param currentUser current firebase user model
+     */
     private void undateUserinfo(final String username, final Uri uriProfileImage, final FirebaseUser currentUser) {
         StorageReference mStorage = FirebaseStorage.getInstance().getReference("user_photo/"+currentUser.getUid()+"jpg");
         final StorageReference imageFilepath = mStorage.child(currentUser.getUid());

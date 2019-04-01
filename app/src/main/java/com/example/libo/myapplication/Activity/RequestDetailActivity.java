@@ -35,6 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * The type Request detail activity.
+ */
 public class RequestDetailActivity extends AppCompatActivity {
 
     private DatabaseReference requestDatabseRef;
@@ -44,6 +47,9 @@ public class RequestDetailActivity extends AppCompatActivity {
     private DatabaseReference AllbooksRef;
 
     private Button accept;
+    /**
+     * The Tool bar add button.
+     */
     MenuItem toolBarAddButton;
 
     private Button deny;
@@ -201,6 +207,11 @@ public class RequestDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Accept.
+     *
+     * @param view the view
+     */
     public void accept(View view) {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         // when owner select accept, let owner choose geo immediately.
@@ -215,6 +226,11 @@ public class RequestDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Deny.
+     *
+     * @param view the view
+     */
     public void deny(View view) {
         requestDatabseRef.child(request.getRequestId()).removeValue();
         requestdRef.child(request.getSenderId()).child(request.getBookId()).removeValue();
@@ -264,6 +280,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     *
+     * @param requestCode to detect which activity
+     * @param resultCode
+     * @param data data from request
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ScanResultCode && resultCode == Activity.RESULT_OK) {
@@ -301,6 +323,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @param senderId borrower's ID
+     * @param bookId    Id of current book
+     * @param receiver Id of book owner
+     */
     private void updaterequestBook(final String senderId, final String bookId, String receiver) {
         requestdRef.child(senderId).child(bookId).removeValue();
         book.setNew_status(BookStatus.accepted);
@@ -328,6 +356,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *
+     * @param borrowerId borrower's ID
+     * @param bookID    Id of current book
+     * @param receiver  Id of book owner
+     */
     //After owner and borrower confirm that the book has been exchanged successfully, update the firebase accept
     private void updateBorrowed(final String borrowerId, final String bookID, final String receiver) {
         borrowedRef.child(borrowerId).child(bookID).setValue(book);
@@ -335,6 +369,11 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param newBook book object with new status
+     * @param senderId ID of user want to borrow a book
+     */
     //After accepting the request, update the borrow and all lists
     private void updateBook(final Book newBook, final String senderId) {
         AllbooksRef.child(newBook.getOwnerId()).child(newBook.getID()).setValue(newBook);
@@ -362,7 +401,11 @@ public class RequestDetailActivity extends AppCompatActivity {
         });
         */
     }
-
+    /**
+     * Set request to  accepted and delete other request on same book
+     * @param bookID the book id of current request
+     * @param request the current request object
+     */
     private void uploadRequest(final String bookID, final Request request) {
         DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests").child(request.getReceiver());
         requestRef.child(request.getRequestId()).setValue(request);
