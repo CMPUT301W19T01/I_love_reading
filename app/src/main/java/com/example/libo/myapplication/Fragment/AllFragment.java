@@ -388,7 +388,6 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 this.currentBook.setStatus(true);
                 Util.SendRequset(currentBook.getOwnerId(),currentBook, true);
-                requestbookRef.child(UID).child(currentBook.getID()).setValue(currentBook);
             }
 
 
