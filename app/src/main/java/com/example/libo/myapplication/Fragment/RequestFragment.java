@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,9 @@ import android.widget.Toast;
 import com.example.libo.myapplication.Activity.ExampleService;
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Adapter.RequestAdapter;
+import com.example.libo.myapplication.Adapter.bookListViewAdapter;
+import com.example.libo.myapplication.BookStatus;
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
@@ -35,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The type Request fragment.
@@ -49,6 +54,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
     private String userid;
     private Spinner spinner;
 
+    private HashMap<String, ArrayList<Request>> dictRequest = new HashMap<>();
 
     @Nullable
     @Override
@@ -138,6 +144,60 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                 return true;
             }
         });
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("requests");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                ArrayList<Request> allRequestsArray = new ArrayList<>();
+                ArrayList<Request> myRequestsArray = new ArrayList<>();
+                ArrayList<Request> otherRequestArray = new ArrayList<>();
+                for (DataSnapshot user : dataSnapshot.getChildren()){
+                    for (DataSnapshot request : user.getChildren()){
+                        Request myRequest = request.getValue(Request.class);
+                        if(myRequest.getReceiver().equals(userid) || myRequest.getSenderId().equals(userid))
+                            if(!allRequestsArray.contains(myRequest))
+                                allRequestsArray.add(myRequest);
+
+                    }
+                }
+
+                ArrayList<Request> myAllRequests = new ArrayList<>();
+                for(Request request : allRequestsArray){
+                    Boolean isUnique = true;
+                    for(Request checkRequest:myAllRequests){
+
+                        if(checkRequest.getSenderId().equals(request.getSenderId()) && checkRequest.getReceiver().equals(request.getReceiver()) && checkRequest.getBookId().equals(request.getBookId())){
+                            isUnique = false;
+                            break;
+                        }
+                    }
+                    if(isUnique){
+                        myAllRequests.add(request);
+                    }
+
+                }
+
+                for (Request request : myAllRequests){
+                    if(request.getSenderId().equals(userid) && !myRequestsArray.contains(request))
+                        myRequestsArray.add(request);
+                    if(request.getReceiver().equals(userid) && !otherRequestArray.contains(request))
+                        otherRequestArray.add(request);
+                }
+
+                dictRequest.put("All", myAllRequests);
+                dictRequest.put("MyRequest", myRequestsArray);
+                dictRequest.put("OtherRequest", otherRequestArray);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -151,87 +211,28 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                         Toast.LENGTH_SHORT).show();
 
                 if (item.equals("All")){
-                    requestRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            requests.clear();
-                            for(DataSnapshot owner : dataSnapshot.getChildren()){
-                                for(DataSnapshot request : owner.getChildren()){
-                                    Request requestClass = request.getValue(Request.class);
-                                    if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
+                    requests = dictRequest.get("All");
+                    Log.d("byf", String.valueOf(requests.size()));
 
-                                        requests.add(requestClass);
-                                    }
-                                }
-                            }
-                            requestAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-
+                    requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
+                    requestList.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
                 }
                 if (item.equals("My Request")){
-                    requestRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            requests.clear();
-                            for(DataSnapshot owner : dataSnapshot.getChildren()){
-                                for(DataSnapshot request : owner.getChildren()){
-                                    Request requestClass = request.getValue(Request.class);
-                                    if (requestClass.getSenderId().equals(userid) ){
-                                        requests.add(requestClass);
-                                        if (requestClass.isAccepted()){
-                                            //startService(requestClass);
-                                            //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
-                                            //       .setContentTitle("Example Service")
-                                            //      .setContentText("test")
-                                            //      .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                            //       //.setContentIntent(pendingIntent)
-                                            //       .build();
+                    requests = dictRequest.get("MyRequest");
+                    Log.d("byf", String.valueOf(requests.size()));
 
-                                        }
-                                    }
-                                }
-                            }
-                            requestAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
+                    requestList.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
                 }
                 if(item.equals("Other Request")){
-                    requestRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            requests.clear();
-                            for(DataSnapshot owner : dataSnapshot.getChildren()){
-                                for(DataSnapshot request : owner.getChildren()){
-                                    Request requestClass = request.getValue(Request.class);
-                                    if (requestClass.getReceiver().equals(userid) ){
-                                        requests.add(requestClass);
-                                        //startService(requestClass);
-                                    }
-                                }
-                            }
-                            requestAdapter.notifyDataSetChanged();
-                        }
+                    requests = dictRequest.get("OtherRequest");
+                    Log.d("byf", String.valueOf(requests.size()));
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
+                    requestList.setAdapter(requestAdapter);
+                    requestAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -245,6 +246,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
+        /*
         //Update request from database
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -269,6 +271,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
 
             }
         });
+        */
 
     }
 
