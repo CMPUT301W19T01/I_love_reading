@@ -113,14 +113,14 @@ public class ProfileFragment extends Fragment {
 
         //btn_refresh = getActivity().findViewById(R.id.btn_refresh);
         //btn_refresh.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View v) {
-                // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
-        //        userNameView.setText("name: "+ user.getDisplayName());
+        //    @Override
+        //    public void onClick(View v) {
+         //       // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+         //       userNameView.setText("name: "+ user.getDisplayName());
          //       userEmailView.setText("email: " + user.getEmail());
         //        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
         //    }
-       // });
+      //  });
 
         ButtonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +139,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Main2Activity"></activity>
         <activity
             android:name=".Activity.profileEditActivity"
+            android:theme="@style/item_view_title"
             android:windowSoftInputMode="stateHidden" />
 
         <meta-data
