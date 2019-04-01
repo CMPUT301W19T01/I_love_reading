@@ -157,6 +157,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         Book currentBook = arrayOwnedbooks.get(position);
                         databaseBook.child(currentBook.getID()).removeValue();
                         dialog.dismiss();
+                        arrayOwnedbooks.remove(currentBook);
+                        adapter.notifyDataSetChanged();
                     }
 
                 });
@@ -331,6 +333,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         //Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
                         currentBook.setOwnerName(mAuth.getCurrentUser().getDisplayName());
                         Util.uploadFile(temp,currentBook.getID(),currentBook,userID);
+                        arrayOwnedbooks.add(currentBook);
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
