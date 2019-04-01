@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -107,6 +108,8 @@ public class BasicActivity extends AppCompatActivity {
         userID = user.getUid();
 
 
+
+
         //username = (TextView) findViewById(R.id.Username);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -163,6 +166,7 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Checking for fragment count on backstack
+        startService();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else if (!doubleBackToExitPressedOnce) {
@@ -250,6 +254,14 @@ public class BasicActivity extends AppCompatActivity {
     public static Context getContextOfApplication()
     {
         return contextOfApplication;
+    }
+
+    public void startService() {
+
+        Intent serviceIntent = new Intent(this, ExampleService.class);
+        serviceIntent.putExtra("inputExtra", "aaaaaaa");
+
+        ContextCompat.startForegroundService(this, serviceIntent);
     }
 
 }
