@@ -65,6 +65,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
     private StorageReference storageRef;
 
     private Spinner spinner;
+    boolean show=false;
 
 
     private FirebaseAuth mAuth;
@@ -213,9 +214,15 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 String item = parent.getItemAtPosition(position).toString();
                 Object iitem = parent.getItemAtPosition(position);
 
-                Toast.makeText(getContext(), iitem.toString(),
-                        Toast.LENGTH_SHORT).show();
+
                 if (item.equals("All")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     databaseBook.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -243,6 +250,13 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if(item.equals("Available")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     databaseBook.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -278,6 +292,13 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if (item.equals("Borrowed")) {
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     databaseBook.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

@@ -47,6 +47,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
     ListView borrow_book_lv;
     ArrayAdapter<Book> adapter;
     private int current_index = 0;
+    boolean show=false;
     private Book currentBook;
     final ArrayList<Book> arrayBorrowbooks = new ArrayList<>();
     private String Userid;
@@ -138,10 +139,16 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 String item = parent.getItemAtPosition(position).toString();
                 Object iitem = parent.getItemAtPosition(position);
 
-                Toast.makeText(getContext(), iitem.toString(),
-                        Toast.LENGTH_SHORT).show();
+
 
                 if(item.equals("Request")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     requestRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,6 +182,13 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                     });
                 }
                 if (item.equals("Accepted")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     acceptRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -207,6 +221,13 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                     });
                 }
                 if (item.equals("Borrowing")) {
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     borrowedRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
