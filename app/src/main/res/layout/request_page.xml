@@ -28,11 +28,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_book_search"
+        app:layout_constraintTop_toBottomOf="@+id/request_search"
+        android:divider="#00FFFFFF"
+        android:dividerHeight="10.0sp"
         app:layout_constraintVertical_bias="0.64" />
 
     <SearchView
-        android:id="@+id/all_book_search"
+        android:id="@+id/request_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -61,7 +63,7 @@
         android:paddingLeft="0dip"
         android:paddingRight="20dip"
         android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="@+id/all_book_search"
+        app:layout_constraintBottom_toBottomOf="@+id/request_search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />

@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
+import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RequestAdapter extends ArrayAdapter{
     private int resourceId;
@@ -45,6 +48,7 @@ public class RequestAdapter extends ArrayAdapter{
         String currentstatus;
         if(currentRequest.isAccepted()){
             currentstatus = "Accepted";
+
         }else{
             currentstatus = "Not Accepted";
         }
@@ -57,4 +61,41 @@ public class RequestAdapter extends ArrayAdapter{
     public int getCount() {
         return requests.size();
     }
+
+    public Filter getFilter(){
+        return bookFilter;
+    }
+
+    private Filter bookFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Request> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(requests);
+            }
+            else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Request item: requests) {
+                    if ((item.getBookName()+' '+item.getBookId()+' '+item.getReceiver()
+                    +' '+item.getRequestId()).toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            requests.clear();
+            requests.addAll((List) results.values);
+            notifyDataSetChanged();
+
+        }
+    };
 }

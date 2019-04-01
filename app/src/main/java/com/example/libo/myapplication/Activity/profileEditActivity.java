@@ -60,6 +60,9 @@ public class profileEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_edit);
+        getSupportActionBar().setTitle("Edit Text");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameEditView = (EditText) findViewById(R.id.profileEditUserName);
         userEmailEditView = findViewById(R.id.profileEditUserEmail);
@@ -153,7 +156,6 @@ public class profileEditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
 
     private void undateUserinfo(final String username, final Uri uriProfileImage, final FirebaseUser currentUser) {
@@ -187,6 +189,12 @@ public class profileEditActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void Adduser(String uid, String username, String photo_uri, String email) {
