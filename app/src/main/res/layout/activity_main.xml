@@ -4,5 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bookbackground"
-    tools:context=".Activity.MainActivity"/>
+    tools:context=".Activity.MainActivity">
+    <VideoView
+        android:id="@+id/backgroundvideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center" />
+
+</android.support.constraint.ConstraintLayout>
