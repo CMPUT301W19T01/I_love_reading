@@ -67,8 +67,8 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String bookName = getItem(position).getBookName();
-        String authorName = getItem(position).getAuthorName();
-        String id = getItem(position).getOwnerName();
+        String status = getItem(position).getNew_status().toString();
+        String id = getItem(position).getDescription();
         String bookCover = getItem(position).getBookcoverUri() ;
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -80,8 +80,8 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
         viewHolder.bookCover = (ImageView)convertView.findViewById(R.id.BookImageView1);
 
         viewHolder.bookNameView.setText("bookname: "+bookName);
-        viewHolder.authorNameView.setText("author: "+authorName);
-        viewHolder.idView .setText("owner: "+ id);
+        viewHolder.authorNameView.setText("status: "+status);
+        viewHolder.idView .setText("Description: "+ id);
         Picasso.with(getContext()).load(bookCover).into(viewHolder.bookCover);
 
 
