@@ -255,7 +255,6 @@ public class ProfileFragment extends Fragment {
                 update();
             }
         }, 4000);   //5 seconds
-
     }
 
     public void update(){
