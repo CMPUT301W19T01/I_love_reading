@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="11dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/spinner_background"
         android:gravity="left"
@@ -75,7 +75,6 @@
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="@+id/all_book_search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
