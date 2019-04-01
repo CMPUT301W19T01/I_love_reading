@@ -52,6 +52,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
     private DatabaseReference AlldatabaseBook;
     private DatabaseReference requestbookRef;
     private DatabaseReference availablebook;
+    boolean show=false;
     //bookListViewAdapter adapter;
 
     private String UID;
@@ -198,9 +199,15 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                 String item = parent.getItemAtPosition(position).toString();
                 Object iitem = parent.getItemAtPosition(position);
 
-                Toast.makeText(getContext(), iitem.toString(),
-                        Toast.LENGTH_SHORT).show();
+
                 if (item.equals("All")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
 
 
                     AlldatabaseBook.addValueEventListener(new ValueEventListener() {
@@ -227,6 +234,13 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if (item.equals("Borrowed")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     borrowedRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -258,6 +272,13 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
                 }
                 if (item.equals("Available")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     AlldatabaseBook.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
