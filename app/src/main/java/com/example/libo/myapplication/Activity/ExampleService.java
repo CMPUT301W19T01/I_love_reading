@@ -26,9 +26,11 @@ public class ExampleService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         String input = intent.getStringExtra("inputExtra");
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, BasicActivity.class);
+        notificationIntent.putExtra("request", true);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
+
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("I love reading")
@@ -37,6 +39,7 @@ public class ExampleService extends Service {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOngoing(false)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .build();
 
 

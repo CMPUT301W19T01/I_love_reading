@@ -54,6 +54,8 @@ public class BasicActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private DatabaseReference requestRef;
     private String userID;
+    private String userid;
+
 
     private Fragment[] fragments;
     private int lastFragment;
@@ -120,8 +122,15 @@ public class BasicActivity extends AppCompatActivity {
         requestRef = myRef.child("requests");
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
+        userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        Intent resultIntent = getIntent();
+        Log.d("Relayyyyyy Importent", String.valueOf(resultIntent.getBooleanExtra("request",false)));
+        if (resultIntent.getBooleanExtra("request",false)){
+            switchFragment(requestFragment, fragments[lastFragment]);
 
+        }
+        stopService();
 
 
         //username = (TextView) findViewById(R.id.Username);
@@ -180,7 +189,25 @@ public class BasicActivity extends AppCompatActivity {
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                startService();
+                for (DataSnapshot owner : dataSnapshot.getChildren()) {
+                    for (DataSnapshot request : owner.getChildren()) {
+                        Request requestClass = request.getValue(Request.class);
+                        if (requestClass.getSenderId().equals(userid)) {
+                            if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
+                                startService(requestClass, "borrower request");
+                                requestClass.setNotification_borrow(false);
+                                requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
+                                requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                            }
+                        }
+                        if (requestClass.getReceiver().equals(userid) && requestClass.isNotification_own()){
+                            startService(requestClass, "owner request");
+                            requestClass.setNotification_own(false);
+                            requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
+                            requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
+                        }
+                    }
+                }
             }
 
             @Override
@@ -219,7 +246,7 @@ public class BasicActivity extends AppCompatActivity {
         }
     }
 
-    
+
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
             Users uInfo = new Users();
@@ -239,6 +266,7 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        stopService();
         mAuth.addAuthStateListener(mAuthListener);
 
     }
@@ -291,12 +319,24 @@ public class BasicActivity extends AppCompatActivity {
     /**
      * Start service.
      */
-    public void startService(Request request) {
+    public void startService(Request request, String requestinfo) {
 
         Intent serviceIntent = new Intent(this, ExampleService.class);
-        serviceIntent.putExtra("inputExtra", "New notification about: "+request.getBookName().toString());
+
+
+        if (requestinfo == "owner request"){
+            serviceIntent.putExtra("inputExtra", "There is a new request for your book:: "+request.getBookName().toString() + "\n Click to enter app");
+        }
+        else{
+            serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted "+request.getBookName().toString() + "\n Click to enter app");
+
+        }
 
         ContextCompat.startForegroundService(this, serviceIntent);
+    }
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ExampleService.class);
+        stopService(serviceIntent);
     }
 
 }

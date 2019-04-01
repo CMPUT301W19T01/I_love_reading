@@ -187,13 +187,13 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     if (requestClass.getSenderId().equals(userid) ){
                                         requests.add(requestClass);
                                         if (requestClass.isAccepted()){
-                                            startService(requestClass);
+                                            //startService(requestClass);
                                             //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
-                                             //       .setContentTitle("Example Service")
-                                              //      .setContentText("test")
-                                              //      .setSmallIcon(R.drawable.ic_launcher_foreground)
-                                             //       //.setContentIntent(pendingIntent)
-                                             //       .build();
+                                            //       .setContentTitle("Example Service")
+                                            //      .setContentText("test")
+                                            //      .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                            //       //.setContentIntent(pendingIntent)
+                                            //       .build();
 
                                         }
                                     }
@@ -219,7 +219,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     Request requestClass = request.getValue(Request.class);
                                     if (requestClass.getReceiver().equals(userid) ){
                                         requests.add(requestClass);
-                                        startService(requestClass);
+                                        //startService(requestClass);
                                     }
                                 }
                             }
@@ -256,7 +256,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                         if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
 
                             requests.add(requestClass);
-                            startService(requestClass);
+                            //startService(requestClass);
 
                         }
                     }
@@ -326,7 +326,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
     //public void stopService(View v) {
-     //   Intent serviceIntent = new Intent(this, ExampleService.class);
+    //   Intent serviceIntent = new Intent(this, ExampleService.class);
     //    stopService(serviceIntent);
     //}
 }

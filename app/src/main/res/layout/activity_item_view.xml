@@ -54,7 +54,7 @@
                 android:layout_marginRight="8dp"
                 android:ellipsize="end"
                 android:hint="@string/Name_Hint"
-                android:maxLength="25"
+                android:maxLength="40"
                 android:maxLines="1"
                 android:paddingLeft="11dp"
                 android:textSize="16sp"

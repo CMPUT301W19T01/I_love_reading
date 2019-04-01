@@ -158,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     Intent intent = new Intent(LoginActivity.this, BasicActivity.class);
                     intent.putExtra("username",editTextEmail.getText().toString());
+                    intent.putExtra("request",false);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                     startActivity(intent);

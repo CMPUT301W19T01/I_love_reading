@@ -38,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         },SPLASH_TIME_OUT);
+
+        stopService();;
+
+    }
+
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ExampleService.class);
+        stopService(serviceIntent);
     }
 
 }

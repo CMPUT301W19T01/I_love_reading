@@ -22,6 +22,10 @@ public class Request implements Serializable {
     private boolean isAccepted = false;
     private Date date;
     private LatLng latLng = null;
+    private boolean notification_own = true;
+    private boolean notification_borrow = true;
+
+
 
     /**
      * Instantiates a new Request.
@@ -244,4 +248,19 @@ public class Request implements Serializable {
         this.requestId = requestId;
     }
 
+    public boolean isNotification_own() {
+        return notification_own;
+    }
+
+    public void setNotification_own(boolean notification_own) {
+        this.notification_own = notification_own;
+    }
+
+    public boolean isNotification_borrow() {
+        return notification_borrow;
+    }
+
+    public void setNotification_borrow(boolean notification_borrow) {
+        this.notification_borrow = notification_borrow;
+    }
 }
