@@ -5,17 +5,18 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".Activity.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.profileEditActivity"></activity>
+        <activity android:name=".Main2Activity"></activity>
+        <activity
+            android:name=".Activity.profileEditActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -24,9 +25,9 @@
         <activity android:name=".Activity.MapActivity" />
         <activity android:name=".Activity.CodeScanner" />
         <activity android:name=".Activity.TestScanActivity" />
-        <activity android:name=".Activity.AddCommentActivity"
-            android:theme="@style/add_comment_title"
-            />
+        <activity
+            android:name=".Activity.AddCommentActivity"
+            android:theme="@style/add_comment_title" />
         <activity android:name=".Activity.RequestDetailActivity" />
         <activity android:name=".Activity.SignUpActivity" />
         <activity android:name=".Activity.MainActivity">
@@ -39,18 +40,14 @@
         <activity
             android:name=".Activity.BasicActivity"
             android:label="@string/title_activity_basic" />
-        <activity android:name=".Activity.LoginActivity"
+        <activity
+            android:name=".Activity.LoginActivity"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".Activity.ItemViewActivity"
             android:theme="@style/item_view_title"
-            android:windowSoftInputMode="stateHidden"
-            />
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Activity.ResetPassward" />
-
-        <service android:name=".Activity.ExampleService" />
-
     </application>
 
 </manifest>
