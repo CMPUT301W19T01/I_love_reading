@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,28 +82,26 @@ public class RequestDetailActivity extends AppCompatActivity {
             After accepting the request, the scan button will show.
          */
         TextView type = findViewById(R.id.request_type);
-        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver())){
+        if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(request.getReceiver())) {
             isOwner = true;
 
-            if (request.isBorrowed()){
+            if (request.isBorrowed()) {
                 type.setText("I want to borrow your book.");
-            }
-            else{
+            } else {
                 type.setText("I want to return your book");
             }
-            if (!request.isAccepted()){
+            if (!request.isAccepted()) {
                 accept.setVisibility(View.VISIBLE);
                 deny.setVisibility(View.VISIBLE);
                 scan.setVisibility(View.INVISIBLE);
             }
-        }else{
-            if (request.isBorrowed()){
+        } else {
+            if (request.isBorrowed()) {
                 type.setText("Your borrow request has been sent.");
-            }
-            else{
+            } else {
                 type.setText("Your return request has been sent.");
             }
-            if(request.isAccepted()) {
+            if (request.isAccepted()) {
                 scan.setVisibility(View.VISIBLE);
             } else {
                 scan.setVisibility(View.INVISIBLE);
@@ -110,13 +109,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         }
 
 
-
         //Show the basic information of request(book's owner username; description,date...)
         TextView sender = findViewById(R.id.request_sender);
         TextView date = findViewById(R.id.request_date);
         final TextView des = findViewById(R.id.request_des);
         final TextView bookNmae = findViewById(R.id.request_book_name);
-        final TextView owner  =  findViewById(R.id.request_book_owner);
+        final TextView owner = findViewById(R.id.request_book_owner);
 
         DatabaseReference bookRef = FirebaseDatabase.getInstance().getReference().child("books");
         final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users");
@@ -125,11 +123,11 @@ public class RequestDetailActivity extends AppCompatActivity {
         bookRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot user : dataSnapshot.getChildren()){
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
                     Log.d("byf", user.getKey());
-                    if(user.hasChild(request.getBookId())){
+                    if (user.hasChild(request.getBookId())) {
                         book = user.child(request.getBookId()).getValue(Book.class);
-                        if((book.getOwnerConfirmed() && isOwner) || (book.getBorrowerConfirmed() && ! isOwner)){
+                        if ((book.getOwnerConfirmed() && isOwner) || (book.getBorrowerConfirmed() && !isOwner)) {
                             scan.setVisibility(View.INVISIBLE);
                         }
                         des.setText(book.getDescription());
@@ -149,8 +147,8 @@ public class RequestDetailActivity extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot user : dataSnapshot.getChildren()){
-                    if(user.getKey().equals(book.getOwnerId())){
+                for (DataSnapshot user : dataSnapshot.getChildren()) {
+                    if (user.getKey().equals(book.getOwnerId())) {
                         Users users = user.getValue(Users.class);
                         owner.setText(users.getUsername());
                         break;
@@ -164,7 +162,7 @@ public class RequestDetailActivity extends AppCompatActivity {
             }
         });
 
-        sender.setText(request.getSender()+ " ("+request.getSenderEmail()+")");
+        sender.setText(request.getSender() + " (" + request.getSenderEmail() + ")");
         date.setText(request.getDate().toString());
 
 
@@ -183,7 +181,7 @@ public class RequestDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // If user is borrower, only show location, if the location is not selected yet, show error message
                 latLng = request.getLatLng();
-                if(latLng == null){
+                if (latLng == null) {
                     Toast.makeText(RequestDetailActivity.this, "This book's owner has not picked the location.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -197,7 +195,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         });
     }
 
-    public void accept(View view){
+    public void accept(View view) {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         // when owner select accept, let owner choose geo immediately.
         Intent placePickerIntent;
@@ -211,24 +209,25 @@ public class RequestDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void deny(View view){
+    public void deny(View view) {
         requestDatabseRef.child(request.getRequestId()).removeValue();
         requestdRef.child(request.getSenderId()).child(request.getBookId()).removeValue();
         Toast.makeText(this, "Deny the request.", Toast.LENGTH_SHORT).show();
         finish();
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.item_view_menu, menu);
         toolBarAddButton = menu.findItem(R.id.toolbar_add_book);
         Intent temp_intent = getIntent();
-        Boolean temp_edit = temp_intent.getBooleanExtra("edit",false);
-        if (!temp_edit){
+        Boolean temp_edit = temp_intent.getBooleanExtra("edit", false);
+        if (!temp_edit) {
             toolBarAddButton.setVisible(false);
         }
         return true;
     }
 
-    private void confirmBookStatus(final BookStatus bookStatus){
+    private void confirmBookStatus(final BookStatus bookStatus) {
         AlertDialog.Builder a_builder = new AlertDialog.Builder(RequestDetailActivity.this);
         a_builder.setMessage("Are you sure to denote the book as borrowed?")
                 .setCancelable(false)
@@ -236,17 +235,16 @@ public class RequestDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         book.setNew_status(bookStatus);
-                        if(isOwner){
+                        if (isOwner) {
                             book.setOwnerConfirmed(true);
-                        }
-                        else{
+                        } else {
                             book.setBorrowerConfirmed(true);
                         }
-                        if(book.getBorrowerConfirmed() && book.getOwnerConfirmed()){
+                        if (book.getBorrowerConfirmed() && book.getOwnerConfirmed()) {
                             updateBorrowed(request.getSenderId(), book.getID(), request.getReceiver());
                         }
 
-                        updateBook(book,request.getSenderId());
+                        updateBook(book, request.getSenderId());
                         Toast.makeText(RequestDetailActivity.this, "Denoted the book as " + bookStatus + "!", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -260,12 +258,12 @@ public class RequestDetailActivity extends AppCompatActivity {
         alert.show();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ScanResultCode && resultCode == Activity.RESULT_OK){
+        if (requestCode == ScanResultCode && resultCode == Activity.RESULT_OK) {
             ISBNCode = data.getStringExtra("code"); // This is the result Text
-            if(ISBNCode.equals(book.getID())){
-                if(request.isBorrowed())
+            if (ISBNCode.equals(book.getID())) {
+                if (request.isBorrowed())
                     confirmBookStatus(BookStatus.borrowed);
                 else
                     confirmBookStatus(BookStatus.available);
@@ -289,8 +287,8 @@ public class RequestDetailActivity extends AppCompatActivity {
 
         }
         // when owner user select location on the map and pass latLng to previous activity
-        if(requestCode == 1){
-            if(resultCode==RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 Log.d("BYF", place.getAddress().toString());
                 LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
@@ -303,25 +301,25 @@ public class RequestDetailActivity extends AppCompatActivity {
                 request.setLatLng(latLng);
                 //updateBorrowed(borrowerId,bookID,request.getReceiver());
                 uploadRequest(bookID, request);
-                updaterequestBook(request.getSenderId(),request.getBookId());
+                updaterequestBook(request.getSenderId(), request.getBookId(), request.getReceiver());
                 Toast.makeText(this, "Accept the request.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
 
-    private void updaterequestBook(final String senderId, final String bookId) {
+    private void updaterequestBook(final String senderId, final String bookId, String receiver) {
         requestdRef.child(senderId).child(bookId).removeValue();
         book.setNew_status(BookStatus.accepted);
         acceptedRef.child(senderId).child(bookId).setValue(book);
-        AllbooksRef.child(senderId).child(bookId).setValue(book);
+        AllbooksRef.child(receiver).child(bookId).setValue(book);
 
         //Delete all user have request the book and send them message
         requestdRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    for(DataSnapshot wds : ds.getChildren()){
+                    for (DataSnapshot wds : ds.getChildren()) {
                         Book ALL_book = wds.getValue(Book.class);
                         if (ALL_book.getID().equals(book.getID())) {
                             requestdRef.child(senderId).child(bookId).removeValue();
@@ -377,10 +375,10 @@ public class RequestDetailActivity extends AppCompatActivity {
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Request requestTemp = ds.getValue(Request.class);
 
-                    if (requestTemp.getBookId().equals(bookID)){
+                    if (requestTemp.getBookId().equals(bookID)) {
                         Log.d("byf", ds.getKey());
                         requestRef.child(ds.getKey()).setValue(request);
                     }
@@ -394,4 +392,17 @@ public class RequestDetailActivity extends AppCompatActivity {
         });
 
     }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
 }
