@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,6 +42,8 @@ public class RequestDetailActivity extends AppCompatActivity {
     private DatabaseReference AllbooksRef;
 
     private Button accept;
+    MenuItem toolBarAddButton;
+
     private Button deny;
     private Button scan;
     private Button map;
@@ -54,8 +58,11 @@ public class RequestDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_detail);
 
+        setContentView(R.layout.activity_request_detail);
+        getSupportActionBar().setTitle("Request View");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AllbooksRef = FirebaseDatabase.getInstance().getReference("books");
         requestDatabseRef = FirebaseDatabase.getInstance().getReference("requests").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         requestdRef = FirebaseDatabase.getInstance().getReference("requestBook");
         acceptedRef = FirebaseDatabase.getInstance().getReference("acceptedBook");
@@ -210,6 +217,16 @@ public class RequestDetailActivity extends AppCompatActivity {
         Toast.makeText(this, "Deny the request.", Toast.LENGTH_SHORT).show();
         finish();
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.item_view_menu, menu);
+        toolBarAddButton = menu.findItem(R.id.toolbar_add_book);
+        Intent temp_intent = getIntent();
+        Boolean temp_edit = temp_intent.getBooleanExtra("edit",false);
+        if (!temp_edit){
+            toolBarAddButton.setVisible(false);
+        }
+        return true;
+    }
 
     private void confirmBookStatus(final BookStatus bookStatus){
         AlertDialog.Builder a_builder = new AlertDialog.Builder(RequestDetailActivity.this);
@@ -297,6 +314,7 @@ public class RequestDetailActivity extends AppCompatActivity {
         requestdRef.child(senderId).child(bookId).removeValue();
         book.setNew_status(BookStatus.accepted);
         acceptedRef.child(senderId).child(bookId).setValue(book);
+        AllbooksRef.child(senderId).child(bookId).setValue(book);
 
         //Delete all user have request the book and send them message
         requestdRef.addValueEventListener(new ValueEventListener() {
@@ -328,7 +346,6 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     //After accepting the request, update the borrow and all lists
     private void updateBook(final Book newBook, final String senderId) {
-        AllbooksRef = FirebaseDatabase.getInstance().getReference("books");
         AllbooksRef.child(newBook.getOwnerId()).child(newBook.getID()).setValue(newBook);
         /*
         AllbooksRef.addValueEventListener(new ValueEventListener() {
