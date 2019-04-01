@@ -82,7 +82,6 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         userNameView = getActivity().findViewById(R.id.profileUserName);
         userEmailView = getActivity().findViewById(R.id.profileUserEmail);
-        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
@@ -112,16 +111,16 @@ public class ProfileFragment extends Fragment {
 
         });
 
-        btn_refresh = getActivity().findViewById(R.id.btn_refresh);
-        btn_refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
-                userNameView.setText("name: "+ user.getDisplayName());
-                userEmailView.setText("email: " + user.getEmail());
-                Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
-            }
-        });
+        //btn_refresh = getActivity().findViewById(R.id.btn_refresh);
+        //btn_refresh.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+         //       // final FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
+         //       userNameView.setText("name: "+ user.getDisplayName());
+         //       userEmailView.setText("email: " + user.getEmail());
+        //        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+        //    }
+      //  });
 
         ButtonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +139,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
