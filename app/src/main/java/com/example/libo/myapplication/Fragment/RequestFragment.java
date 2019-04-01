@@ -1,14 +1,15 @@
 package com.example.libo.myapplication.Fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Activity.ExampleService;
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Adapter.RequestAdapter;
-import com.example.libo.myapplication.Model.Book;
-import com.example.libo.myapplication.Model.LatLng;
 import com.example.libo.myapplication.Model.Request;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -114,6 +113,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
             }
         });
         final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
+        startService();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -160,8 +160,16 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                 for(DataSnapshot request : owner.getChildren()){
                                     Request requestClass = request.getValue(Request.class);
                                     if (requestClass.getSenderId().equals(userid) ){
-
                                         requests.add(requestClass);
+                                        if (requestClass.isAccepted()){
+                                            //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
+                                             //       .setContentTitle("Example Service")
+                                              //      .setContentText("test")
+                                              //      .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                             //       //.setContentIntent(pendingIntent)
+                                             //       .build();
+
+                                        }
                                     }
                                 }
                             }
@@ -184,8 +192,8 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                 for(DataSnapshot request : owner.getChildren()){
                                     Request requestClass = request.getValue(Request.class);
                                     if (requestClass.getReceiver().equals(userid) ){
-
                                         requests.add(requestClass);
+                                        startService();
                                     }
                                 }
                             }
@@ -222,6 +230,8 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                         if (requestClass.getSenderId().equals(userid) || requestClass.getReceiver().equals(userid)){
 
                             requests.add(requestClass);
+                            startService();
+
                         }
                     }
                 }
@@ -278,4 +288,16 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
     */
+    public void startService() {
+
+        Intent serviceIntent = new Intent(getActivity(), ExampleService.class);
+        serviceIntent.putExtra("inputExtra", "I love reading: You have got a new notification");
+
+        ContextCompat.startForegroundService(getActivity(), serviceIntent);
+    }
+
+    //public void stopService(View v) {
+     //   Intent serviceIntent = new Intent(this, ExampleService.class);
+    //    stopService(serviceIntent);
+    //}
 }
