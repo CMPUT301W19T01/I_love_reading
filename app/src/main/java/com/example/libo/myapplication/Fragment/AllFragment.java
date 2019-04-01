@@ -310,7 +310,15 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
         */
 
 
-         SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+         final SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+         searchView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 searchView.setIconified(false);
+
+             }
+         });
+
 
          searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

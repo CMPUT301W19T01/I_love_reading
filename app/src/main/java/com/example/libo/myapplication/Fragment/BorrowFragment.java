@@ -109,7 +109,14 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.searchView2);
+        final SearchView searchView = getActivity().findViewById(R.id.searchView2);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
