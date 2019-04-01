@@ -180,7 +180,7 @@ public class BasicActivity extends AppCompatActivity {
         requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //startService();
+                startService();
             }
 
             @Override

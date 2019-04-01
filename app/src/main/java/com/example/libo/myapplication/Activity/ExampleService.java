@@ -31,11 +31,14 @@ public class ExampleService extends Service {
                 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Example Service")
+                .setContentTitle("I love reading")
                 .setContentText(input)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setOngoing(false)
                 .build();
+
 
         startForeground(1, notification);
 
