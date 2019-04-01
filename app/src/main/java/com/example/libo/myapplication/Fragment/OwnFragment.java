@@ -248,9 +248,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                                 arrayOwnedbooks.add(book);
 
                             }
-                            adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
-                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-                            own_book_lv.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
 
                         }
 
