@@ -169,7 +169,15 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        SearchView searchView = getActivity().findViewById(R.id.all_book_search);
+        final SearchView searchView = getActivity().findViewById(R.id.own_book_search);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+
+            }
+        });
+
         adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
         databaseBook.addValueEventListener(new ValueEventListener() {
             @Override
