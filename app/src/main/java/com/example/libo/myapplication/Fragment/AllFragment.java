@@ -41,17 +41,32 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The type All fragment contain all books from firebase database.
+ */
 public class AllFragment extends Fragment implements AdapterView.OnItemSelectedListener /*implements SearchView.OnQueryTextListener*/{
     private static final String TAG = "AllBookDatabase";
     private TextView userNameTextView;
+    /**
+     * The book lv contain all books from firebase database with different status.
+     */
     ListView all_book_lv;
+    /**
+     * The Adapter.
+     */
     ArrayAdapter<Book> adapter;
+    /**
+     * The Array allbooks.
+     */
     ArrayList<Book> arrayAllbooks = new ArrayList<>();
     private Book currentBook;
     private int current_index = 0;
     private DatabaseReference AlldatabaseBook;
     private DatabaseReference requestbookRef;
     private DatabaseReference availablebook;
+    /**
+     * The Show.
+     */
     boolean show=false;
     //bookListViewAdapter adapter;
 

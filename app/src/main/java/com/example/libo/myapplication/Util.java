@@ -24,10 +24,27 @@ import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * The type Util.
+ */
 public class Util {
 
+    /**
+     * The constant FirebaseRequests.
+     */
     public static DatabaseReference FirebaseRequests = FirebaseDatabase.getInstance().getReference("requests");
+    /**
+     * The constant databaseReference.
+     */
     public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("books");
+
+    /**
+     * Send request to the owner of the current book.
+     *
+     * @param bookOwner  the book owner
+     * @param book       the book
+     * @param isBorrowed the is borrowed
+     */
     public static void SendRequset(String bookOwner, Book book, Boolean isBorrowed) {
 
         Request request = new Request();
@@ -54,6 +71,14 @@ public class Util {
     }
 
 
+    /**
+     * Upload file image and all use info into database and storage.
+     *
+     * @param bookCover the book cover
+     * @param id        the id
+     * @param data_book the data book
+     * @param userid    the userid
+     */
     public static void uploadFile(Bitmap bookCover, final String id, final Book data_book, final String userid){
 
         FirebaseStorage storage = FirebaseStorage.getInstance();

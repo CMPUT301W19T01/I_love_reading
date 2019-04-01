@@ -38,17 +38,32 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * The type Borrow fragment contain all books that are borrowed ,requested and accepted .
+ */
 public class BorrowFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private static final int BORROW_REQUEST_CODE = 0;
     private static final String TAG = "BorrowedBookDatabase";
     private Button button;
     private TextView userNameTextView;
+    /**
+     * The Borrow book lv.
+     */
     ListView borrow_book_lv;
+    /**
+     * The Adapter of book.
+     */
     ArrayAdapter<Book> adapter;
     private int current_index = 0;
+    /**
+     * The Show.
+     */
     boolean show=false;
     private Book currentBook;
+    /**
+     * The Array of borrowbooks.
+     */
     final ArrayList<Book> arrayBorrowbooks = new ArrayList<>();
     private String Userid;
     private DatabaseReference borrowedRef;
@@ -317,6 +332,9 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
         }
     }
 
+    /**
+     * The Value event listener.
+     */
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

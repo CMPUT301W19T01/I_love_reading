@@ -17,10 +17,20 @@ import com.example.libo.myapplication.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Request adapter.
+ */
 public class RequestAdapter extends ArrayAdapter{
     private int resourceId;
     private ArrayList<Request> requests;
 
+    /**
+     * Instantiates a new Request adapter.
+     *
+     * @param context  the context of current adapter
+     * @param resource the resource id
+     * @param requests the requests list
+     */
     public RequestAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Request> requests) {
         super(context, resource, requests);
         resourceId = resource;

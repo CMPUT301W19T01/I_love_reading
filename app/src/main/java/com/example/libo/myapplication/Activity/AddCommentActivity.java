@@ -16,6 +16,9 @@ import android.support.v7.app.ActionBar;
 
 import com.example.libo.myapplication.R;
 
+/**
+ * The type Add comment activity.
+ */
 public class AddCommentActivity extends AppCompatActivity {
 
     @Override

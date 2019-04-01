@@ -30,6 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * The type Basic activity of current App.
+ */
 public class BasicActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewDatabase";
@@ -40,6 +43,9 @@ public class BasicActivity extends AppCompatActivity {
     private AllFragment allFragment;
     private RequestFragment requestFragment;
 
+    /**
+     * The constant contextOfApplication.
+     */
     public static Context contextOfApplication;
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
@@ -50,10 +56,15 @@ public class BasicActivity extends AppCompatActivity {
 
     private Fragment[] fragments;
     private int lastFragment;
+    /**
+     * The Double back to exit pressed once.
+     */
     boolean doubleBackToExitPressedOnce = false;
 
 
-
+    /**
+     * go to different fragment by Clicking on different fragment
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -94,7 +105,9 @@ public class BasicActivity extends AppCompatActivity {
             return false;
         }
     };
-
+    /**
+     * get current user info form fireabse.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,11 +264,20 @@ public class BasicActivity extends AppCompatActivity {
         }
         fragmentTransaction.show(fragment).commitAllowingStateLoss();
     }
+
+    /**
+     * Gets context of application.
+     *
+     * @return the context of application
+     */
     public static Context getContextOfApplication()
     {
         return contextOfApplication;
     }
 
+    /**
+     * Start service.
+     */
     public void startService() {
 
         Intent serviceIntent = new Intent(this, ExampleService.class);

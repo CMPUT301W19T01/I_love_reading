@@ -36,6 +36,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * The type Request fragment.
+ */
 public class RequestFragment extends Fragment implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "RequestDatabase";
     private TextView userNameTextView;
@@ -281,7 +284,10 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
 
     }
 
-    /*
+    /**
+     * Start service.
+     */
+/*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

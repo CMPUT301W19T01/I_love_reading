@@ -27,20 +27,50 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+/**
+ * The type Comment adapter.
+ */
 public class CommentAdapter extends ArrayAdapter<Comment> {
     private ArrayList<Comment> comments;
     private Context myContext;
     private static class ViewHolder {
+        /**
+         * The Username.
+         */
         TextView username;
+        /**
+         * The Time.
+         */
         TextView time;
+        /**
+         * The Content.
+         */
         TextView content;
+        /**
+         * The User photo.
+         */
         ImageView usericon;
+        /**
+         * The Rating bar.
+         */
         RatingBar ratingbar;
+        /**
+         * The Favor button.
+         */
         SparkButton favorButton;
+        /**
+         * The Favor num of current comment.
+         */
         TextView favorNum;
     }
 
 
+    /**
+     * Instantiates a new Comment adapter.
+     *
+     * @param context  the context of comment
+     * @param comments the array of comments
+     */
     public CommentAdapter(Context context, ArrayList<Comment> comments) {
         super(context, R.layout.comment_adapter, comments);
         this.comments = comments;

@@ -49,9 +49,15 @@ import java.util.Arrays;
 
 import static de.greenrobot.event.EventBus.TAG;
 
+/**
+ * The type Profile fragment have current user's information.
+ */
 public class ProfileFragment extends Fragment {
     private Button btn_edit;
     private Button btn_refresh;
+    /**
+     * The User name view.
+     */
     public TextView userNameView;
     private TextView userEmailView;
     private TextView userId;
@@ -61,7 +67,13 @@ public class ProfileFragment extends Fragment {
     private TextView TextViewOwnBookNum;
     private TextView TextViewBorrowBookNum;
     private TextView TextViewCommentBookNum;
+    /**
+     * The current User from Firebase(Fireabse defined user model).
+     */
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    /**
+     * The Current user from firebase real time database (programmer defined user mode).
+     */
     final DatabaseReference currentuser = FirebaseDatabase.getInstance().getReference("users");
     static private Users User_user;
 
@@ -184,7 +196,10 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-                public void UpdateNum(){
+    /**
+     * Update current user's info to the screen.
+     */
+    public void UpdateNum(){
 
         final DatabaseReference currentuser = FirebaseDatabase.getInstance().getReference("users");
 
@@ -233,6 +248,11 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    /**
+     * Display notification belong to current user.
+     *
+     * @param view the view
+     */
     public void displayNotification(View view){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),"notificaiton");
         builder.setSmallIcon(R.drawable.icon_email);
@@ -258,6 +278,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Update info to screen.
+     */
     public void update(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameView.setText("name: "+ user.getDisplayName());
