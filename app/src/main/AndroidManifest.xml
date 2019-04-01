@@ -16,7 +16,7 @@
         <activity
             android:name=".Activity.profileEditActivity"
             android:theme="@style/item_view_title"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -48,7 +48,7 @@
         <activity
             android:name=".Activity.ItemViewActivity"
             android:theme="@style/item_view_title"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activity.ResetPassward" />
     </application>
 
