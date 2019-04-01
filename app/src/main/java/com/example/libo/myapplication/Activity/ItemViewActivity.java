@@ -35,6 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.RequestPopup;
 import com.google.firebase.storage.FirebaseStorage;
@@ -129,7 +130,7 @@ public class ItemViewActivity extends AppCompatActivity {
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         Edit = result.getBooleanExtra("edit",false);
-        final Boolean Status = result.getBooleanExtra("status",false);
+        final BookStatus Status = (BookStatus) result.getSerializableExtra("status");
 
         intializeVaraibles();
         initializeStatus();
@@ -165,7 +166,7 @@ public class ItemViewActivity extends AppCompatActivity {
         BorrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Status){ //If available
+                if (Status.equals(BookStatus.available) || Status.equals(BookStatus.requested)){ //If available
                     if (BorrowButton.getText() == "Borrow") {
                         BorrowButton.setText("Requested");
                         resultIntent.putExtra("borrow", "true");
@@ -481,7 +482,7 @@ public class ItemViewActivity extends AppCompatActivity {
         ArrayList<String> ClassificationArray = result.getStringArrayListExtra("ClassificationArray");
         final Uri BookCover = (Uri) result.getParcelableExtra("BookCover"); // Get Book Cover in the format of bitmap
         Edit = result.getBooleanExtra("edit",false);
-        final Boolean Status = result.getBooleanExtra("status",false);
+        final BookStatus Status = (BookStatus) result.getSerializableExtra("status");
         if (!Edit){ // If we are viewing the info instead of borrowing
             resultIntent.putExtra("borrow","false"); //default setting
             resultIntent.putExtra("watchlist", "false");
@@ -533,12 +534,40 @@ public class ItemViewActivity extends AppCompatActivity {
      *
      * @param Status the status
      */
-    public void checkStatus(Boolean Status){
+    public void checkStatus(BookStatus Status){
         // This function checks if the Book is available.
         // If the Book is not available, it Borrow Button will show Unavailable
-        if (Status){
+        if (Status!= null && (Status.equals(BookStatus.accepted) || Status.equals(BookStatus.borrowed))){
             BorrowButton.setText("Unavailable");
             BorrowButton.setEnabled(false);
+        } else {
+            String ownerId = result.getStringExtra("ownerId");
+            Log.d("byf", ownerId);
+            final DatabaseReference myRequest = FirebaseDatabase.getInstance().getReference().child("requests").child(ownerId);
+
+            myRequest.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot request : dataSnapshot.getChildren()){
+                        Request currentRequest = request.getValue(Request.class);
+                        Log.d("byf", currentRequest.getBookName());
+                        if(!currentRequest.getBookId().equals(BookId)){
+                            continue;
+                        }
+
+                        if(currentRequest.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                            BorrowButton.setText("Requested");
+                            BorrowButton.setEnabled(false);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

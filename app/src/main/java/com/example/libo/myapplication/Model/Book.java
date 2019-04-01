@@ -46,6 +46,7 @@ public class Book {
         this.setDescription(Description);
         this.setClassification(Classification);
         this.OwnerId = ownerId;
+        this.new_status = BookStatus.available;
     }
 
     public String getBookcoverUri() {

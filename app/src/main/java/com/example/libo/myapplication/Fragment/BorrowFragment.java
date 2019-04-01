@@ -89,9 +89,10 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
-                ItemView.putExtra("status", currentBook.getStatus());
+                ItemView.putExtra("status", currentBook.getNew_status());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
+                ItemView.putExtra("ownerId", currentBook.getOwnerId());
                 ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
                         .asList(currentBook.getClassification().split("/")));
                 ItemView.putExtra("ClassificationArray", ClassificationArray);

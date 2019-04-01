@@ -158,7 +158,7 @@ public class ProfileFragment extends Fragment {
                                 ItemView.putExtra("BookName", thisBook.getBookName()); // Put the info of the book to next activity
                                 ItemView.putExtra("AuthorName", thisBook.getAuthorName());
                                 ItemView.putExtra("ID", thisBook.getID());
-                                ItemView.putExtra("status", thisBook.getStatus());
+                                ItemView.putExtra("status", thisBook.getNew_status());
                                 ItemView.putExtra("edit",false);
                                 ItemView.putExtra("Description", thisBook.getDescription());
                                 ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
@@ -166,7 +166,7 @@ public class ProfileFragment extends Fragment {
                                 ItemView.putExtra("ClassificationArray", ClassificationArray);
                                 Uri bookcover = Uri.parse(thisBook.getBookcoverUri());
                                 ItemView.putExtra("BookCover", bookcover);
-
+                                ItemView.putExtra("ownerId", thisBook.getOwnerId());
                                 ItemView.putExtra("ButtonCode", 2);
                                 startActivity(ItemView); // request code 0 means it is from borrow fragement
                                 break;

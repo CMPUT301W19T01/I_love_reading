@@ -121,7 +121,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                 ItemView.putExtra("BookName", currentBook.getBookName()); // Put the info of the book to next activity
                 ItemView.putExtra("AuthorName", currentBook.getAuthorName());
                 ItemView.putExtra("ID", currentBook.getID());
-                ItemView.putExtra("status", currentBook.getStatus());
+                ItemView.putExtra("status", currentBook.getNew_status());
                 ItemView.putExtra("edit",false);
                 ItemView.putExtra("Description", currentBook.getDescription());
                 ArrayList<String> ClassificationArray = new ArrayList<String>(Arrays
@@ -129,6 +129,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                 ItemView.putExtra("ClassificationArray", ClassificationArray);
                 Uri bookcover = Uri.parse(currentBook.getBookcoverUri());
                 ItemView.putExtra("BookCover", bookcover);
+                ItemView.putExtra("ownerId", currentBook.getOwnerId());
                 current_index = i;
                 if (currentBook.getOwnerId().equals(FirebaseAuth.getInstance().getUid())){
                     ItemView.putExtra("edit",true);
