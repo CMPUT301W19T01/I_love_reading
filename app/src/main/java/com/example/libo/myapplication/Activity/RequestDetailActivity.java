@@ -295,7 +295,9 @@ public class RequestDetailActivity extends AppCompatActivity {
 
     private void updaterequestBook(final String senderId, final String bookId) {
         requestdRef.child(senderId).child(bookId).removeValue();
+        book.setNew_status(BookStatus.accepted);
         acceptedRef.child(senderId).child(bookId).setValue(book);
+
         //Delete all user have request the book and send them message
         requestdRef.addValueEventListener(new ValueEventListener() {
             @Override
