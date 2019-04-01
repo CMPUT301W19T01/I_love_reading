@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
     private TextView userId;
     private ImageView userImage;
     private Button ButtonLogOut;
-    private  ImageButton scanButton;
+    private Button scanButton;
     private TextView TextViewOwnBookNum;
     private TextView TextViewBorrowBookNum;
     private TextView TextViewCommentBookNum;
@@ -85,7 +85,7 @@ public class ProfileFragment extends Fragment {
         userId = getActivity().findViewById(R.id.profileEditUserID);
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
-        scanButton = (ImageButton) getActivity().findViewById(R.id.scan_button);
+        scanButton = (Button) getActivity().findViewById(R.id.scan_button);
         TextViewBorrowBookNum = (TextView) getActivity().findViewById(R.id.TextViewBorrowBook);
         TextViewOwnBookNum = (TextView) getActivity().findViewById(R.id.TextViewOwnBook);
         TextViewCommentBookNum = (TextView) getActivity().findViewById(R.id.TextViewCommentNum);

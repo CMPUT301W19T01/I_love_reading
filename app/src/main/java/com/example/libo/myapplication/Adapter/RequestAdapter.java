@@ -35,7 +35,12 @@ public class RequestAdapter extends ArrayAdapter{
         TextView date =  view.findViewById(R.id.request_cell_date);
         TextView status =  view.findViewById(R.id.request_cell_status);
 
-        bookName.setText(currentRequest.getBookName());
+        String newBookName = currentRequest.getBookName();
+        if(newBookName.length()>15){
+            newBookName = newBookName.substring(0, 15) + "...";
+        }
+
+        bookName.setText(newBookName);
         date.setText(currentRequest.getDate().toString());
         String currentstatus;
         if(currentRequest.isAccepted()){
