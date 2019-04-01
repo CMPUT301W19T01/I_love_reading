@@ -65,7 +65,7 @@ public class profileEditActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameEditView = (EditText) findViewById(R.id.profileEditUserName);
-        userEmailEditView = findViewById(R.id.profileEditUserEmail);
+        userEmailEditView = findViewById(R.id.textView3);
         userIdEditView = findViewById(R.id.profileEditUserID);
         userContactEditView = (EditText) findViewById(R.id.profileEditUserContact);
         userEditImage = (ImageView) findViewById(R.id.profileEditUserImage);
@@ -77,8 +77,8 @@ public class profileEditActivity extends AppCompatActivity {
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
 
-        userEmailEditView.setText("CurrentEmail: " + user.getEmail());
-        userIdEditView.setText("ID(unmodifiable): " + user.getUid());
+        userEmailEditView.setText(user.getEmail());
+        userIdEditView.setText(user.getUid());
         userNameEditView.setText(user.getDisplayName());
         userContactEditView.setText(user.getEmail());
 

@@ -28,7 +28,9 @@
         <activity
             android:name=".Activity.AddCommentActivity"
             android:theme="@style/add_comment_title" />
-        <activity android:name=".Activity.RequestDetailActivity" />
+        <activity android:name=".Activity.RequestDetailActivity"
+            android:theme="@style/item_view_title"
+            />
         <activity android:name=".Activity.SignUpActivity" />
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
