@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,28 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
 
         requestAdapter = new RequestAdapter(getContext(), R.layout.request_cell, requests);
         requestList.setAdapter(requestAdapter);
+
+        final SearchView searchView = getActivity().findViewById(R.id.request_search);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+
+            }
+        });
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                requestAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         requestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -162,6 +185,7 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                                     if (requestClass.getSenderId().equals(userid) ){
                                         requests.add(requestClass);
                                         if (requestClass.isAccepted()){
+                                            startService();
                                             //Notification notification = new NotificationCompat.Builder(getContext(), "exampleServiceChannel")
                                              //       .setContentTitle("Example Service")
                                               //      .setContentText("test")
