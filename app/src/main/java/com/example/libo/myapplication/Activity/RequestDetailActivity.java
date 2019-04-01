@@ -310,7 +310,7 @@ public class RequestDetailActivity extends AppCompatActivity {
                     for (DataSnapshot wds : ds.getChildren()) {
                         Book ALL_book = wds.getValue(Book.class);
                         if (ALL_book.getID().equals(book.getID())) {
-                            requestdRef.child(senderId).child(bookId).removeValue();
+                            requestdRef.child(ds.getKey()).child(bookId).removeValue();
                         }
                     }
                 }
