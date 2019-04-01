@@ -7,15 +7,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,11 +29,6 @@ import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.R;
 import com.example.libo.myapplication.Util;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +38,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * The type Own fragment.
@@ -66,6 +58,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
      * The Adapter of book.
      */
     ArrayAdapter<Book> adapter;
+    private HashMap<String, ArrayList<Book>> dictBooks;
     private ArrayList<Book> arrayOwnedbooks;
     private Book currentBook;
     private int current_index = 0;
@@ -97,7 +90,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
-        arrayOwnedbooks = new ArrayList<>();
+        dictBooks = new HashMap<>();
         Button add_button = (Button) view.findViewById(R.id.AddButton);
 
         spinner = view.findViewById(R.id.ownfilter);
@@ -172,8 +165,6 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
         return view;
-
-
     }
 
 
@@ -205,25 +196,49 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
 
+        arrayOwnedbooks = new ArrayList<>();
         adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
-        databaseBook.addValueEventListener(new ValueEventListener() {
+        own_book_lv.setAdapter(adapter);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                arrayOwnedbooks.clear();
-
-                Log.d(TAG,"Deading database successfully" + arrayOwnedbooks.toString());
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Book book = ds.getValue(Book.class);
-                    arrayOwnedbooks.add(book);
-
+                ArrayList<Book> myBooksArray = new ArrayList<>();
+                DataSnapshot myBooks = dataSnapshot.child("books").child(userID);
+                for (DataSnapshot myBook : myBooks.getChildren()){
+                    Book book = myBook.getValue(Book.class);
+                    Log.d("byf", book.getBookName());
+                    myBooksArray.add(book);
                 }
-                adapter.notifyDataSetChanged();
-                //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
-                //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-                //own_book_lv.setAdapter(adapter);
 
+                ArrayList<Book> myBorrowedBooksArray = new ArrayList<>();
+                DataSnapshot borrowedBooks = dataSnapshot.child("borrowedBook").child(userID);
+                for(DataSnapshot borrowedBook : borrowedBooks.getChildren()){
+                    Book book = borrowedBook.getValue(Book.class);
+                    Log.d("byf", book.getBookName());
+                    myBorrowedBooksArray.add(book);
+                }
+
+                ArrayList<Book> allBooks = new ArrayList<>();
+                allBooks.addAll(myBooksArray);
+                for(Book book : myBorrowedBooksArray){
+                    if(!allBooks.contains(book))
+                        allBooks.add(book);
+                }
+
+                ArrayList<Book> availableBooks = new ArrayList<>();
+                for (Book book : myBooksArray){
+                    if(book.getNew_status().equals(BookStatus.available)){
+                        availableBooks.add(book);
+                    }
+                }
+
+                dictBooks.put("All", allBooks);
+                dictBooks.put("Available", availableBooks);
+                dictBooks.put("Borrowed", myBorrowedBooksArray);
             }
 
             @Override
@@ -242,124 +257,28 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
                 if (item.equals("All")){
-                    if (show==true){
-                        Toast.makeText(getContext(), iitem.toString(),
-                                Toast.LENGTH_SHORT).show();
+                    arrayOwnedbooks = dictBooks.get("All");
+                    Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
 
-                    }else {
-                        show=true;
-                    }
-                    databaseBook.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // This method is called once with the initial value and again
-                            // whenever data at this location is updated.
-                            arrayOwnedbooks.clear();
-
-                            for(DataSnapshot ds : dataSnapshot.getChildren()){
-                                Book book = ds.getValue(Book.class);
-                                arrayOwnedbooks.add(book);
-
-                            }
-                            adapter.notifyDataSetChanged();
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
+                    adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
+                    own_book_lv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
                 if(item.equals("Available")){
-                    if (show==true){
-                        Toast.makeText(getContext(), iitem.toString(),
-                                Toast.LENGTH_SHORT).show();
-
-                    }else {
-                        show=true;
-                    }
-                    databaseBook.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // This method is called once with the initial value and again
-                            // whenever data at this location is updated.
-                            arrayOwnedbooks.clear();
-
-                            for(DataSnapshot ds : dataSnapshot.getChildren()){
-                                Book book = ds.getValue(Book.class);
-                                BookStatus ssstatus = book.getNew_status();
-                                if ((ssstatus.toString().equals("available"))||(ssstatus.toString().equals("requested"))){
-                                    Log.d("byf===================",book.getID());
-
-                                    arrayOwnedbooks.add(book);
-                                }
-
-
-
-
-                            }
-                            adapter.notifyDataSetChanged();
-                            //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
-                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-
-                            //own_book_lv.setAdapter(adapter);
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    arrayOwnedbooks = dictBooks.get("Available");
+                    Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
+                    adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
+                    own_book_lv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
                 if (item.equals("Borrowed")) {
-                    if (show==true){
-                        Toast.makeText(getContext(), iitem.toString(),
-                                Toast.LENGTH_SHORT).show();
-
-                    }else {
-                        show=true;
-                    }
-                    databaseBook.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            // This method is called once with the initial value and again
-                            // whenever data at this location is updated.
-                            arrayOwnedbooks.clear();
-
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                Book book = ds.getValue(Book.class);
-                                BookStatus ssstatus = book.getNew_status();
-                                if ((ssstatus.toString().equals("accepted")) || (ssstatus.toString().equals("borrowed"))) {
-                                    Log.d("byf===================", book.getID());
-
-                                    arrayOwnedbooks.add(book);
-                                }
-
-
-                            }
-                            adapter.notifyDataSetChanged();
-                            //adapter = new bookListViewAdapter(getContext().getApplicationContext(), arrayOwnedbooks);
-                            //adapter = new ArrayAdapter<Book>(getContext().getApplicationContext(),android.R.layout.simple_list_item_1,arrayOwnedbooks);
-
-                            //own_book_lv.setAdapter(adapter);
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    arrayOwnedbooks = dictBooks.get("Borrowed");
+                    Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
+                    adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
+                    own_book_lv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
-
-
-                }
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
