@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -230,9 +232,17 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+    }
 
+    public void displayNotification(View view){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),"notificaiton");
+        builder.setSmallIcon(R.drawable.icon_email);
+        builder.setContentTitle("Notificaiton");
+        builder.setContentText("You have a new notification");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        notificationManagerCompat.notify(001,builder.build());
 
     }
 
