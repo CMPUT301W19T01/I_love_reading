@@ -50,12 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         },SPLASH_TIME_OUT);
 
-        backgroundVideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setVolume(30, 30);
-            }
-        });
+
 
         stopService();;
 

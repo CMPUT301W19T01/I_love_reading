@@ -187,37 +187,30 @@ public class BasicActivity extends AppCompatActivity {
             lastFragment = 4;
 
         DatabaseReference temp_requestRef = FirebaseDatabase.getInstance().getReference("requests");
-        requestRef.addValueEventListener(new ValueEventListener() {
+            requestRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for (DataSnapshot owner : dataSnapshot.getChildren()) {
                     for (DataSnapshot request : owner.getChildren()) {
                         Request requestClass = request.getValue(Request.class);
-                        System.out.println("I reach here");
-                        Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getSenderId());
+                        Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getRequestId()+ "\n" +requestClass.getSenderId());
 
                         if (requestClass.getSenderId().equals(userid)) {
                             if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
+
                                 startService(requestClass, "borrower request");
                                 requestClass.setNotification_borrow(false);
-                                Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getSenderId());
-                                if (owner.getKey() == requestClass.getReceiver()){
-                                    requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
+                                requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
                                 }
-                                else{
-                                    requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
-                                }
-                            }
+
                         }
                         if (requestClass.getReceiver().equals(userid) && requestClass.isNotification_own()){
                             startService(requestClass, "owner request");
                             requestClass.setNotification_own(false);
-                            if (owner.getKey() == requestClass.getReceiver()){
-                                requestRef.child(requestClass.getReceiver()).child(requestClass.getRequestId()).setValue(requestClass);
-                            }
-                            else{
-                                requestRef.child(requestClass.getSenderId()).child(requestClass.getRequestId()).setValue(requestClass);
-                            }
+                            requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
+
+
                         }
                     }
                 }
@@ -237,7 +230,7 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Checking for fragment count on backstack
-        //startService();
+        startService2();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else if (!doubleBackToExitPressedOnce) {
@@ -341,14 +334,24 @@ public class BasicActivity extends AppCompatActivity {
 
         Intent serviceIntent = new Intent(this, ExampleService.class);
 
-
         if (requestinfo == "owner request"){
-            serviceIntent.putExtra("inputExtra", "There is a new request for your book:: "+request.getBookName().toString() + "\n Click to enter app");
+            serviceIntent.putExtra("inputExtra", "There is a new request for your book: "+request.getBookName().toString() + "\n Click to enter app");
         }
         else{
-            serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted "+request.getBookName().toString() + "\n Click to enter app");
+
+            serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted:  "+request.getBookName().toString() + "\n Click to enter app");
 
         }
+
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+
+
+    public void startService2() {
+
+        Intent serviceIntent = new Intent(this, ExampleService.class);
+
+            serviceIntent.putExtra("inputExtra", "There is a new request for your book:Click to enter app");
 
         ContextCompat.startForegroundService(this, serviceIntent);
     }

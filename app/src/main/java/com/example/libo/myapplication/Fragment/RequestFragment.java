@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Activity.BasicActivity;
 import com.example.libo.myapplication.Activity.ExampleService;
 import com.example.libo.myapplication.Activity.RequestDetailActivity;
 import com.example.libo.myapplication.Adapter.RequestAdapter;
@@ -157,10 +158,12 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                 for (DataSnapshot user : dataSnapshot.getChildren()){
                     for (DataSnapshot request : user.getChildren()){
                         Request myRequest = request.getValue(Request.class);
-                        if(myRequest.getReceiver().equals(userid) || myRequest.getSenderId().equals(userid))
-                            if(!allRequestsArray.contains(myRequest))
+                        Request requestClass = request.getValue(Request.class);
+                        if(myRequest.getReceiver().equals(userid) || myRequest.getSenderId().equals(userid)) {
+                            if (!allRequestsArray.contains(myRequest)) {
                                 allRequestsArray.add(myRequest);
-
+                            }
+                        }
                     }
                 }
 
@@ -197,8 +200,6 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
 
             }
         });
-
-        final DatabaseReference requestRef = FirebaseDatabase.getInstance().getReference("requests");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -320,12 +321,20 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
     */
-    public void startService(Request request) {
+    public void startService(Request request, String requestinfo) {
 
         Intent serviceIntent = new Intent(getActivity(), ExampleService.class);
-        serviceIntent.putExtra("inputExtra", "New notification about: "+request.getBookName().toString());
 
-        ContextCompat.startForegroundService(getActivity(), serviceIntent);
+        if (requestinfo == "owner request"){
+            serviceIntent.putExtra("inputExtra", "There is a new request for your book: "+request.getBookName().toString() + "\n Click to enter app");
+        }
+        else{
+
+            serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted:  "+request.getBookName().toString() + "\n Click to enter app");
+
+        }
+
+        ContextCompat.startForegroundService(getContext(), serviceIntent);
     }
 
     //public void stopService(View v) {
