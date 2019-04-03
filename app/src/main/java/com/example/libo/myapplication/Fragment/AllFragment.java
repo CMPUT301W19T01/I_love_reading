@@ -9,22 +9,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.libo.myapplication.Activity.BasicActivity;
 import com.example.libo.myapplication.Activity.ItemViewActivity;
+import com.example.libo.myapplication.Activity.MainActivity;
 import com.example.libo.myapplication.Adapter.bookListViewAdapter;
 import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
@@ -75,6 +81,8 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
     // String prevQuery = "" ;
     //ArrayList<Book>  resultbook;
     //ArrayAdapter<Book> resultsAdapter;
+
+    ArrayList<Book> backupAllbooks = new ArrayList<>();
 
 
     private static final int all_request_code = 0;
@@ -190,10 +198,12 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 arrayAllbooks.clear();
+                backupAllbooks.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     for(DataSnapshot newds : ds.getChildren()) {
                         Book book = newds.getValue(Book.class);
                         arrayAllbooks.add(book);
+                        backupAllbooks.add(book);
                     }
                 }
 
@@ -232,10 +242,12 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             arrayAllbooks.clear();
+                            backupAllbooks.clear();
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 for(DataSnapshot newds : ds.getChildren()) {
                                     Book book = newds.getValue(Book.class);
                                     arrayAllbooks.add(book);
+                                    backupAllbooks.add(book);
                                 }
                             }
 
@@ -263,6 +275,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             arrayAllbooks.clear();
+                            backupAllbooks.clear();
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 for(DataSnapshot newds : ds.getChildren()) {
                                     Book book = newds.getValue(Book.class);
@@ -273,6 +286,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                                         Log.d("byf===================",book.getID());
 
                                         arrayAllbooks.add(book);
+                                        backupAllbooks.add(book);
                                     }
                                 }
                             }
@@ -301,6 +315,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             arrayAllbooks.clear();
+                            backupAllbooks.clear();
                             for(DataSnapshot ds : dataSnapshot.getChildren()){
                                 for(DataSnapshot newds : ds.getChildren()) {
                                     Book book = newds.getValue(Book.class);
@@ -311,6 +326,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                                         Log.d("byf===================",book.getID());
 
                                         arrayAllbooks.add(book);
+                                        backupAllbooks.add(book);
                                     }
                                 }
                             }
@@ -348,28 +364,70 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
          final SearchView searchView = getActivity().findViewById(R.id.all_book_search);
-         searchView.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 searchView.setIconified(false);
+         searchView.setSubmitButtonEnabled(true);
+         searchView.setQueryHint("Search Here");
+         searchView.setIconified(false);
 
-             }
-         });
-
-
-         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        int searchCloseButtonId = searchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView)searchView.findViewById(searchCloseButtonId);
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-           public boolean onQueryTextSubmit(String query) {
-             return false;
-         }
-        @Override
-         public boolean onQueryTextChange(String newText) {
-           adapter.getFilter().filter(newText);
-         return false;
-          }
-         });
+            public void onClick(View v) {
+                //Clear query
+                searchView.setQuery("", false);
+                //Collapse the action view
+                searchView.onActionViewCollapsed();
+                //Collapse the search widget
+                arrayAllbooks.clear();
+                arrayAllbooks.addAll((ArrayList<Book>) backupAllbooks.clone());
+            }
+        });
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.onActionViewExpanded();
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                   arrayAllbooks.clear();
+                   arrayAllbooks.addAll((ArrayList<Book>) backupAllbooks.clone());
+                return false;
+                }
+            });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Boolean check = false;
+                searchView.clearFocus();
+                for (Book currentBook:arrayAllbooks){
+                    if (currentBook.getDescription() == query|| currentBook.getAuthorName()==query){
+                        check = true;
+                    }
+                }
+                if(!check){
+                    adapter.getFilter().filter(query);
+                }else{
+                    Toast.makeText(getContext(), "No Match found",Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //    adapter.getFilter().filter(newText);
+                return false;
+            }
+
+        });
 
     }
+
+
+
 
     /**
      *
@@ -508,4 +566,5 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     return false;
      }*/
+
 }
