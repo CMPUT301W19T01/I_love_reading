@@ -147,18 +147,17 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         });
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("requests");
+        final ArrayList<Request> allRequestsArray = new ArrayList<>();
+        final ArrayList<Request> myRequestsArray = new ArrayList<>();
+        final ArrayList<Request> otherRequestArray = new ArrayList<>();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                ArrayList<Request> allRequestsArray = new ArrayList<>();
-                ArrayList<Request> myRequestsArray = new ArrayList<>();
-                ArrayList<Request> otherRequestArray = new ArrayList<>();
                 for (DataSnapshot user : dataSnapshot.getChildren()){
                     for (DataSnapshot request : user.getChildren()){
                         Request myRequest = request.getValue(Request.class);
-                        Request requestClass = request.getValue(Request.class);
                         if(myRequest.getReceiver().equals(userid) || myRequest.getSenderId().equals(userid)) {
                             if (!allRequestsArray.contains(myRequest)) {
                                 allRequestsArray.add(myRequest);
@@ -321,21 +320,8 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
     */
-    public void startService(Request request, String requestinfo) {
 
-        Intent serviceIntent = new Intent(getActivity(), ExampleService.class);
 
-        if (requestinfo == "owner request"){
-            serviceIntent.putExtra("inputExtra", "There is a new request for your book: "+request.getBookName().toString() + "\n Click to enter app");
-        }
-        else{
-
-            serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted:  "+request.getBookName().toString() + "\n Click to enter app");
-
-        }
-
-        ContextCompat.startForegroundService(getContext(), serviceIntent);
-    }
 
     //public void stopService(View v) {
     //   Intent serviceIntent = new Intent(this, ExampleService.class);

@@ -17,6 +17,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -91,7 +92,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
         View view=inflater.inflate(R.layout.own_page,container,false);
         own_book_lv = (ListView)view.findViewById(R.id.own_book);
         dictBooks = new HashMap<>();
-        Button add_button = (Button) view.findViewById(R.id.AddButton);
+        ImageButton add_button = (ImageButton) view.findViewById(R.id.AddButton);
 
         spinner = view.findViewById(R.id.ownfilter);
         ArrayAdapter<CharSequence> filteradapter = ArrayAdapter.createFromResource(getActivity().getApplication(),R.array.ownfilter,android.R.layout.simple_spinner_item);

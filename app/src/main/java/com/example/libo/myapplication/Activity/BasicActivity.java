@@ -124,8 +124,7 @@ public class BasicActivity extends AppCompatActivity {
         userID = user.getUid();
         userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        Intent resultIntent = getIntent();
-        Log.d("Relayyyyyy Importent", String.valueOf(resultIntent.getBooleanExtra("request",false)));
+        //Log.d("Relayyyyyy Importent", String.valueOf(resultIntent.getBooleanExtra("request",false)));
 
         stopService();
 
@@ -163,54 +162,24 @@ public class BasicActivity extends AppCompatActivity {
         });
 
         requestRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        // Hide the action bar
-        getSupportActionBar().hide();
-        // Set full screen
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        initFragment();
-
-        if (resultIntent.getBooleanExtra("request",false)){
-            switchFragment(requestFragment, fragments[lastFragment]);
-            lastFragment = 4;
-
-        DatabaseReference temp_requestRef = FirebaseDatabase.getInstance().getReference("requests");
-            requestRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot owner : dataSnapshot.getChildren()) {
                     for (DataSnapshot request : owner.getChildren()) {
                         Request requestClass = request.getValue(Request.class);
-                        Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getRequestId()+ "\n" +requestClass.getSenderId());
-
+                        //Log.d("Important", owner.getKey() + "\n" + requestClass.getReceiver() + "\n" + requestClass.getRequestId()+ "\n" +requestClass.getSenderId());
                         if (requestClass.getSenderId().equals(userid)) {
                             if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
-
                                 startService(requestClass, "borrower request");
                                 requestClass.setNotification_borrow(false);
                                 requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
-                                }
-
+                            }
                         }
                         if (requestClass.getReceiver().equals(userid) && requestClass.isNotification_own()){
                             startService(requestClass, "owner request");
                             requestClass.setNotification_own(false);
                             requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
-
-
                         }
                     }
                 }
@@ -223,6 +192,17 @@ public class BasicActivity extends AppCompatActivity {
 
         });
 
+        // Hide the action bar
+        getSupportActionBar().hide();
+        // Set full screen
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        initFragment();
+
+        Intent resultIntent = getIntent();
+        if (resultIntent.getBooleanExtra("request",false)){
+            switchFragment(requestFragment, fragments[lastFragment]);
+            lastFragment = 4;
 
         }
     }
@@ -230,7 +210,6 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //Checking for fragment count on backstack
-        startService2();
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else if (!doubleBackToExitPressedOnce) {
@@ -281,6 +260,12 @@ public class BasicActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        stopService();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
 
     @Override
     protected void onStop() {
@@ -331,18 +316,14 @@ public class BasicActivity extends AppCompatActivity {
      * Start service.
      */
     public void startService(Request request, String requestinfo) {
-
         Intent serviceIntent = new Intent(this, ExampleService.class);
-
-        if (requestinfo == "owner request"){
+        if (requestinfo.equals("owner request")){
             serviceIntent.putExtra("inputExtra", "There is a new request for your book: "+request.getBookName().toString() + "\n Click to enter app");
         }
         else{
-
             serviceIntent.putExtra("inputExtra", "Your request for the following book has been accepted:  "+request.getBookName().toString() + "\n Click to enter app");
 
         }
-
         ContextCompat.startForegroundService(this, serviceIntent);
     }
 

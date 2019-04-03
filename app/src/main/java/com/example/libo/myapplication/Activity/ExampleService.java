@@ -46,7 +46,7 @@ public class ExampleService extends Service {
                 .build();
 
 
-        startForeground(1, notification);
+        startForeground(2, notification);
 
         //do heavy work on a background thread
         //stopSelf();
