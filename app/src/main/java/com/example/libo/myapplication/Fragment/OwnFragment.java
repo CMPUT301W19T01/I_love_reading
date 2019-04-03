@@ -356,7 +356,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         currentBook.setOwnerId(FirebaseAuth.getInstance().getUid());
                         Log.d("CURRENT BOOK: +++++++++",currentBook.getClassification());
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
-                        String book_id = databaseBook.push().getKey();
+                        String book_id = Long.toString(System.currentTimeMillis());
                         currentBook.setID(book_id);
                         currentBook.setNew_status(BookStatus.available);
                         //Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
