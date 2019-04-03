@@ -113,6 +113,8 @@ public class ItemViewActivity extends AppCompatActivity {
      * The Update comment.
      */
     final int UPDATE_COMMENT = 4; // update the information in comment
+
+    final int ScamResultCode = 5;
     private int current_comment_position = -1;
 
     /**
@@ -350,7 +352,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        if (requestCode == GET_FROM_COMMENT && resultCode == Activity.RESULT_OK){
+        else if (requestCode == GET_FROM_COMMENT && resultCode == Activity.RESULT_OK){
             Intent resultIntent = data;
             Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
             if (!resultCommand) {
@@ -393,7 +395,7 @@ public class ItemViewActivity extends AppCompatActivity {
                 update_comment_firebase();
             }
         }
-        if (requestCode == UPDATE_COMMENT && resultCode == Activity.RESULT_OK){
+        else if (requestCode == UPDATE_COMMENT && resultCode == Activity.RESULT_OK){
             Intent resultIntent = data;
             Boolean resultCommand = resultIntent.getBooleanExtra("close",true);
             if (!resultCommand) {
@@ -422,7 +424,17 @@ public class ItemViewActivity extends AppCompatActivity {
             //
             //
         }
+
+        else if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK) {
+            String ScanBookName = data.getStringExtra("BookName");
+            String ScanAuthorName = data.getStringExtra("AuthorName");
+            String ScanDescription = data.getStringExtra("Description");
+            EditTextBookName.setText(ScanBookName);
+            EditTextAuthorName.setText(ScanAuthorName);
+            EditTextDescription.setText(ScanDescription);
+        }
     }
+
 
 
     /**
@@ -882,5 +894,7 @@ public class ItemViewActivity extends AppCompatActivity {
         }
         return result;
     }
+
+
 
 }
