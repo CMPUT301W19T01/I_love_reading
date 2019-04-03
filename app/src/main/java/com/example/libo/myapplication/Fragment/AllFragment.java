@@ -366,7 +366,6 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
          final SearchView searchView = getActivity().findViewById(R.id.all_book_search);
          searchView.setSubmitButtonEnabled(true);
          searchView.setQueryHint("Search Here");
-         searchView.setIconified(false);
 
         int searchCloseButtonId = searchView.getContext().getResources()
                 .getIdentifier("android:id/search_close_btn", null, null);
@@ -375,17 +374,21 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
             @Override
             public void onClick(View v) {
                 //Clear query
+                searchView.setIconified(true);
                 searchView.setQuery("", false);
                 //Collapse the action view
                 searchView.onActionViewCollapsed();
                 //Collapse the search widget
+                Log.d(TAG, "numbe is "+ arrayAllbooks.size());
                 arrayAllbooks.clear();
-                arrayAllbooks.addAll((ArrayList<Book>) backupAllbooks.clone());
+                arrayAllbooks.addAll(backupAllbooks);
+                adapter.notifyDataSetChanged();
             }
         });
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchView.setIconified(false);
                 searchView.onActionViewExpanded();
             }
         });
@@ -395,6 +398,7 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
             public boolean onClose() {
                    arrayAllbooks.clear();
                    arrayAllbooks.addAll((ArrayList<Book>) backupAllbooks.clone());
+                   adapter.notifyDataSetChanged();
                 return false;
                 }
             });
@@ -418,7 +422,12 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                //    adapter.getFilter().filter(newText);
+                if (newText.length()!=0){
+                    Log.d(TAG, "I reached here" + newText);
+
+                    adapter.getFilter().filter(newText);
+
+                }
                 return false;
             }
 

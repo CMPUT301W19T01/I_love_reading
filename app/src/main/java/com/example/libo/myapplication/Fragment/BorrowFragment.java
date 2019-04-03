@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -56,6 +57,10 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
      * The Adapter of book.
      */
     ArrayAdapter<Book> adapter;
+    ArrayList<Book> backupAllbooks = new ArrayList<>();
+
+    ArrayList<Book> myBorrowedBooksArray = new ArrayList<>();
+
     private int current_index = 0;
     /**
      * The Show.
@@ -130,22 +135,47 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final SearchView searchView = getActivity().findViewById(R.id.searchView2);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Search Here");
+
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchView.setIconified(false);
+            }
+        });
 
+        int searchCloseButtonId = searchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView)searchView.findViewById(searchCloseButtonId);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Clear query
+                searchView.setIconified(true);
+                searchView.setQuery("", false);
+                //Collapse the action view
+                searchView.onActionViewCollapsed();
+                //Collapse the search widget
+                arrayBorrowbooks.clear();
+                arrayBorrowbooks.addAll(myBorrowedBooksArray);
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                adapter.getFilter().filter(query);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                if (newText.length()!=0){
+                    Log.d(TAG, "I reached here" + newText);
+
+                    adapter.getFilter().filter(newText);
+
+                }
                 return false;
             }
         });
@@ -156,7 +186,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                ArrayList<Book> myBorrowedBooksArray = new ArrayList<>();
+                myBorrowedBooksArray.clear();
                 DataSnapshot borrowedBooks = dataSnapshot.child("borrowedBooks").child(Userid);
                 for (DataSnapshot myBook : borrowedBooks.getChildren()){
                     Book book = myBook.getValue(Book.class);
@@ -288,9 +318,11 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             arrayBorrowbooks.clear();
+            backupAllbooks.clear();
             for(DataSnapshot ds : dataSnapshot.getChildren()){
                 Book book = ds.getValue(Book.class);
                 arrayBorrowbooks.add(book);
+                backupAllbooks.add(book);
             }
             adapter.notifyDataSetChanged();
         }

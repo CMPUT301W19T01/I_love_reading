@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -63,6 +64,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
     private ArrayList<Book> arrayOwnedbooks;
     private Book currentBook;
     private int current_index = 0;
+    ArrayList<Book> backupAllbooks = new ArrayList<>();
+    ArrayList<Book> myBooksArray = new ArrayList<>();
 
     private DatabaseReference databaseBook;
     private StorageReference storageRef;
@@ -178,6 +181,8 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         super.onActivityCreated(savedInstanceState);
         final SearchView searchView = getActivity().findViewById(R.id.own_book_search);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("Search Here");
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,22 +191,45 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
             }
         });
 
+        int searchCloseButtonId = searchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null);
+        ImageView closeButton = (ImageView)searchView.findViewById(searchCloseButtonId);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Clear query
+                searchView.setIconified(true);
+                searchView.setQuery("", false);
+                //Collapse the action view
+                searchView.onActionViewCollapsed();
+                //Collapse the search widget
+                arrayOwnedbooks.clear();
+                arrayOwnedbooks.addAll(myBooksArray);
+                Log.d(TAG, "numbe is "+ arrayOwnedbooks.size());
+                adapter.notifyDataSetChanged();
+            }
+        });
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                adapter.getFilter().filter(query);
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                if (newText.length()!=0){
+                    Log.d(TAG, "I reached here" + newText);
+
+                    adapter.getFilter().filter(newText);
+
+                }
                 return false;
             }
         });
 
-        arrayOwnedbooks = new ArrayList<>();
-        adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
-        own_book_lv.setAdapter(adapter);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -209,7 +237,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                ArrayList<Book> myBooksArray = new ArrayList<>();
+                myBooksArray.clear();
                 DataSnapshot myBooks = dataSnapshot.child("books").child(userID);
                 for (DataSnapshot myBook : myBooks.getChildren()){
                     Book book = myBook.getValue(Book.class);
