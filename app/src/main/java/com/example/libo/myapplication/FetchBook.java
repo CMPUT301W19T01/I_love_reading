@@ -24,7 +24,7 @@ public class FetchBook extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return NetworkUit.getBook(strings[0]);
+        return NetworkUit.getBookInfo(strings[0]);
     }
 
     @Override

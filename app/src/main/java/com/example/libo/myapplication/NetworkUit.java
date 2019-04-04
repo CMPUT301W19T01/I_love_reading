@@ -10,46 +10,53 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class NetworkUit {
-    private static String BOOk_BASE_URI = "https://www.googleapis.com/books/v1/volumes?";
-    private static String QUERY_type = "q";
-    private static String QUERY_par = "=isbn:";
-    private static final String PRINT_base = "printType";
-    private static final String PRINT_type = "books";
-    private static final String method = "GET";
+    private static final String TAG = "ISBNWebAPIAdapter";
+    private static final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
+    private static final String QUERY_PARAM = "q";
+    private static final String QUERY_BASE = "=isbn:";
+    private static final String PRINT_TYPE = "printType";
+    private static final String PRINT_VALUE = "books";
+    private static final String METHOD = "GET";
 
-    public static String getBook ( String ISBN ){
+    public NetworkUit() {}
+
+    public static String getBookInfo(String ISBN){
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;
-        String bookDescription = null;
-        StringBuffer Buffer = new StringBuffer();
+        String bookDescriptionJSON = null;
 
-        try{
-            Uri uri = Uri.parse(BOOk_BASE_URI).buildUpon()
-                    .appendQueryParameter(QUERY_type,QUERY_par+ISBN)
-                    .appendQueryParameter(PRINT_base,PRINT_type)
-                    .build();
+        try {
+            Uri uri = Uri.parse(BASE_URL).buildUpon()
+                    .appendQueryParameter(QUERY_PARAM, QUERY_BASE + ISBN)
+                    .appendQueryParameter(PRINT_TYPE, PRINT_VALUE).build();
 
             URL url = new URL(uri.toString());
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod(method);
+            httpURLConnection.setRequestMethod(METHOD);
             httpURLConnection.connect();
 
             InputStream inputStream = httpURLConnection.getInputStream();
+            StringBuffer stringBuffer = new StringBuffer();
+
             if (inputStream == null){
                 return null;
             }
 
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-            String output = bufferedReader.readLine();
-            if (output == null || output.length() == 0){
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null){
+                stringBuffer.append(line + "\n");
+            }
+            if (stringBuffer.length() == 0){
                 return null;
             }
 
-            Buffer.append(output+"/n");
-            bookDescription = Buffer.toString();
-            Log.d("CURRENT BOOK JASON",bookDescription);
+            bookDescriptionJSON = stringBuffer.toString();
+            Log.d(TAG, bookDescriptionJSON);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -60,17 +67,17 @@ public class NetworkUit {
                 httpURLConnection.disconnect();
             }
 
-            if(bufferedReader != null) {
-                try {
+            if (bufferedReader!=null){
+                try{
                     bufferedReader.close();
-                } catch (Exception e) {
+                }
+                catch (Exception e){
                     e.printStackTrace();
-
                 }
             }
 
-            return bookDescription;
+            return bookDescriptionJSON;
         }
-    }
 
+    }
 }
