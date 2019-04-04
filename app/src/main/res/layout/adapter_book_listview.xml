@@ -69,7 +69,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/BookImageView1"
                 android:paddingStart="8dp"
-                android:text="id"
+                android:text="Owner "
                 android:textAlignment="viewStart"
                 android:textSize="14sp" />
 

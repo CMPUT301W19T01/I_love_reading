@@ -155,6 +155,9 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                allRequestsArray.clear();
+                myRequestsArray.clear();
+                otherRequestArray.clear();
                 for (DataSnapshot user : dataSnapshot.getChildren()){
                     for (DataSnapshot request : user.getChildren()){
                         Request myRequest = request.getValue(Request.class);

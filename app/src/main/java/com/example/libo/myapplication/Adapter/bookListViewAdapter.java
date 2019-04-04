@@ -81,7 +81,7 @@ public class bookListViewAdapter extends ArrayAdapter<Book> {
 
         viewHolder.bookNameView.setText(bookName);
         viewHolder.authorNameView.setText("author: "+getItem(position).getAuthorName());
-        viewHolder.idView .setText(getItem(position).getClassification());
+        viewHolder.idView .setText(getItem(position).getOwnerName());
         Picasso.with(getContext()).load(bookCover).into(viewHolder.bookCover);
 
 
