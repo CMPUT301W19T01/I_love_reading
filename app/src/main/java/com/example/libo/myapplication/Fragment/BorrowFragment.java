@@ -187,7 +187,7 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 myBorrowedBooksArray.clear();
-                DataSnapshot borrowedBooks = dataSnapshot.child("borrowedBooks").child(Userid);
+                DataSnapshot borrowedBooks = dataSnapshot.child("borrowedBook").child(Userid);
                 for (DataSnapshot myBook : borrowedBooks.getChildren()){
                     Book book = myBook.getValue(Book.class);
                     Log.d("byf", book.getBookName());
@@ -213,8 +213,10 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 dictBooks.put("Borrowing", myBorrowedBooksArray);
                 dictBooks.put("Request", myRequestBooksArray);
                 dictBooks.put("Accepted", myAcceptedBooksArray);
+
                 if(adapter!=null)
                     adapter.notifyDataSetChanged();
+
             }
 
             @Override

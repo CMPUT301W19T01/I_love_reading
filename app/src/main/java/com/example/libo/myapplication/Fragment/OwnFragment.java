@@ -249,8 +249,10 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                 DataSnapshot borrowedBooks = dataSnapshot.child("borrowedBook").child(userID);
                 for(DataSnapshot borrowedBook : borrowedBooks.getChildren()){
                     Book book = borrowedBook.getValue(Book.class);
-                    Log.d("byf", book.getBookName());
-                    myBorrowedBooksArray.add(book);
+                    if(book.getOwnerId().equals(userID)){
+                        Log.d("byf", book.getBookName());
+                        myBorrowedBooksArray.add(book);
+                    }
                 }
 
                 ArrayList<Book> allBooks = new ArrayList<>();
