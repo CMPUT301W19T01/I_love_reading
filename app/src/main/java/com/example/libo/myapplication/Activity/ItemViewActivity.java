@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.libo.myapplication.BookStatus;
+import com.example.libo.myapplication.FetchBook;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.RequestPopup;
 import com.google.firebase.storage.FirebaseStorage;
@@ -427,7 +428,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         else if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK) {
             String ISBN = data.getStringExtra("code");
-            //new ISBNAdapater
+            new FetchBook(ISBN, EditTextBookName, EditTextAuthorName, EditTextDescription).execute(ISBN);
 
            // String ScanBookName = data.getStringExtra("BookName");
             //String ScanAuthorName = data.getStringExtra("AuthorName");
@@ -680,8 +681,13 @@ public class ItemViewActivity extends AppCompatActivity {
         toolBarAddButton = menu.findItem(R.id.toolbar_add_book);
         Intent temp_intent = getIntent();
         Boolean temp_edit = temp_intent.getBooleanExtra("edit",false);
-        if (!temp_edit){
+        String tempBookName = temp_intent.getStringExtra("BookName");
+        if (!temp_edit && tempBookName.length() == 0){
             toolBarAddButton.setVisible(false);
+        }
+        else if (!temp_edit){
+            toolBarAddButton.setVisible(false);
+            toolBarAddButton.setTitle("Save");
         }
         return true;
     }
