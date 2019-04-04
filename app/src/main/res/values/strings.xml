@@ -91,6 +91,7 @@
         <item>Other Request</item>
 
     </string-array>
+    <string name="title_activity_user_search">UserSearchActivity</string>
 
 
 </resources>
