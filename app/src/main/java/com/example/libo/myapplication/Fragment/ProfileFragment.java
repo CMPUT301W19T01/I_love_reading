@@ -287,7 +287,7 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         userNameView.setText("name: "+ user.getDisplayName());
         userEmailView.setText("email: " + user.getEmail());
-        Picasso.with(getActivity().getApplicationContext()).load(user.getPhotoUrl()).into(userImage);
+        Picasso.with(getActivity()).load(user.getPhotoUrl()).into(userImage);
     }
 
 }

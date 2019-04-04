@@ -44,7 +44,7 @@ public class UserAdapter extends ArrayAdapter <Users> {
             convertView = inflater.inflate(R.layout.user_adapter, parent,false);
             viewHolder = new ViewHolder();
             viewHolder.username = (TextView) convertView.findViewById(R.id.username);
-            viewHolder.uid = (TextView) convertView.findViewById(R.id.user_id);
+            viewHolder.uid = (TextView) convertView.findViewById(R.id.id);
             viewHolder.contactInfo = (TextView) convertView.findViewById(R.id.contact);
             viewHolder.Userphoto = (ImageView) convertView.findViewById(R.id.userphoto);
 
@@ -55,8 +55,13 @@ public class UserAdapter extends ArrayAdapter <Users> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.username.setText("name: " + user.getUsername());
-        //viewHolder.contactInfo.setText("Email: " + user.getEmail());
-        //viewHolder.uid.setText(user.getUid());
+        if (user.getEmail() != null){
+            viewHolder.contactInfo.setText("Email: " + user.getEmail());
+        }
+
+        if (user.getUid() != null){
+            viewHolder.uid.setText("UID: "+user.getUid());
+        }
         Picasso.with(getContext()).load(user.getPhoto()).into(viewHolder.Userphoto);
 
 

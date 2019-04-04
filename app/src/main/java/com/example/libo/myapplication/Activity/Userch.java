@@ -1,17 +1,15 @@
 package com.example.libo.myapplication.Activity;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.libo.myapplication.Adapter.UserAdapter;
-import com.example.libo.myapplication.Adapter.bookListViewAdapter;
-import com.example.libo.myapplication.Model.Book;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
 import com.google.firebase.database.DataSnapshot;
@@ -19,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.liferay.mobile.screens.context.User;
 
 import java.util.ArrayList;
 
@@ -60,8 +57,9 @@ public class Userch extends Activity {
         all_user_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 current_user = arrayAllusers.get(position);
+                
+
 
             }
         });
