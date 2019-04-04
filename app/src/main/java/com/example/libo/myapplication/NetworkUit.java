@@ -1,3 +1,5 @@
+package com.example.libo.myapplication;
+
 import android.net.Uri;
 import android.util.Log;
 
@@ -70,7 +72,5 @@ public class NetworkUit {
             return bookDescription;
         }
     }
-
-
 
 }
