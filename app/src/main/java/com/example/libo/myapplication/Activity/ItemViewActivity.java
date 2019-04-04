@@ -129,7 +129,7 @@ public class ItemViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
+        getWindow().setBackgroundDrawableResource(R.drawable.avoid_scale_background);
         result = getIntent();
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SelectedItemSet = new boolean[ItemSet.length];

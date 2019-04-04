@@ -210,7 +210,7 @@
 
         <Button
             android:id="@+id/scan_button"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@color/profile_creamYellow_color"
@@ -218,7 +218,7 @@
 
         <Button
             android:id="@+id/btn_editProfile"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
@@ -239,7 +239,7 @@
 
         <Button
             android:id="@+id/btn_logout"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
@@ -257,9 +257,18 @@
 
         <Button
             android:id="@+id/button_search"
-            android:layout_width="109dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="36dp"
             android:layout_weight="1"
+            android:background="@color/clear_red_default"
             android:text="Search" />
 
 
