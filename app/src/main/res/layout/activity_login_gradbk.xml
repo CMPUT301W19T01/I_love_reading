@@ -37,7 +37,7 @@
                 android:drawableLeft="@drawable/ic_person_outline_red_400_24dp"
                 android:drawablePadding="12dp"
                 android:ems="10"
-                android:hint="Username"
+                android:hint="UserEmail"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColorHint="#000" />
