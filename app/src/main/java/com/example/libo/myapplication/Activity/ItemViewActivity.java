@@ -125,6 +125,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
     private DatabaseReference commentsRef;
     private Uri BookCoverUri;
+    private String THIS_ISBN;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -428,6 +429,7 @@ public class ItemViewActivity extends AppCompatActivity {
 
         else if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK) {
             String ISBN = data.getStringExtra("code");
+            THIS_ISBN = ISBN;
             new FetchBook(ISBN, EditTextBookName, EditTextAuthorName, EditTextDescription).execute(ISBN);
 
            // String ScanBookName = data.getStringExtra("BookName");
@@ -723,7 +725,10 @@ public class ItemViewActivity extends AppCompatActivity {
                                     resultIntent.putExtra("AuthorName", AuthorName);
                                     resultIntent.putExtra("Description", Description);
                                     resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+                                    if (THIS_ISBN != null){
+                                        resultIntent.putExtra("ISBN",THIS_ISBN);
 
+                                    }
                                     setResult(Activity.RESULT_OK, resultIntent);
                                     finish();
                                 }
