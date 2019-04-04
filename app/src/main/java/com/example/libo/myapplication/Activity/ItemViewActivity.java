@@ -725,10 +725,7 @@ public class ItemViewActivity extends AppCompatActivity {
                                     resultIntent.putExtra("AuthorName", AuthorName);
                                     resultIntent.putExtra("Description", Description);
                                     resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
-                                    if (THIS_ISBN != null){
-                                        resultIntent.putExtra("ISBN",THIS_ISBN);
-
-                                    }
+                                    resultIntent.putExtra("ISBN",THIS_ISBN);
                                     setResult(Activity.RESULT_OK, resultIntent);
                                     finish();
                                 }

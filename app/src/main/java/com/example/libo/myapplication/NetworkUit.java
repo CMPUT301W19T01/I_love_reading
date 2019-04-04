@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * The type Network uit.
+ */
 public class NetworkUit {
     private static final String TAG = "ISBNWebAPIAdapter";
     private static final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
@@ -18,8 +21,17 @@ public class NetworkUit {
     private static final String PRINT_VALUE = "books";
     private static final String METHOD = "GET";
 
+    /**
+     * Instantiates a new Network uit.
+     */
     public NetworkUit() {}
 
+    /**
+     * Get book info string.
+     *
+     * @param ISBN the isbn
+     * @return the string
+     */
     public static String getBookInfo(String ISBN){
         HttpURLConnection httpURLConnection = null;
         BufferedReader bufferedReader = null;

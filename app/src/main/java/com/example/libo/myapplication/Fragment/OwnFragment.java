@@ -357,6 +357,10 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         Log.d("CURRENT BOOK: +++++++++",currentBook.getClassification());
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = Long.toString(System.currentTimeMillis());
+                        String ISBN = (data.getStringExtra("ISBN"));
+                        if (ISBN != null){
+                            book_id = ISBN;
+                        }
                         currentBook.setID(book_id);
                         currentBook.setNew_status(BookStatus.available);
                         //Log.d(TAG,mAuth.getCurrentUser().getDisplayName());
