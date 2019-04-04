@@ -179,9 +179,11 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                         otherRequestArray.add(request);
                 }
 
-                dictRequest.put("All", otherRequestArray);
+                dictRequest.put("All", allRequestsArray);
                 dictRequest.put("MyRequest", myRequestsArray);
                 dictRequest.put("OtherRequest", otherRequestArray);
+
+                requestAdapter.notifyDataSetChanged();
             }
 
             @Override

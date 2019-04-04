@@ -6,16 +6,7 @@
     android:background="@color/profile_creamYellow_color"
     android:padding="5dp"
     android:layout_gravity="center">
-    <TextView
-        android:id="@+id/txtclose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:textColor="@color/profile_coral_color"
-        android:text="X"
-        android:textStyle="bold"
-        android:layout_gravity="end"
-        android:gravity="center"
-        android:background="@color/clear_red_default"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,12 +49,12 @@
                 android:layout_height="wrap_content"
                 android:text="150"
                 android:textSize="18sp"
-                android:textColor="@color/profile_darkCoral_color"/>
+                android:textColor="@color/darkerGray"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Email"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="@color/common_google_signin_btn_text_light_pressed"/>
         </LinearLayout>
         <LinearLayout
@@ -80,16 +71,25 @@
                 android:layout_height="wrap_content"
                 android:text="19"
                 android:textSize="18sp"
-                android:textColor="@color/profile_darkCoral_color"/>
+                android:textColor="@color/darkerGray"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/userid"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="@color/common_google_signin_btn_text_light_pressed"/>
         </LinearLayout>
 
     </LinearLayout>
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/profile_coral_color"
+        android:textColor="@color/common_google_signin_btn_text_light_pressed"/>
 
 
 </LinearLayout>

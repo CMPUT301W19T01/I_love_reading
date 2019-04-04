@@ -833,7 +833,7 @@ public class ItemViewActivity extends AppCompatActivity {
                                         resultIntent.putExtra("AuthorName", AuthorName);
                                         resultIntent.putExtra("Description", Description);
                                         resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
-
+                                        resultIntent.putExtra("ISBN",THIS_ISBN);
                                         setResult(Activity.RESULT_OK, resultIntent);
                                         finish();
                                     }
@@ -876,6 +876,7 @@ public class ItemViewActivity extends AppCompatActivity {
                     resultIntent.putExtra("AuthorName", AuthorName);
                     resultIntent.putExtra("Description", Description);
                     resultIntent.putExtra("ClassificationArray", CombineStringList(resultClassification));
+                    resultIntent.putExtra("ISBN",THIS_ISBN);
                     setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }
