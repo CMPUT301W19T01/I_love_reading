@@ -169,30 +169,17 @@ public class RequestFragment extends Fragment implements AdapterView.OnItemSelec
                     }
                 }
 
-                ArrayList<Request> myAllRequests = new ArrayList<>();
-                for(Request request : allRequestsArray){
-                    Boolean isUnique = true;
-                    for(Request checkRequest:myAllRequests){
-
-                        if(checkRequest.getSenderId().equals(request.getSenderId()) && checkRequest.getReceiver().equals(request.getReceiver()) && checkRequest.getBookId().equals(request.getBookId())){
-                            isUnique = false;
-                            break;
-                        }
-                    }
-                    if(isUnique){
-                        myAllRequests.add(request);
-                    }
-
+                for (Request request : allRequestsArray){
+                    if(request.getSenderId().equals(userid))
+                        myRequestsArray.add(request);
                 }
 
-                for (Request request : myAllRequests){
-                    if(request.getSenderId().equals(userid) && !myRequestsArray.contains(request))
-                        myRequestsArray.add(request);
-                    if(request.getReceiver().equals(userid) && !otherRequestArray.contains(request))
+                for (Request request : allRequestsArray){
+                    if(request.getReceiver().equals(userid))
                         otherRequestArray.add(request);
                 }
 
-                dictRequest.put("All", myAllRequests);
+                dictRequest.put("All", otherRequestArray);
                 dictRequest.put("MyRequest", myRequestsArray);
                 dictRequest.put("OtherRequest", otherRequestArray);
             }
