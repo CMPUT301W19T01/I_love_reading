@@ -67,6 +67,8 @@ public class Util {
         request.setRequestId(requestid);
         FirebaseRequests.child(bookOwner).child(requestid).setValue(request);
         book.setNew_status(BookStatus.requested);
+        book.setOwnerConfirmed(false);
+        book.setBorrowerConfirmed(false);
         databaseReference.child(book.getOwnerId()).child(book.getID()).setValue(book);
     }
 

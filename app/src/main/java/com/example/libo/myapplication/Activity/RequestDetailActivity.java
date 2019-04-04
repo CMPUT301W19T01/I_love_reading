@@ -262,8 +262,10 @@ public class RequestDetailActivity extends AppCompatActivity {
                         } else {
                             book.setBorrowerConfirmed(true);
                         }
-                        if (book.getBorrowerConfirmed() && book.getOwnerConfirmed()) {
+                        if (book.getBorrowerConfirmed() && book.getOwnerConfirmed() && request.isBorrowed()) {
                             updateBorrowed(request.getSenderId(), book.getID(), request.getReceiver());
+                        } else if(book.getBorrowerConfirmed() && book.getOwnerConfirmed() && !request.isBorrowed()){
+                            removeBorrowed(request.getSenderId(), book.getID(), request.getReceiver());
                         }
 
                         updateBook(book, request.getSenderId());
@@ -366,7 +368,13 @@ public class RequestDetailActivity extends AppCompatActivity {
     private void updateBorrowed(final String borrowerId, final String bookID, final String receiver) {
         borrowedRef.child(borrowerId).child(bookID).setValue(book);
         acceptedRef.child(borrowerId).child(bookID).removeValue();
+    }
 
+    private void removeBorrowed(final String borrowerId, final String bookID, final String receiver) {
+        borrowedRef.child(borrowerId).child(bookID).removeValue();
+        acceptedRef.child(borrowerId).child(bookID).removeValue();
+        book.setNew_status(BookStatus.available);
+        AllbooksRef.child(book.getOwnerId()).child(book.getID()).setValue(book);
     }
 
     /**
