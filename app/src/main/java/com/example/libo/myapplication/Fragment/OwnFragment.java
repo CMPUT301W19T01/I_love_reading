@@ -288,6 +288,13 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
 
 
                 if (item.equals("All")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayOwnedbooks = dictBooks.get("All");
                     Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
 
@@ -296,6 +303,13 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                     adapter.notifyDataSetChanged();
                 }
                 if(item.equals("Available")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayOwnedbooks = dictBooks.get("Available");
                     Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
                     adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);
@@ -303,6 +317,13 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                     adapter.notifyDataSetChanged();
                 }
                 if (item.equals("Borrowed")) {
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayOwnedbooks = dictBooks.get("Borrowed");
                     Log.d("byf", String.valueOf(arrayOwnedbooks.size()));
                     adapter = new bookListViewAdapter(getContext(), arrayOwnedbooks);

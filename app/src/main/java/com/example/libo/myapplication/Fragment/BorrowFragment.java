@@ -229,6 +229,13 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 Object iitem = parent.getItemAtPosition(position);
 
                 if(item.equals("Request")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayBorrowbooks = dictBooks.get("Request");
                     Log.d("byf", String.valueOf(arrayBorrowbooks.size()));
 
@@ -237,6 +244,13 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                     adapter.notifyDataSetChanged();
                 }
                 if (item.equals("Accepted")){
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayBorrowbooks = dictBooks.get("Accepted");
                     Log.d("byf", String.valueOf(arrayBorrowbooks.size()));
 
@@ -245,6 +259,13 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                     adapter.notifyDataSetChanged();
                 }
                 if (item.equals("Borrowing")) {
+                    if (show==true){
+                        Toast.makeText(getContext(), iitem.toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        show=true;
+                    }
                     arrayBorrowbooks = dictBooks.get("Borrowing");
                     Log.d("byf", String.valueOf(arrayBorrowbooks.size()));
 
