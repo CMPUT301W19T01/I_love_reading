@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activity.Userch"
-            android:label="@string/title_activity_userch"></activity>
+            android:label="title_activity_userch"></activity>
         <activity
             android:name=".Activity.UserSearchActivity"
             android:label="@string/title_activity_user_search" />
