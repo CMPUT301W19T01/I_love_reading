@@ -36,7 +36,7 @@ public class otherProfilePopupActivity extends AppCompatActivity {
         result = getIntent();
         otherId = findViewById(R.id.profilePopupUserId);
         otherNameView =findViewById(R.id.profilePopupUserName);
-        otherEmailView = findViewById(R.id.profilePopupEmail);
+        otherEmailView = findViewById(R.id.emal_99);
         otherImage = findViewById(R.id.profilePopupImage);
         closeButton = findViewById(R.id.btnClose);
 
