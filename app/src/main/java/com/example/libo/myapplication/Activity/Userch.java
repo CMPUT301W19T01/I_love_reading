@@ -56,11 +56,6 @@ public class Userch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userch);
-        otherId = findViewById(R.id.profilePopupUserId);
-        otherNameView =findViewById(R.id.profilePopupUserName);
-        otherEmailView = findViewById(R.id.emal_99);
-        otherImage = findViewById(R.id.profilePopupImage);
-        closeButton = findViewById(R.id.btnClose);
 
         getSupportActionBar().setTitle("User Search");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -93,7 +88,7 @@ public class Userch extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 current_user = arrayAllusers.get(position);
-                //ShowPopup(current_user,current_user.getPhoto());
+                ShowPopup(current_user,current_user.getPhoto());
             }
         });
 
@@ -168,10 +163,19 @@ public class Userch extends AppCompatActivity {
 
 
     public void ShowPopup(Users thecurrentuser, String photo) {
+        myDialog.setContentView(R.layout.other_user_profile);
+
+        otherId = myDialog.findViewById(R.id.profilePopupUserId);
+        otherNameView =myDialog.findViewById(R.id.profilePopupUserName);
+        otherEmailView = myDialog.findViewById(R.id.emal_99);
+        otherImage = myDialog.findViewById(R.id.profilePopupImage);
+        closeButton = myDialog.findViewById(R.id.btnClose);
         otherEmailView.setText(thecurrentuser.getEmail());
         otherId.setText(thecurrentuser.getUid());
         otherNameView.setText(thecurrentuser.getUsername());
-        Picasso.with(this).load(photo).into(otherImage);
+        if (current_user.getPhoto().length() != 0){
+            Picasso.with(this).load(current_user.getPhoto()).into(otherImage);
+        }
 
 
         //closeButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +191,6 @@ public class Userch extends AppCompatActivity {
 
 
         TextView txtclose;
-        myDialog.setContentView(R.layout.other_user_profile);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
