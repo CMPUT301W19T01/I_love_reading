@@ -426,12 +426,14 @@ public class ItemViewActivity extends AppCompatActivity {
         }
 
         else if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK) {
-            String ScanBookName = data.getStringExtra("BookName");
-            String ScanAuthorName = data.getStringExtra("AuthorName");
-            String ScanDescription = data.getStringExtra("Description");
-            EditTextBookName.setText(ScanBookName);
-            EditTextAuthorName.setText(ScanAuthorName);
-            EditTextDescription.setText(ScanDescription);
+            String ISBN = data.getStringExtra("code");
+            //
+           // String ScanBookName = data.getStringExtra("BookName");
+            //String ScanAuthorName = data.getStringExtra("AuthorName");
+           // String ScanDescription = data.getStringExtra("Description");
+           // EditTextBookName.setText(ScanBookName);
+           // EditTextAuthorName.setText(ScanAuthorName);
+            //EditTextDescription.setText(ScanDescription);
         }
     }
 
@@ -532,7 +534,21 @@ public class ItemViewActivity extends AppCompatActivity {
         checkEdit(Edit, BookName, AuthorName, Description, ClassificationArray, BookCover); // show the information of the Book
 
         int buttonCode = result.getIntExtra("ButtonCode", -1);
-        if( buttonCode == 0){
+        String temp_BookName = result.getStringExtra("BookName");
+        boolean temp_edit = result.getBooleanExtra("edit",false);
+        if (temp_BookName.length() == 0 && temp_edit){
+            ReturnButton.setVisibility(View.VISIBLE);
+            ReturnButton.setText("Scan");
+            ReturnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent temp_intent = new Intent(ItemViewActivity.this, CodeScanner.class);
+                    startActivityForResult(temp_intent, ScamResultCode);
+                }
+            });
+
+        }
+        else if( buttonCode == 0){
             BorrowButton.setVisibility(View.INVISIBLE);
             WatchListButton.setVisibility(View.INVISIBLE);
             ReturnButton.setVisibility(View.VISIBLE);

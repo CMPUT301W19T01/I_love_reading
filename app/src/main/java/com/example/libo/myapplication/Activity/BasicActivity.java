@@ -173,6 +173,7 @@ public class BasicActivity extends AppCompatActivity {
                             if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
                                 startService(requestClass, "borrower request");
                                 requestClass.setNotification_borrow(false);
+                                Log.d(TAG, "User ID is :" +owner.getKey() + "request id"+ requestClass.getRequestId());
                                 requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
                             }
                         }
@@ -317,6 +318,8 @@ public class BasicActivity extends AppCompatActivity {
      */
     public void startService(Request request, String requestinfo) {
         Intent serviceIntent = new Intent(this, ExampleService.class);
+        serviceIntent.putExtra("stop", false);
+
         if (requestinfo.equals("owner request")){
             serviceIntent.putExtra("inputExtra", "There is a new request for your book: "+request.getBookName().toString() + "\n Click to enter app");
         }
@@ -338,7 +341,8 @@ public class BasicActivity extends AppCompatActivity {
     }
     public void stopService() {
         Intent serviceIntent = new Intent(this, ExampleService.class);
-        stopService(serviceIntent);
+        serviceIntent.putExtra("stop", true);
+        startService(serviceIntent);
     }
 
 }

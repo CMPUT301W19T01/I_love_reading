@@ -28,28 +28,35 @@ public class ExampleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String input = intent.getStringExtra("inputExtra");
 
-        Intent notificationIntent = new Intent(this, BasicActivity.class);
-        notificationIntent.putExtra("request", true);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
+        boolean stop = intent.getBooleanExtra("stop",false);
 
+        if (!stop){
+            String input = intent.getStringExtra("inputExtra");
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("I love reading")
-                .setContentText(input)
-                .setSmallIcon(R.drawable.logo2)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setOngoing(false)
-                .build();
+            Intent notificationIntent = new Intent(this, BasicActivity.class);
+            notificationIntent.putExtra("request", true);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    0, notificationIntent, 0);
 
 
-        startForeground(2, notification);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("I love reading")
+                    .setContentText(input)
+                    .setSmallIcon(R.drawable.logo2)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setOngoing(false)
+                    .build();
 
+
+            startForeground(2, notification);
+        }
+        else{
+            stopSelf();
+
+        }
         //do heavy work on a background thread
-        //stopSelf();
 
         return START_NOT_STICKY;
     }
