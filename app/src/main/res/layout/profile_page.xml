@@ -208,7 +208,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:contentDescription="@string/todo"
-                android:src="@drawable/icon_birthday" />
+                android:src="@drawable/ic_phone" />
 
             <TextView
                 android:layout_width="wrap_content"
