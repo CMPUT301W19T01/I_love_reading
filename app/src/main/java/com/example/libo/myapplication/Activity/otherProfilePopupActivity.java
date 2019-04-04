@@ -26,6 +26,10 @@ public class otherProfilePopupActivity extends AppCompatActivity {
         setContentView(R.layout.other_user_profile);
 
         result = getIntent();
+        otherId = findViewById(R.id.profilePopupUserId);
+        otherNameView =findViewById(R.id.profilePopupUserName);
+        otherEmailView = findViewById(R.id.profilePopupEmail);
+        otherImage = findViewById(R.id.profilePopupImage);
 
         otherEmailView.setText( result.getStringExtra("email"));
         otherId.setText(result.getStringExtra("uid"));

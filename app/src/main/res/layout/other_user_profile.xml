@@ -1,200 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/profile_cream_color"
-    android:orientation="vertical">
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="280dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:background="@color/profile_coral_color"
-            android:orientation="vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileUserImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
-                android:contentDescription="@string/todo"
-                android:visibility="visible"
-                tools:srcCompat="@mipmap/ic_launcher" />
-
-            <TextView
-                android:id="@+id/profileUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/username"
-                android:textColor="#fff"
-                android:textSize="21sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="400dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="170dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Owns"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/TextViewOwnBook"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="0"
-                        android:textColor="@color/profile_darkCoral_color"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Borrows"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/TextViewBorrowBook"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="0"
-                        android:textColor="@color/profile_darkCoral_color"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Comments"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/TextViewCommentNum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="0"
-                        android:textColor="@color/profile_darkCoral_color"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
-
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:background="@color/profile_creamYellow_color"
+    android:padding="5dp"
+    android:layout_gravity="center">
+    <TextView
+        android:id="@+id/txtclose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:textColor="@color/profile_coral_color"
+        android:text="X"
+        android:textStyle="bold"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:background="@color/clear_red_default"/>
     <LinearLayout
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingStart="25dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePopupImage"
+            android:layout_width="163dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/icon_birthday" />
 
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/icon_email" />
+        <TextView
+            android:id="@+id/profilePopupUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textStyle="bold"
+            android:textColor="@color/common_google_signin_btn_text_light_pressed"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:background="@color/clear_red_default"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="100dp">
 
             <TextView
-                android:id="@+id/profileUserEmail"
+                android:id="@+id/profilePopupEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingLeft="20dp"
-                android:paddingEnd="25dp"
-                android:paddingRight="25dp"
-                android:text="@string/useremail"
-                android:textStyle="bold" />
+                android:text="150"
+                android:textSize="18sp"
+                android:textColor="@color/profile_darkCoral_color"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Email"
+                android:textSize="18sp"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed"/>
         </LinearLayout>
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingStart="25dp"
-            android:paddingLeft="25dp"
-            android:paddingEnd="25dp"
-            android:paddingRight="25dp">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/icon_userid" />
+            android:background="@color/profile_cream_color"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="100dp">
 
             <TextView
-                android:id="@+id/profileEditUserID"
+                android:id="@+id/profilePopupUserId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingLeft="20dp"
-                android:paddingEnd="25dp"
-                android:paddingRight="25dp"
+                android:text="19"
+                android:textSize="18sp"
+                android:textColor="@color/profile_darkCoral_color"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/userid"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed"/>
         </LinearLayout>
-
-
 
     </LinearLayout>
 
