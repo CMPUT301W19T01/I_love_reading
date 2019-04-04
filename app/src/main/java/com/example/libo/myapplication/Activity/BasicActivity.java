@@ -173,19 +173,20 @@ public class BasicActivity extends AppCompatActivity {
                             if (requestClass.isAccepted()&& requestClass.isNotification_borrow()) {
                                 startService(requestClass, "borrower request");
                                 requestClass.setNotification_borrow(false);
-                                Log.d(TAG, "User ID is :" +owner.getKey() + "request id"+ requestClass.getRequestId());
+                                //Log.d(TAG, "User ID is :" +owner.getKey() + "request id"+ requestClass.getRequestId());
                                 requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
                             }
                         }
                         if (requestClass.getReceiver().equals(userid) && requestClass.isNotification_own()){
                             startService(requestClass, "owner request");
                             requestClass.setNotification_own(false);
+                            Log.d(TAG, "User ID is :" +owner.getKey() + "request id"+ requestClass.getRequestId());
+
                             requestRef.child(owner.getKey()).child(requestClass.getRequestId()).setValue(requestClass);
                         }
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -204,7 +205,6 @@ public class BasicActivity extends AppCompatActivity {
         if (resultIntent.getBooleanExtra("request",false)){
             switchFragment(requestFragment, fragments[lastFragment]);
             lastFragment = 4;
-
         }
     }
 

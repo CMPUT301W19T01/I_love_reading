@@ -39,7 +39,6 @@ public class ExampleService extends Service {
             PendingIntent pendingIntent = PendingIntent.getActivity(this,
                     0, notificationIntent, 0);
 
-
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("I love reading")
                     .setContentText(input)
@@ -53,8 +52,8 @@ public class ExampleService extends Service {
             startForeground(2, notification);
         }
         else{
+            stopForeground(true);
             stopSelf();
-
         }
         //do heavy work on a background thread
 

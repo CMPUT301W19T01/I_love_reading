@@ -427,7 +427,8 @@ public class ItemViewActivity extends AppCompatActivity {
 
         else if (requestCode == ScamResultCode && resultCode == Activity.RESULT_OK) {
             String ISBN = data.getStringExtra("code");
-            //
+            //new ISBNAdapater
+
            // String ScanBookName = data.getStringExtra("BookName");
             //String ScanAuthorName = data.getStringExtra("AuthorName");
            // String ScanDescription = data.getStringExtra("Description");
