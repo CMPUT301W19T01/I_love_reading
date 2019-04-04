@@ -213,6 +213,8 @@ public class BorrowFragment extends Fragment implements AdapterView.OnItemSelect
                 dictBooks.put("Borrowing", myBorrowedBooksArray);
                 dictBooks.put("Request", myRequestBooksArray);
                 dictBooks.put("Accepted", myAcceptedBooksArray);
+                if(adapter!=null)
+                    adapter.notifyDataSetChanged();
             }
 
             @Override

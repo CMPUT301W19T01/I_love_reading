@@ -379,7 +379,7 @@ public class OwnFragment extends Fragment implements AdapterView.OnItemSelectedL
                         Bitmap temp = (Bitmap) data.getParcelableExtra("BookCover");
                         String book_id = Long.toString(System.currentTimeMillis());
                         String ISBN = (data.getStringExtra("ISBN"));
-                        Log.d("THE ISBN IS ",ISBN);
+                        //Log.d("THE ISBN IS ",ISBN);
                         if (ISBN != null){
                             book_id = ISBN;
                         }
