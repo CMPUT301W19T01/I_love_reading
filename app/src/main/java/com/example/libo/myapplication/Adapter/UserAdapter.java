@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.example.libo.myapplication.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserAdapter extends ArrayAdapter <Users> {
     private ArrayList<Users> users;
@@ -64,9 +66,44 @@ public class UserAdapter extends ArrayAdapter <Users> {
         }
         Picasso.with(getContext()).load(user.getPhoto()).into(viewHolder.Userphoto);
 
-
         return convertView;
     }
+
+    public Filter getFilter(){
+        return bookFilter;
+    }
+
+    private Filter bookFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Users> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(users);
+            }
+            else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Users item: users) {
+                    if ((item.getUsername()+' '+item.getUid()+' '+item.getEmail()).toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            users.clear();
+            users.addAll((List) results.values);
+            notifyDataSetChanged();
+
+        }
+    };
 }
 
 
