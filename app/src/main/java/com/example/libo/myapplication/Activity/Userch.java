@@ -58,7 +58,12 @@ public class Userch extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 current_user = arrayAllusers.get(position);
-                
+                Intent other_profile = new Intent(getApplicationContext(),otherProfilePopupActivity.class);
+                other_profile.putExtra("name",current_user.getUsername());
+                other_profile.putExtra("uid",current_user.getUid());
+                other_profile.putExtra("email",current_user.getEmail());
+                other_profile.putExtra("photo",current_user.getPhoto());
+                startService(other_profile);
 
 
             }
