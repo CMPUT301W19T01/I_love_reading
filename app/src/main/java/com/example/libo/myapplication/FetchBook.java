@@ -29,7 +29,6 @@ public class FetchBook extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        Log.d("Important", s);
         super.onPostExecute(s);
         try {
             JSONObject jsonObject = new JSONObject(s);
@@ -45,37 +44,5 @@ public class FetchBook extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-    }
-
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
-    }
-
-    public TextView getTitle() {
-        return title;
-    }
-
-    public void setTitle(TextView title) {
-        this.title = title;
-    }
-
-    public TextView getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(TextView author) {
-        this.author = author;
-    }
-
-    public TextView getDescription() {
-        return description;
-    }
-
-    public void setDescription(TextView description) {
-        this.description = description;
     }
 }
