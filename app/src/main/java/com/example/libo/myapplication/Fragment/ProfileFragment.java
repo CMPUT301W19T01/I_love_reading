@@ -3,15 +3,12 @@ package com.example.libo.myapplication.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteBlobTooBigException;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -19,19 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.example.libo.myapplication.Activity.BasicActivity;
 import com.example.libo.myapplication.Activity.CodeScanner;
 import com.example.libo.myapplication.Activity.ItemViewActivity;
 import com.example.libo.myapplication.Activity.LoginActivity;
+import com.example.libo.myapplication.Activity.Userch;
 import com.example.libo.myapplication.Activity.profileEditActivity;
-import com.example.libo.myapplication.BookStatus;
 import com.example.libo.myapplication.Model.Book;
-import com.example.libo.myapplication.Model.Comment;
 import com.example.libo.myapplication.Model.Users;
 import com.example.libo.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.liferay.mobile.screens.context.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -64,6 +56,7 @@ public class ProfileFragment extends Fragment {
     private ImageView userImage;
     private Button ButtonLogOut;
     private Button scanButton;
+    private Button SearchButton;
     private TextView TextViewOwnBookNum;
     private TextView TextViewBorrowBookNum;
     private TextView TextViewCommentBookNum;
@@ -98,6 +91,7 @@ public class ProfileFragment extends Fragment {
         userImage = (ImageView) getActivity().findViewById(R.id.profileUserImage);
         ButtonLogOut = (Button) getActivity().findViewById(R.id.btn_logout);
         scanButton = (Button) getActivity().findViewById(R.id.scan_button);
+        SearchButton = (Button) getActivity().findViewById(R.id.button_search);
         TextViewBorrowBookNum = (TextView) getActivity().findViewById(R.id.TextViewBorrowBook);
         TextViewOwnBookNum = (TextView) getActivity().findViewById(R.id.TextViewOwnBook);
         TextViewCommentBookNum = (TextView) getActivity().findViewById(R.id.TextViewCommentNum);
@@ -147,6 +141,15 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent scanIntent = new Intent(getActivity().getApplication(), CodeScanner.class);
+                startActivityForResult(scanIntent,1);
+
+            }
+        });
+
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(getActivity().getApplication(), Userch.class);
                 startActivityForResult(scanIntent,1);
 
             }

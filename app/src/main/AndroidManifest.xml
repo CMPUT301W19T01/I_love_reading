@@ -23,8 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Activity.Userch"
+            android:label="@string/title_activity_userch"></activity>
+        <activity
             android:name=".Activity.UserSearchActivity"
-            android:label="@string/title_activity_user_search"></activity>
+            android:label="@string/title_activity_user_search" />
         <activity
             android:name=".Activity.profileEditActivity"
             android:theme="@style/item_view_title"
