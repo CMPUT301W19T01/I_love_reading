@@ -467,6 +467,9 @@ public class AllFragment extends Fragment implements AdapterView.OnItemSelectedL
                     // TODO Extract the data returned from the child Activity.
                     if (data.getStringExtra("borrow").equals("true")) {
                         this.currentBook.setStatus(true);
+                        this.currentBook.setStatus(true);
+                        Util.SendRequset(currentBook.getOwnerId(),currentBook, true);
+                        requestbookRef.child(UID).child(currentBook.getID()).setValue(currentBook);
                         /* The book is now borrowed, update your information
                          */
                     }
